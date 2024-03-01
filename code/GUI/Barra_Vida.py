@@ -1,5 +1,4 @@
-import pygame
-import sys
+import pygame,sys,threading
 from GUI.button import Button
 from tkinter import messagebox
 import settings
@@ -93,7 +92,14 @@ class BarraDeVida:
         pygame.display.update()
 
     def Muerte(self,size= [settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT], muerto=False):
-        
+        from juego import Game
+        from reinicio import Reinicio
+        from level import Level
+
+        self.level = Level()
+        self.game = Game()
+        self.reinicio = Reinicio()
+
         pygame.display.update()
         pygame.mixer.music.fadeout(500)
         
@@ -152,11 +158,16 @@ class BarraDeVida:
                 if event.type == pygame.MOUSEBUTTONDOWN:
 
                     if Reiniciar.checkForInput(pygame.mouse.get_pos()):
-
+                        
+                        print("Reiniciar Nivel")
                         Reiniciar.click(self.display_surface)
                         pygame.mixer.music.play()
                         self.logros.agregar_logro("B3")
                         
+                        threadLevel=threading.Thread(target= self.reinicio.ReCargarNivel)
+                        threadLevel.start()
+                        self.reinicio.Animacion_Carga()
+                        threadLevel.join()
 
                     elif salir_botton.checkForInput(pygame.mouse.get_pos()):
                         salir_botton.click(self.display_surface)

@@ -1,4 +1,3 @@
-
 import pygame
 import sys
 from time import time
@@ -11,6 +10,7 @@ from DB.conectar import *
 from GUI.button import Button
 from GUI.Entry import InputBox
 from DB.validar import validar
+from DB.Sesion import Sesion
 from spritesheet_functions import SpriteSheet
 import threading
 from tkinter import messagebox
