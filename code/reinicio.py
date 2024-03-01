@@ -1,4 +1,4 @@
-import pygame,sys
+import pygame, sys, threading
 from spritesheet_functions import SpriteSheet
 from settings import *
 
@@ -71,4 +71,40 @@ class Reinicio():
             pygame.time.delay(1)
         pygame.time.delay(200)
 
+    def run(self):
+        from GUI.Pausa import PausaMenu
+        print("Run")
+        self.main_sound.music.play(-1)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    self.cursor.close()
+                    self.conexion.close()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        self.level.toggle_menu()
+                    if event.key == pygame.K_ESCAPE:
+                        self.main_sound.music.pause()
+                        self.musica_personalizada.play(1)
+                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada)
+                        xd = self.Pausita.show_menu()
+                        if xd == False:
+                            self.main_sound.music.unpause()
 
+            self.screen.fill(WATER_COLOR)
+            self.level.run()
+            
+            pygame.display.update()
+            self.clock.tick(FPS)
+
+    def ReiniciarNivel(self):
+        print("Reiniciando el nivel")
+        threadReLevel = threading.Thread(target= self.CargarNivel)
+        threadReLevel.start()
+        threadReCargaNivel = threading.Thread(target= self.ReCargarNivel)
+        threadReCargaNivel.start()
+        self.Animacion_Carga()
+        threadReLevel.join()
+        self.run()

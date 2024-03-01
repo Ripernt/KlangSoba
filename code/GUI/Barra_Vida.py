@@ -1,8 +1,9 @@
-import pygame,sys,threading
+import pygame, sys, threading, settings
 from GUI.button import Button
 from tkinter import messagebox
-import settings
 from logros import Logros
+
+
 clock = pygame.time.Clock() 
 
 
@@ -26,7 +27,7 @@ def Movimiento_suave(bar_x=0,bar_y=0,square_x=None,square_y=None, error=0.75):
 class BarraDeVida:
     
     def __init__(self, screen):
-        from level import YSortCameraGroup   
+        from level import YSortCameraGroup 
         # Inicializar Pygame
         pygame.init()
         self.display_surface = screen
@@ -36,7 +37,7 @@ class BarraDeVida:
         self.x_centroScreen, self.y_centroScreen = self.center_of_screen
         
         self.level = YSortCameraGroup()
-
+        
         # Cargamos imagen de la barra
         self.barra_vida= pygame.image.load("graphics/elementos_graficos/barra.png").convert_alpha()
         self.barra_vida = pygame.transform.scale(self.barra_vida, (86,23))
@@ -53,6 +54,7 @@ class BarraDeVida:
     # Función para dibujar la barra de vida
     def Mostrar_vida(self, vida_actual, vida_completa, objetoEntity):
         #dibuja la barra de vida en la pantalla
+        
         self.objetoEntity = objetoEntity
 
         self.display_surface.blit(self.barra_vida,(self.bar_x, self.bar_y))
@@ -91,14 +93,32 @@ class BarraDeVida:
         
         pygame.display.update()
 
+    """def RecargaNivel(self):
+        
+        self.clock = pygame.time.Clock()
+        self.progreso = 30
+        
+        self.main_sound = pygame.mixer
+        self.main_sound.music.load('audio/Monkberry Moon Delight.ogg')
+        
+        self.progreso = 50
+        #pause audio//Musica personalizada
+        self.musica_personalizada = pygame.mixer.Sound("audio/bass-loops-006-with-drums-long-loop-120-bpm-6111.mp3")
+        #DB
+        #print(self.progreso)       
+        self.progreso = 503"""
+
+
+
     def Muerte(self,size= [settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT], muerto=False):
         from juego import Game
         from reinicio import Reinicio
         from level import Level
-
         self.level = Level()
-        self.game = Game()
+        self.game = Game
+
         self.reinicio = Reinicio()
+
 
         pygame.display.update()
         pygame.mixer.music.fadeout(500)
@@ -111,6 +131,8 @@ class BarraDeVida:
         boton=pygame.image.load("graphics/elementos_graficos/button.png")
         boton=pygame.transform.scale(boton,(240,90))
 
+        
+
         fondo = pygame.image.load("graphics/elementos_graficos/fondosgenerico.png")
 
         fondo = pygame.transform.scale(fondo, (size[0], size[1]))
@@ -118,10 +140,11 @@ class BarraDeVida:
         Reiniciar = Button(image=boton, pos=(size[0]//2, 150),text_input="Reiniciar",font=fontsito,base_color="#7467F2",hovering_color="#F13816")
 
         salir_botton = Button(image=boton, pos=(size[0]//2, 250),text_input="Salir",font=fontsito,base_color="#7467F2",hovering_color="#F13816")
-        
+        self.musica_muerte = pygame.mixer.Sound('audio/For You Blue.ogg')
         
         while True:
             
+            #self.musica_muerte.play(0)
 
             self.display_surface.blit(fondo, (0,0))
             self.display_surface.blit(menu_text, menu_rect)
@@ -158,17 +181,16 @@ class BarraDeVida:
                 if event.type == pygame.MOUSEBUTTONDOWN:
 
                     if Reiniciar.checkForInput(pygame.mouse.get_pos()):
-                        
-                        print("Reiniciar Nivel")
-                        Reiniciar.click(self.display_surface)
-                        pygame.mixer.music.play()
-                        self.logros.agregar_logro("B3")
-                        
-                        threadLevel=threading.Thread(target= self.reinicio.ReCargarNivel)
-                        threadLevel.start()
-                        self.reinicio.Animacion_Carga()
-                        threadLevel.join()
 
+                        Reiniciar.click(self.display_surface)
+                        #pygame.mixer.music.stop()
+                        print("Reiniciar nivel")
+                        self.logros.agregar_logro("B3")
+                        muerto = False
+
+                        self.reinicio.ReiniciarNivel()
+                                         
+ 
                     elif salir_botton.checkForInput(pygame.mouse.get_pos()):
                         salir_botton.click(self.display_surface)
                         pygame.quit()
@@ -178,4 +200,5 @@ class BarraDeVida:
 
             clock.tick(60)
 
+        
 
