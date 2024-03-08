@@ -1,4 +1,4 @@
-import pygame, sys, threading, settings
+import pygame, sys, settings
 from GUI.button import Button
 from tkinter import messagebox
 from logros import Logros
@@ -36,7 +36,7 @@ class BarraDeVida:
         self.center_of_screen = self.display_surface.get_rect().center
         self.x_centroScreen, self.y_centroScreen = self.center_of_screen
         
-        self.level = YSortCameraGroup()
+        self.level = YSortCameraGroup("ground")
         
         # Cargamos imagen de la barra
         self.barra_vida= pygame.image.load("graphics/elementos_graficos/barra.png").convert_alpha()
@@ -93,29 +93,9 @@ class BarraDeVida:
         
         pygame.display.update()
 
-    """def RecargaNivel(self):
-        
-        self.clock = pygame.time.Clock()
-        self.progreso = 30
-        
-        self.main_sound = pygame.mixer
-        self.main_sound.music.load('audio/Monkberry Moon Delight.ogg')
-        
-        self.progreso = 50
-        #pause audio//Musica personalizada
-        self.musica_personalizada = pygame.mixer.Sound("audio/bass-loops-006-with-drums-long-loop-120-bpm-6111.mp3")
-        #DB
-        #print(self.progreso)       
-        self.progreso = 503"""
-
-
-
     def Muerte(self,size= [settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT], muerto=False):
-        from juego import Game
         from reinicio import Reinicio
-        from level import Level
-        self.level = Level()
-        self.game = Game
+
 
         self.reinicio = Reinicio()
 
@@ -131,7 +111,7 @@ class BarraDeVida:
         boton=pygame.image.load("graphics/elementos_graficos/button.png")
         boton=pygame.transform.scale(boton,(240,90))
 
-        
+        musica_muerte = pygame.mixer.Sound('audio/For You Blue.ogg')
 
         fondo = pygame.image.load("graphics/elementos_graficos/fondosgenerico.png")
 
@@ -140,11 +120,11 @@ class BarraDeVida:
         Reiniciar = Button(image=boton, pos=(size[0]//2, 150),text_input="Reiniciar",font=fontsito,base_color="#7467F2",hovering_color="#F13816")
 
         salir_botton = Button(image=boton, pos=(size[0]//2, 250),text_input="Salir",font=fontsito,base_color="#7467F2",hovering_color="#F13816")
-        self.musica_muerte = pygame.mixer.Sound('audio/For You Blue.ogg')
+        
         
         while True:
             
-            #self.musica_muerte.play(0)
+            musica_muerte.play(-1)
 
             self.display_surface.blit(fondo, (0,0))
             self.display_surface.blit(menu_text, menu_rect)
@@ -184,12 +164,11 @@ class BarraDeVida:
 
                         Reiniciar.click(self.display_surface)
                         #pygame.mixer.music.stop()
+                        musica_muerte.stop()
                         print("Reiniciar nivel")
                         self.logros.agregar_logro("B3")
-                        muerto = False
-
+                        
                         self.reinicio.ReiniciarNivel()
-                                         
  
                     elif salir_botton.checkForInput(pygame.mouse.get_pos()):
                         salir_botton.click(self.display_surface)

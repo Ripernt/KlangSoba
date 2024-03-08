@@ -1,6 +1,3 @@
-import threading
-
-#from time import time
 from settings import *
 from juego import Game
 

@@ -1,7 +1,7 @@
-import sys
-import pygame
+import pygame ,sys
+
 from tkinter import messagebox
-from GUI.button import Button
+
 from plataforma import Plataforma
 import sistema
 import colores
@@ -108,7 +108,7 @@ class Inicio:
         self.mostrar_imagen_atenuada(logos[3], 1000, (self.logo_x - logos[3].get_width() / 2, self.logo_y - logos[3].get_height() / 2), 2, True)
 
     def inicio(self):
-        
+        from GUI.button import Button
         pantallaInicio = pygame.image.load("graphics/papu/ks-startScreen.png")
 
         brillo = pygame.image.load("graphics/papu/ks (1).png")

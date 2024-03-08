@@ -1,3 +1,5 @@
+import threading
+import time
 import pygame 
 from settings import *
 from tile import Tile
@@ -7,7 +9,7 @@ from support import *
 from random import choice, randint
 from weapon import Weapon
 from ui import UI
-from enemy import Enemy
+
 from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade
@@ -20,23 +22,30 @@ from item import Item
 
 
 class Level:
-	def __init__(self):
-
+	def __init__(self, n=1, mapa="ground", scale=1):
+		
 		 
 		self.display_surface = pygame.display.get_surface()
 		self.game_paused = False
 		
-		self.visible_sprites = YSortCameraGroup()
+		self.visible_sprites = YSortCameraGroup(mapa, scale)
 		self.obstacle_sprites = pygame.sprite.Group()
 
 		# attack sprites
 		self.current_attack = None
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
-
+		self.capasCargadas = 0
+  
 		# sprite setup
-		self.create_map()
+		self.create_map(n)
 
+		print(self.capasCargadas)
+		while(self.capasCargadas<4):
+			print("esperando a que carguen las capas...")
+			print(self.capasCargadas)
+			time.sleep(1)
+		time.sleep(2)
 		# user interface 
 		self.ui = UI(Player=self.player)
 		self.upgrade = Upgrade(self.player)
@@ -44,21 +53,13 @@ class Level:
 		# particles
 		self.animation_player = AnimationPlayer()
 		self.magic_player = MagicPlayer(self.animation_player)
+  
+	def cargarCSV(self, style, layout, graphics):
+		from enemy import Enemy
 
-	def create_map(self):
-		layouts = {
-			'boundary': import_csv_layout('map/map_FloorBlocks.csv'),
-			'grass': import_csv_layout('map/map_Grass.csv'),
-			'object': import_csv_layout('map/map_Objects.csv'),
-			'entities': import_csv_layout('map/map_Entities.csv')
-		}
-		graphics = {
-			'grass': import_folder('graphics/Grass'),
-			'objects': import_folder('graphics/objects')
-		}
+		
 
-		for style,layout in layouts.items():
-			for row_index,row in enumerate(layout):
+		for row_index,row in enumerate(layout):
 				for col_index, col in enumerate(row):
 					if col != '-1':
 						x = col_index * TILESIZE
@@ -85,7 +86,8 @@ class Level:
 									self.obstacle_sprites,
 									self.create_attack,
 									self.destroy_attack,
-									self.create_magic)
+									self.create_magic, 
+         							self.display_surface)
 								
 							else:
 								if col == '390': monster_name = 'bamboo'
@@ -101,6 +103,27 @@ class Level:
 									self.trigger_death_particles,
 									self.add_exp,
          							self.drop_item, self.display_surface)
+		self.capasCargadas+=1
+		print(style)
+
+	def create_map(self, num):
+		
+		layouts = {
+			'boundary': import_csv_layout(f'map/{num}/map_FloorBlocks.csv'),
+			'grass': import_csv_layout(f'map/{num}/map_Grass.csv'),
+			'object': import_csv_layout(f'map/{num}/map_Objects.csv'),
+			'entities': import_csv_layout(f'map/{num}/map_Entities.csv')
+		}
+		graphics = {
+			'grass': import_folder('graphics/Grass'),
+			'objects': import_folder('graphics/objects')
+		}
+
+		for style,layout in layouts.items():
+			print("Optimizacion")
+			threadLevel = threading.Thread(target=self.cargarCSV, args=(style, layout, graphics))
+			threadLevel.start()
+            
 
 		print("se ha creado el mapa")					
 	def create_attack(self):
@@ -167,11 +190,14 @@ class Level:
 
 			self.player_attack_logic()
 
-	
+
+class Level_2 (Level):
+    def __init__(self):
+        super().__init__(2, "ground 2", 4)
 
 class YSortCameraGroup(pygame.sprite.Group):
-	def __init__(self):
-
+	def __init__(self, tile, scale=1):
+		from enemy import Enemy
 		# general setup 
 		super().__init__()
 		self.display_surface = pygame.display.get_surface()
@@ -180,7 +206,8 @@ class YSortCameraGroup(pygame.sprite.Group):
 		self.offset = pygame.math.Vector2()
 		self.logros = Logros(self.display_surface)
 		# creating the floor
-		self.floor_surf = pygame.image.load('graphics/tilemap/ground.png').convert()
+		self.floor_surf = pygame.image.load(f'graphics/tilemap/{tile}.png').convert()
+		self.floor_surf = pygame.transform.scale(self.floor_surf, (self.floor_surf.get_width()*scale,self.floor_surf.get_height()*scale))
 		self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
 
 	def custom_draw(self,player):
