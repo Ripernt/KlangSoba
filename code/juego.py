@@ -1,11 +1,12 @@
 import pygame, sys, threading
 
-from level import Level 
+from level import *
 from time import time
 from settings import *
 from inicio import Inicio
 from GUI.Pausa import PausaMenu
 from GUI.button import Button
+from GUI.MenuIntrumentos import MInstrumentos
 from GUI.Entry import InputBox
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
@@ -22,13 +23,19 @@ class Game:
         self.progreso = 0	
         self.fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20) 
         
+        self.current_level = 0
+        
+        self.color_level = [WATER_COLOR, (38, 11, 45)]
+        
+        self.level = None
+        
     """def conectarBase(self):
         try: 
             self.conexion = Conectar.conectar()
             self.cursor = self.conexion.cursor()
             print("conectado")
         except mysql.connector.Error as error:
-                print("Se produjo un error al conectar a la base de datos: {}".format(error))"""
+                print("Se color un error al conectar a la base de datos: {}".format(error))"""
 
     def iniciarSesion(self):
         pygame.display.update()
@@ -251,7 +258,12 @@ class Game:
         
     def inicializar_level(self):
         print("inicializando nivel")
-        self.level = Level()
+        if self.level is not None:
+            del self.level
+        if(self.current_level==0):
+            self.level = Level()
+        elif(self.current_level==1):
+            self.level = Level_2()
         print("level hecho")
 
     def Pantalla_incio(self):
@@ -284,12 +296,25 @@ class Game:
                         xd = self.Pausita.show_menu()
                         if xd == False:
                             self.main_sound.music.unpause()
+                    if event.key == pygame.K_m:
+                        self.main_sound.music.pause()
+                        self.musica_personalizada.play(1)
+                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_personalizada)#Cambiar la musica
+                        hola = self.Instrumentos.mostrar_instrumentos()
+                        if hola == False:
+                            self.main_sound.music.unpause()
 
-            self.screen.fill(WATER_COLOR)
+            self.screen.fill(self.color_level[self.current_level])
             self.level.run()
+            print(pygame.time.get_ticks())
+            if(pygame.time.get_ticks()>30000 and self.current_level<1):
+                self.current_level+=1
+                self.inicializar_level()
             
             pygame.display.update()
             self.clock.tick(FPS)
+            
+            pygame.display.set_caption(f'fps: {round(self.clock.get_fps())}')
     
     def iniciar_Juego(self):
             print("inicializar juego")

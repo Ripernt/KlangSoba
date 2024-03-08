@@ -55,6 +55,12 @@ botonPurChat = pygame.transform.scale(botonPur, (80, 80))
 botonGreen = pygame.image.load("graphics/elementos_graficos/greenbut.png")
 botonGreen = pygame.transform.scale(botonGreen, (180, 180))
 
+botonPiano = pygame.image.load("graphics/elementos_graficos/Piano.png")
+botonPiano = pygame.transform.scale(botonPiano, (200, 200))
+
+botonSintetizador = pygame.image.load("graphics/elementos_graficos/Sintetizador.png")
+botonSintetizador = pygame.transform.scale(botonSintetizador,(200, 200))
+
 generalButton=pygame.image.load("graphics/elementos_graficos/botonkS.png")
 generalButton=pygame.transform.scale(generalButton,(240,90))
 
