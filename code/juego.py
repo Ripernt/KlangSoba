@@ -1,13 +1,18 @@
 import pygame, sys, threading
 
-from level import *
 from time import time
 from settings import *
+from level import Level, Level_2
 from inicio import Inicio
 from GUI.Pausa import PausaMenu
+from DB import conectar as Conectar
+from DB.conectar import *
 from GUI.button import Button
-from GUI.MenuInstrumentos import MInstrumentos
 from GUI.Entry import InputBox
+from GUI.MenuInstrumentos import MInstrumentos
+from secure.cifrado import Cifradito
+from DB import validar
+from DB.Sesion  import Sesion
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
 
@@ -29,13 +34,13 @@ class Game:
         
         self.level = None
         
-    """def conectarBase(self):
+    def conectarBase(self):
         try: 
             self.conexion = Conectar.conectar()
             self.cursor = self.conexion.cursor()
             print("conectado")
         except mysql.connector.Error as error:
-                print("Se color un error al conectar a la base de datos: {}".format(error))"""
+                print("Se color un error al conectar a la base de datos: {}".format(error))
 
     def iniciarSesion(self):
         pygame.display.update()
@@ -56,9 +61,9 @@ class Game:
 
         botoniniciar.cargar(self.screen)
         botoniniciar.cambiar_color(pygame.mouse.get_pos())
-        #renderT = None
+        renderT = None
 
-        """while True:
+        while True:
             self.screen.blit(fondo, (0,0))
 
             self.screen.blit(menu_text, menu_rect)
@@ -66,8 +71,8 @@ class Game:
             if renderT is not None:
                 self.screen.blit(renderT, rect)
 
-
-
+            botoniniciar.cargar(self.screen)
+            botoniniciar.cambiar_color(pygame.mouse.get_pos())
 
             cajaI.update(self.screen)
             cajaC.update(self.screen)
@@ -89,7 +94,7 @@ class Game:
                         # Acción a realizar si se cancela
                         print("Cancelado") 
 
-               if event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.Pantalla_incio()
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -110,9 +115,9 @@ class Game:
                             renderT = textR.render(response, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 400))
                 
-            pygame.display.update()"""
+            pygame.display.update()
 
-    """def Registrarse(self):
+    def Registrarse(self):
         pygame.display.update()
 
         menu_text = self.fontsito.render("Inicia Sesion con tu Fast-Stern ID", True, "white")
@@ -187,7 +192,7 @@ class Game:
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(response, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 430))      
-            pygame.display.update()"""
+            pygame.display.update()
 
     def CargarKS(self):
         print("Cargando")
