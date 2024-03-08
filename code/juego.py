@@ -6,7 +6,7 @@ from settings import *
 from inicio import Inicio
 from GUI.Pausa import PausaMenu
 from GUI.button import Button
-from GUI.MenuIntrumentos import MInstrumentos
+from GUI.MenuInstrumentos import MInstrumentos
 from GUI.Entry import InputBox
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
