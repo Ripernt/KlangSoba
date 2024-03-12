@@ -4,7 +4,7 @@ import pygame, sys, threading
 
 from time import time
 from settings import *
-from level import Level, Level_2
+from level import Level
 from inicio import Inicio
 from GUI.Pausa import PausaMenu
 from DB import conectar as Conectar
@@ -211,6 +211,7 @@ class Game:
         self.progreso = 50
         #pause audio//Musica personalizada
         self.musica_personalizada = pygame.mixer.Sound("audio/bass-loops-006-with-drums-long-loop-120-bpm-6111.mp3")
+        self.musica_instrumentos = pygame.mixer.Sound("audio/[CHIPTUNE] Pink Floyd - Have A Cigar.wav")
         #DB
         #print(self.progreso)       
         self.progreso = 503
@@ -266,13 +267,8 @@ class Game:
         self.Inicio.logos()
         
     def inicializar_level(self):
-        print("inicializando nivel")
-        if self.level is not None:
-            del self.level
-        if(self.current_level==0):
-            self.level = Level()
-        elif(self.current_level==1):
-            self.level = Level_2()
+
+        self.level = Level()
         print("level hecho")
 
     def Pantalla_incio(self):
@@ -308,7 +304,7 @@ class Game:
                     if event.key == pygame.K_m:
                         self.main_sound.music.pause()
                         self.musica_personalizada.play(1)
-                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_personalizada)#Cambiar la musica
+                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos)#Cambiar la musica
                         hola = self.Instrumentos.mostrar_instrumentos()
                         if hola == False:
                             self.main_sound.music.unpause()

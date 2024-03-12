@@ -111,7 +111,7 @@ class BarraDeVida:
         boton=pygame.image.load("graphics/elementos_graficos/button.png")
         boton=pygame.transform.scale(boton,(240,90))
 
-        musica_muerte = pygame.mixer.Sound('audio/For You Blue.ogg')
+        musica_muerte = pygame.mixer.Sound('audio/Gustavo Cerati - Crimen (8 bits).wav')
 
         fondo = pygame.image.load("graphics/elementos_graficos/fondosgenerico.png")
 

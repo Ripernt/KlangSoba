@@ -1,7 +1,7 @@
 import pygame, sys, threading
 from spritesheet_functions import SpriteSheet
 from settings import *
-
+from GUI.MenuInstrumentos import MInstrumentos
 
 class Reinicio():
 
@@ -91,6 +91,13 @@ class Reinicio():
                         self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada)
                         xd = self.Pausita.show_menu()
                         if xd == False:
+                            self.main_sound.music.unpause()
+                    if event.key == pygame.K_m:
+                        self.main_sound.music.pause()
+                        self.musica_instrumentos.play(-1)
+                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos)#Cambiar la musica
+                        hola = self.Instrumentos.mostrar_instrumentos()
+                        if hola == False:
                             self.main_sound.music.unpause()
 
             self.screen.fill(WATER_COLOR)
