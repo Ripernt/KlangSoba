@@ -7,10 +7,11 @@ from DB.constants import *
 
 def conectar():
     try:
+        print("conectando...")
         bcdb = mysql.connector.connect(
             host=host,
             user=user,
-            password= 'GAty_w42', #password
+            password= 'MbpDqCpLekkKULRsFvHzCethljJHMKVl', #password
             database=db,
             port = port
         )
