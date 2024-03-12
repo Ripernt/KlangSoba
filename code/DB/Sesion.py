@@ -1,4 +1,3 @@
-
 def calcular_dimensiones(arreglo):
     dimensiones = []
     while isinstance(arreglo, list):

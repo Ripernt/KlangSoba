@@ -2,7 +2,7 @@ from settings import *
 
 import pygame, sys, threading
 
-from time import time
+#from time import time
 from settings import *
 from level import Level
 from inicio import Inicio

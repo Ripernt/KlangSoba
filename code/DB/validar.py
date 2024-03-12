@@ -1,7 +1,7 @@
 import re
 from secure.cifrado import Cifradito
 from DB.Sesion import Sesion
-# from platform_scroller import iniciarSesion, registrarUsuario
+#from platform_scroller import iniciarSesion, registrarUsuario
 from DB import conectar
 from DB.playerBD import obtenerDataJugador
 from settings import*
@@ -153,7 +153,7 @@ def validar_correo(correo):
         return False
     
 def enviarCorreo(correo):
-    url = 'https://MauFS.pythonanywhere.com/enviar_codigo'
+    url = 'https://Francis.pythonanywhere.com/enviar_codigo'
     # Dirección de correo electrónico a la que se enviará el código
     # Realizar la solicitud POST al servidor Flask
     data = {'correo': correo}

@@ -7,7 +7,6 @@ from DB.constants import *
 
 def conectar():
     try:
-        print("conectando...")
         bcdb = mysql.connector.connect(
             host=host,
             user=user,
