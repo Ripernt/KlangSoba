@@ -2,6 +2,16 @@ import pygame, sys, threading
 from spritesheet_functions import SpriteSheet
 from settings import *
 from GUI.MenuInstrumentos import MInstrumentos
+from math import sqrt, pow
+from level import Level, Level_2
+
+def eucDis(p1, p2): 
+    difx = p1[0]-p2[0]
+    dify = p1[1]-p2[1]
+    
+    dis = sqrt(pow(difx,2)+pow(dify,2))
+    
+    return dis
 
 class Reinicio():
 
@@ -22,8 +32,18 @@ class Reinicio():
         self.progreso = 503
 
     def CargarNivel(self):
-        from level import Level
-        self.level = Level()
+
+        print("inicializando niveles")
+        self.downloaded_level.append(Level())
+        print("primer nivel...")
+        self.downloaded_level.append(Level_2(self.downloaded_level[0].player))
+        print("segundo nivel...")
+        
+        self.level = self.downloaded_level[0]
+        
+        self.player = self.level.player
+        
+        print("level hecho")
 
     def Animacion_Carga(self):
         print("Mostrar animación")
@@ -103,8 +123,21 @@ class Reinicio():
             self.screen.fill(WATER_COLOR)
             self.level.run()
             
+            if(eucDis(self.player.rect.topleft, (3743, 670))<70 and self.currentLevelNum != 1):
+                print("que sucede chaval")
+                self.currentLevelNum = 1
+                self.level = self.downloaded_level[self.currentLevelNum]
+                self.level.resetPlayer()
+            if(eucDis(self.player.rect.topleft, (827, 1197))<70 and self.currentLevelNum != 0):
+                print("que sucede chaval")
+                self.currentLevelNum = 0
+                self.level = self.downloaded_level[self.currentLevelNum]
+                self.level.resetPlayer()
+                
             pygame.display.update()
             self.clock.tick(FPS)
+            
+            pygame.display.set_caption(f'fps: {round(self.clock.get_fps())}')
 
     def ReiniciarNivel(self):
         print("Reiniciando el nivel")

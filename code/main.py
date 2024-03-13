@@ -4,7 +4,7 @@ import pygame, sys, threading
 
 #from time import time
 from settings import *
-from level import Level
+from level import Level,Level_2
 from inicio import Inicio
 from GUI.Pausa import PausaMenu
 from DB import conectar as Conectar
@@ -17,7 +17,15 @@ from GUI.MenuInstrumentos import MInstrumentos
 from secure.cifrado import Cifradito
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
+from math import sqrt, pow
 
+def eucDis(p1, p2): 
+    difx = p1[0]-p2[0]
+    dify = p1[1]-p2[1]
+    
+    dis = sqrt(pow(difx,2)+pow(dify,2))
+    
+    return dis
 
 class Game:
     
@@ -29,12 +37,15 @@ class Game:
         self.cifrado = Cifradito()
         self.progreso = 0	
         self.fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20) 
-        
-        self.current_level = 0
-        
         self.color_level = [WATER_COLOR, (38, 11, 45)]
-        
+
+        self.current_level = 0
+
         self.level = None
+        
+        self.player = None
+        
+        self.currentLevelNum = 0
         
     def conectarBase(self):
         try: 
@@ -267,8 +278,16 @@ class Game:
         self.Inicio.logos()
         
     def inicializar_level(self):
-
-        self.level = Level()
+        print("inicializando niveles")
+        self.downloaded_level.append(Level())
+        print("primer nivel...")
+        self.downloaded_level.append(Level_2(self.downloaded_level[0].player))
+        print("segundo nivel...")
+        
+        self.level = self.downloaded_level[0]
+        
+        self.player = self.level.player
+        
         print("level hecho")
 
     def Pantalla_incio(self):

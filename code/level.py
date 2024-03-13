@@ -190,7 +190,9 @@ class Level:
 
 			self.player_attack_logic()
 
-
+class Level_2 (Level):
+    def __init__(self, player=None):
+        super().__init__(2, "ground 2", 4, player)
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self, tile, scale=1):
