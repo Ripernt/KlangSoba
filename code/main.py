@@ -32,7 +32,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pygame.display.set_caption('me la soba')
+        pygame.display.set_caption('KlangSoba')
         self.Inicio = Inicio()
         self.cifrado = Cifradito()
         self.progreso = 0	
@@ -115,8 +115,8 @@ class Game:
                     if botoniniciar.checkForInput(pygame.mouse.get_pos()):
                         botoniniciar.click(self.screen)
                         correo = cajaI.text
-                        contraseña = cajaC.text
-                        xd = self.cifrado.encriptado(contraseña)
+                        password = cajaC.text
+                        xd = self.cifrado.encriptado(password)
                         t1 = threading.Thread(target= validar.validar,args=(correo,xd,self.cursor,self.conexion))
                         t1.start()
                         t1.join()
@@ -195,11 +195,11 @@ class Game:
                         botonregistrar.click(self.screen)
                         usuario = caja.getText()
                         correo = caja2.getText()
-                        contraseña = caja3.getText()
+                        password = caja3.getText()
                         confirmcontra = caja4.getText()
                         #renderT = None
-                        
-                        response = validar.validarRegistro(usuario,correo,contraseña,confirmcontra, self.conexion, self.cursor)
+                        print(password)
+                        response = validar.validarRegistro(usuario,correo,password,confirmcontra, self.conexion, self.cursor)
                         if response == "OK":
                             return
                         else:
