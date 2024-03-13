@@ -40,7 +40,7 @@ class Game:
         self.color_level = [WATER_COLOR, (38, 11, 45)]
 
         self.current_level = 0
-
+        self.downloaded_level = []
         self.level = None
         
         self.player = None
