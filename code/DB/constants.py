@@ -1,5 +1,5 @@
 user = 'root'
-password = 'MbpDqCpLekkKULRsFvHzCethljJHMKVl' #5fc-gF3ED2e2GDcHg3CBgBG-3bD-4BH1
-host = 'monorail.proxy.rlwy.net' #roundhouse.proxy.rlwy.net
+password = 'GAty_w42' #MbpDqCpLekkKULRsFvHzCethljJHMKVl
+host = 'localhost' #monorail.proxy.rlwy.net
 db = 'railway'
-port = '11778' #18701
+port = '3306' #11778

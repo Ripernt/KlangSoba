@@ -9,7 +9,7 @@ class Sesion():
     def __init__(self, info):
         self.id = info[0]
         self.correo = info[3]
-        self.contraseña = info[2]
+        self.password = info[2]
 
         self.nombre = info[1]
         self.permiso = info[4]

@@ -10,7 +10,7 @@ def conectar():
         bcdb = mysql.connector.connect(
             host=host,
             user=user,
-            password= 'MbpDqCpLekkKULRsFvHzCethljJHMKVl', #password
+            password= 'GAty_w42', #password
             database=db,
             port = port
         )

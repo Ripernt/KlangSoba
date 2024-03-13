@@ -17,12 +17,12 @@ from GUI.button import Button
 
 
 """valida inicio de sesion"""
-def validar(correo,contraseña,cursor,conexion):
+def validar(correo,password,cursor,conexion):
     global s
 
     correo = correo.lower()
     print(correo)
-    if correo == "" or contraseña == "":
+    if correo == "" or password == "":
         print("llene los campos")
     elif validar_correo(correo):
         print("El correo electrónico es válido.")
@@ -30,7 +30,7 @@ def validar(correo,contraseña,cursor,conexion):
         
         if buscarcor:
             print("SE HA ENCONTRADO AL USUARIO")
-            validarcontra = validarContraseña(correo,contraseña)
+            validarcontra = validarContraseña(correo,password)
             if validarcontra:
                 print("SE VALIDADO LA CONTRASEÑA ")
                 s = Sesion(obtenerDataJugador(correo, conexion, cursor))
@@ -48,28 +48,30 @@ def responseI():
 
 
 """valida registro"""
-def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
+def validarRegistro(usuario,correo,password,confirmcontra, conexion, cursor):
     
     correo = correo.lower()
     # print(correo)
-    if usuario == "" or correo == "" or contraseña == "" or confirmcontra == "":
+    if usuario == "" or correo == "" or password == "" or confirmcontra == "":
         return "Rellene los campos"
     elif validar_correo(correo): 
         
-        if contraseña == confirmcontra:
-
-            if not encontrarUsuario(correo, conexion, cursor):
+        if password == confirmcontra:
+            registrarUsuario(usuario,correo, password, conexion, cursor)
+            print("se ha registrado exitosamente")
+            return "OK"
+            """if not encontrarUsuario(correo, conexion, cursor):
                 res = autentificarCorreoUsuario(correo, conexion, cursor)
                 print("se enviaa correo")
-                if res:
+                if res:"""
                     
-                    registrarUsuario(usuario,correo,contraseña, conexion, cursor)
-                    print("se ha registrado exitosamente")
-                    return "OK"
-                else:
-                    return "codigo incorrecto, vuelva a intentarlo"
-            else:
-                return "El correo ya existe"
+               #     registrarUsuario(usuario,correo, password, conexion, cursor)
+               #     print("se ha registrado exitosamente")
+               #     return "OK"
+               # else:
+               #     return "codigo incorrecto, vuelva a intentarlo"
+            #else:
+            #    return "El correo ya existe"
         else:
             return "las contraseñas no coinciden"
     else:
@@ -77,10 +79,10 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
     
 
 """ingresa info a la base de datos, registra"""
-def registrarUsuario(usuario,correo, contraseña, conexionR = None, cursorR = None):
-    query = "insert into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s,%s,%s,%s);"
+def registrarUsuario(usuario,correo, password, conexionR = None, cursorR = None):
+    query = "insert into usuario (usr_nombre, usr_password, usr_correo, per_id) values (%s,%s,%s,%s);"
     cifrado = Cifradito()
-    contraseña_cifrada = cifrado.encriptado(contraseña)
+    contraseña_cifrada = cifrado.encriptado(password)
     valores= (usuario,contraseña_cifrada,correo,1)
     print(contraseña_cifrada)
     if conexionR is None:
@@ -119,9 +121,9 @@ def encontrarUsuario(correo, conexionR = None, cursorR = None):
         return False
 
 """una vez encontrado, compueba la contraseña"""
-def validarContraseña(correo,contraseña, conexionR = None, cursorR = None):
+def validarContraseña(correo,password, conexionR = None, cursorR = None):
     cifrado = Cifradito()
-    query = "select usr_contraseña from usuario where usr_correo = %s;"
+    query = "select usr_password from usuario where usr_correo = %s;"
     
     if conexionR is None:
         conexion = conectar.conectar()
@@ -138,7 +140,7 @@ def validarContraseña(correo,contraseña, conexionR = None, cursorR = None):
         conexion.close()
 
     resultado[0]
-    if contraseña == resultado[0]:
+    if password == resultado[0]:
         return True
     else:
         return False

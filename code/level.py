@@ -15,14 +15,11 @@ from magic import MagicPlayer
 from upgrade import Upgrade
 from GUI.Barra_Vida import BarraDeVida
 from logros import Logros
-
-
-
 from item import Item
 
 
 class Level:
-	def __init__(self, n=1, mapa="ground", scale=1):
+	def __init__(self, n=1, mapa="ground", scale=1, player = None):
 		
 		 
 		self.display_surface = pygame.display.get_surface()
@@ -36,7 +33,9 @@ class Level:
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
 		self.capasCargadas = 0
-  
+
+		self.player = player
+		self.posInit = (0,0)
 		# sprite setup
 		self.create_map(n)
 
@@ -80,14 +79,19 @@ class Level:
 
 						if style == 'entities':
 							if col == '394':
-								self.player = Player(
-									(x,y),
-									[self.visible_sprites],
-									self.obstacle_sprites,
-									self.create_attack,
-									self.destroy_attack,
-									self.create_magic, 
-         							self.display_surface)
+								if(self.player == None):
+									self.posInit = (x,y)
+									self.player = Player(
+										(x,y),
+										[self.visible_sprites],
+										self.obstacle_sprites,
+										self.create_attack,
+										self.destroy_attack,
+										self.create_magic, 
+         								self.display_surface)
+								else: 
+									self.posInit = (x,y)
+									print("esta es la posicion inicial: ", self.posInit)
 								
 							else:
 								if col == '390': monster_name = 'bamboo'
