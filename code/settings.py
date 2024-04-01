@@ -58,6 +58,7 @@ botonGreen = pygame.transform.scale(botonGreen, (180, 180))
 botonPiano = pygame.image.load("graphics/elementos_graficos/Piano.png")
 botonPiano = pygame.transform.scale(botonPiano, (200, 200))
 
+
 botonSintetizador = pygame.image.load("graphics/elementos_graficos/Sintetizador.png")
 botonSintetizador = pygame.transform.scale(botonSintetizador,(200, 200))
 
@@ -74,7 +75,9 @@ weapon_data = {
 
 magic_data = {
 	'flame': {'strength': 5,'cost': 20,'graphic':'graphics/particles/flame/fire.png'},
-	'heal' : {'strength': 20,'cost': 10,'graphic':'graphics/particles/heal/heal.png'}}
+	'heal' : {'strength': 20,'cost': 10,'graphic':'graphics/particles/heal/heal.png'},
+    'ray': {'strength': 5,'cost': 20,'graphic':'graphics/particles/ray/rayo.png'},
+    'magic': {'strength': 5,'cost': 20,'graphic':'graphics/particles/magic/magico.png'}}
 
 monster_data = {
 	'squid': {'health': 100,'exp':100,'damage':10,'attack_type': 'slash', 'attack_sound':'audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 360},

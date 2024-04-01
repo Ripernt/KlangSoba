@@ -9,8 +9,10 @@ class AnimationPlayer:
 		self.frames = {
 			# magic
 			'flame': import_folder('graphics/particles/flame/frames'),
+			'ray': import_folder('graphics/particles/ray/frames'),
 			'aura': import_folder('graphics/particles/aura'),
 			'heal': import_folder('graphics/particles/heal/frames'),
+			'magic': import_folder('graphics/particles/magic/frames'),
 			
 			# attacks 
 			'claw': import_folder('graphics/particles/claw'),

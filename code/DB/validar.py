@@ -1,28 +1,24 @@
 import re
-from secure.cifrado import Cifradito
+#from secure.cifrado import Cifradito
 from DB.Sesion import Sesion
-#from platform_scroller import iniciarSesion, registrarUsuario
+#from main import iniciarSesion, registrarUsuario
 from DB import conectar
 from DB.playerBD import obtenerDataJugador
 from settings import*
 import requests
-
 import pygame
-
 import sys
-
-
 from GUI.EntryS import Entry
 from GUI.button import Button
 
 
-"""valida inicio de sesion"""
-def validar(correo,password,cursor,conexion):
+#valida inicio de sesion
+def validar(correo,contraseña,cursor,conexion):
     global s
 
     correo = correo.lower()
     print(correo)
-    if correo == "" or password == "":
+    if correo == "" or contraseña == "":
         print("llene los campos")
     elif validar_correo(correo):
         print("El correo electrónico es válido.")
@@ -30,10 +26,11 @@ def validar(correo,password,cursor,conexion):
         
         if buscarcor:
             print("SE HA ENCONTRADO AL USUARIO")
-            validarcontra = validarContraseña(correo,password)
+            validarcontra = validarContraseña(correo,contraseña)
             if validarcontra:
                 print("SE VALIDADO LA CONTRASEÑA ")
                 s = Sesion(obtenerDataJugador(correo, conexion, cursor))
+                return s
             else:
                 s = "contraseña incorrecta"
         else:
@@ -41,23 +38,25 @@ def validar(correo,password,cursor,conexion):
     else:
         s = "El correo electrónico no es válido."
 
+    
+
         
-"""obtiene el objeto sesion"""
+#obtiene el objeto sesion
 def responseI():
     return s
 
 
 """valida registro"""
-def validarRegistro(usuario,correo,password,confirmcontra, conexion, cursor):
+def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
     
     correo = correo.lower()
     # print(correo)
-    if usuario == "" or correo == "" or password == "" or confirmcontra == "":
+    if usuario == "" or correo == "" or contraseña == "" or confirmcontra == "":
         return "Rellene los campos"
     elif validar_correo(correo): 
         
-        if password == confirmcontra:
-            registrarUsuario(usuario,correo, password, conexion, cursor)
+        if contraseña == confirmcontra:
+            registrarUsuario(usuario,correo, contraseña, conexion, cursor)
             print("se ha registrado exitosamente")
             return "OK"
             """if not encontrarUsuario(correo, conexion, cursor):
@@ -65,7 +64,7 @@ def validarRegistro(usuario,correo,password,confirmcontra, conexion, cursor):
                 print("se enviaa correo")
                 if res:"""
                     
-               #     registrarUsuario(usuario,correo, password, conexion, cursor)
+               #     registrarUsuario(usuario,correo, contraseña, conexion, cursor)
                #     print("se ha registrado exitosamente")
                #     return "OK"
                # else:
@@ -79,19 +78,19 @@ def validarRegistro(usuario,correo,password,confirmcontra, conexion, cursor):
     
 
 """ingresa info a la base de datos, registra"""
-def registrarUsuario(usuario,correo, password, conexionR = None, cursorR = None):
-    query = "insert into usuario (usr_nombre, usr_password, usr_correo, per_id) values (%s,%s,%s,%s);"
-    cifrado = Cifradito()
-    contraseña_cifrada = cifrado.encriptado(password)
-    valores= (usuario,contraseña_cifrada,correo,1)
-    print(contraseña_cifrada)
+def registrarUsuario(usuario,correo, contraseña, conexionR = None, cursorR = None):
+    query = "INSERT into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s, %s, %s, %s);"
+    #cifrado = Cifradito()
+    #contraseña_cifrada = cifrado.encriptado(contraseña)
+    valores= (usuario,contraseña,correo,1)
+    #print(contraseña_cifrada)
     if conexionR is None:
         conexion = conectar.conectar()
         cursor = conexion.cursor()
     else:
         conexion = conexionR
         cursor = cursorR
-    cursor.execute(query,valores)
+    cursor.execute(query, valores)
     conexion.commit()
     if conexionR is None:
         cursor.close()
@@ -121,9 +120,9 @@ def encontrarUsuario(correo, conexionR = None, cursorR = None):
         return False
 
 """una vez encontrado, compueba la contraseña"""
-def validarContraseña(correo,password, conexionR = None, cursorR = None):
-    cifrado = Cifradito()
-    query = "select usr_password from usuario where usr_correo = %s;"
+def validarContraseña(correo,contraseña, conexionR = None, cursorR = None):
+    #cifrado = Cifradito()
+    query = "select usr_contraseña from usuario where usr_correo = %s;"
     
     if conexionR is None:
         conexion = conectar.conectar()
@@ -140,7 +139,7 @@ def validarContraseña(correo,password, conexionR = None, cursorR = None):
         conexion.close()
 
     resultado[0]
-    if password == resultado[0]:
+    if contraseña == resultado[0]:
         return True
     else:
         return False
@@ -154,7 +153,7 @@ def validar_correo(correo):
     else:
         return False
     
-def enviarCorreo(correo):
+"""def enviarCorreo(correo):
     url = 'https://Francis.pythonanywhere.com/enviar_codigo'
     # Dirección de correo electrónico a la que se enviará el código
     # Realizar la solicitud POST al servidor Flask
@@ -167,9 +166,9 @@ def enviarCorreo(correo):
         return response.json()['codigo']
     else:
         return "Error"
-
+    """
 """codigo de verificacion"""   
-def autentificarCorreoUsuario(correo, conexion, cursor):
+"""def autentificarCorreoUsuario(correo, conexion, cursor):
     pygame.display.update()
 
     code = enviarCorreo(correo)
@@ -228,4 +227,4 @@ def autentificarCorreoUsuario(correo, conexion, cursor):
         entrada.update(events)
 
 
-        pygame.display.update()
+        pygame.display.update()"""

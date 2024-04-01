@@ -1,20 +1,18 @@
-from settings import *
-
 import pygame, sys, threading
-
 #from time import time
 from settings import *
-from level import Level,Level_2
+from level import *
+from settings import *
 from inicio import Inicio
-from GUI.Pausa import PausaMenu
 from DB import conectar as Conectar
 from DB.conectar import *
 from DB import validar
 from DB.Sesion  import Sesion
+from GUI.Pausa import PausaMenu
 from GUI.button import Button
 from GUI.Entry import InputBox
 from GUI.MenuInstrumentos import MInstrumentos
-from secure.cifrado import Cifradito
+#from secure.cifrado import Cifradito
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
 from math import sqrt, pow
@@ -34,12 +32,12 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption('KlangSoba')
         self.Inicio = Inicio()
-        self.cifrado = Cifradito()
+        #self.cifrado = Cifradito()
         self.progreso = 0	
         self.fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20) 
+        
         self.color_level = [WATER_COLOR, (38, 11, 45)]
-
-        self.current_level = 0
+        
         self.downloaded_level = []
         self.level = None
         
@@ -54,7 +52,7 @@ class Game:
             self.cursor = self.conexion.cursor()
             print("conectado")
         except mysql.connector.Error as error:
-                print("Se color un error al conectar a la base de datos: {}".format(error))
+                print("Se encontro un error al conectar a la base de datos: {}".format(error))
 
     def iniciarSesion(self):
         pygame.display.update()
@@ -73,8 +71,6 @@ class Game:
         cajaI = InputBox((200,200,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)])
         cajaC = InputBox((200,300,400,32), "Contraseña", colorValue=[(0,0,0), (255,0,0)])
 
-        botoniniciar.cargar(self.screen)
-        botoniniciar.cambiar_color(pygame.mouse.get_pos())
         renderT = None
 
         while True:
@@ -115,9 +111,9 @@ class Game:
                     if botoniniciar.checkForInput(pygame.mouse.get_pos()):
                         botoniniciar.click(self.screen)
                         correo = cajaI.text
-                        password = cajaC.text
-                        xd = self.cifrado.encriptado(password)
-                        t1 = threading.Thread(target= validar.validar,args=(correo,xd,self.cursor,self.conexion))
+                        contraseña = cajaC.text
+                        #xd = self.cifrado.encriptado(contraseña)
+                        t1 = threading.Thread(target= validar.validar,args=(correo,contraseña,self.cursor,self.conexion)) #,xd,
                         t1.start()
                         t1.join()
                         response = validar.responseI()
@@ -195,11 +191,11 @@ class Game:
                         botonregistrar.click(self.screen)
                         usuario = caja.getText()
                         correo = caja2.getText()
-                        password = caja3.getText()
+                        contraseña = caja3.getText()
                         confirmcontra = caja4.getText()
                         #renderT = None
-                        print(password)
-                        response = validar.validarRegistro(usuario,correo,password,confirmcontra, self.conexion, self.cursor)
+                        #print(contraseña)
+                        response = validar.validarRegistro(usuario,correo,contraseña,confirmcontra, self.conexion, self.cursor)
                         if response == "OK":
                             return
                         else:
@@ -316,8 +312,8 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         self.main_sound.music.pause()
                         self.musica_personalizada.play(1)
-                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada)
-                        xd = self.Pausita.show_menu()
+                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada,self.player, self.screen)
+                        xd = self.Pausita.show_menu(self.screen)
                         if xd == False:
                             self.main_sound.music.unpause()
                     if event.key == pygame.K_m:
@@ -328,13 +324,23 @@ class Game:
                         if hola == False:
                             self.main_sound.music.unpause()
 
-            self.screen.fill(self.color_level[self.current_level])
+            self.screen.fill(self.color_level[self.currentLevelNum])
             self.level.run()
-            print(pygame.time.get_ticks())
-            if(pygame.time.get_ticks()>30000 and self.current_level<1):
-                self.current_level+=1
-                self.inicializar_level()
             
+            print(self.player.rect.topleft)
+            
+            
+            if(eucDis(self.player.rect.topleft, (4001, 705))<70 and self.currentLevelNum != 1):
+                print("que sucede chaval")
+                self.currentLevelNum = 1
+                self.level = self.downloaded_level[self.currentLevelNum]
+                self.level.resetPlayer()
+            if(eucDis(self.player.rect.topleft, (827, 1197))<70 and self.currentLevelNum != 0):
+                print("que sucede chaval")
+                self.currentLevelNum = 0
+                self.level = self.downloaded_level[self.currentLevelNum]
+                self.level.resetPlayer()
+                
             pygame.display.update()
             self.clock.tick(FPS)
             

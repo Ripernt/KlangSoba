@@ -1,19 +1,21 @@
-import pygame
+import pygame, settings, sys
 from pygame.locals import *
 from GUI.button import Button  
 from GUI.Range import Range  
-import settings
-import sys
 from tkinter import messagebox
+from GUI.Almanaque import Almanaque
+
 
 class PausaMenu:
-    def __init__(self, main_sound, pause_sound, screen = pygame.display.set_mode((settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))):
+    def __init__(self, main_sound, pause_sound, player, screen = pygame.display.set_mode((settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))):
         self.screen = screen
         self.paused = True
         self.almanaque = None
         self.sound = main_sound
         self.pause_sound = pause_sound
-    def show_menu(self):
+        self.player = player
+        
+    def show_menu(self, screen):
 
         fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20)
         self.screen.fill((50, 50, 50))
@@ -33,7 +35,7 @@ class PausaMenu:
 
         range_volumen = Range((900, 650, 250, 22), "Musica")
         range_volumen.range = self.sound.music.get_volume() * 10
-       
+    
         
         
         while self.paused:
@@ -58,17 +60,18 @@ class PausaMenu:
             range_volumen.draw(self.screen, events)
 
             for event in events:
+                #Salir
                 if event.type == pygame.QUIT:
                     respuesta = messagebox.askyesno("Precaución", "Se perderán los avances de este nivel. ¿Estás seguro?")
                     if respuesta:
                         pygame.quit()
                         sys.exit()
+                #Renaudar
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_p or event.key == K_ESCAPE:
                         self.paused = False
                         play_button.click(self.screen)
                         self.pause_sound.stop()
-                        
                         return self.paused
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -80,9 +83,14 @@ class PausaMenu:
                             
                             return self.paused
                         elif pokedex_button.checkForInput(pygame.mouse.get_pos()):
-                            
+                            self.paused = False
                             pokedex_button.click(self.screen)
-
+                            self.alm = Almanaque(screen, self.player, 'graphics/elementos_graficos/fondosgenerico.png', rect=(settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT),center=True) #listaMateriales = player.itemsRecolectados
+                            Elpepe = self.alm.show_almanaque(screen)
+                            if Elpepe == False:
+                                self.pause_sound.stop()
+                            return self.paused
+                        
                         elif salir_button.checkForInput(pygame.mouse.get_pos()):
                             salir_button.click(self.screen)
                             respuesta = messagebox.askyesno("Precaución", "Se perderán los avances de este nivel. ¿Estás seguro?")

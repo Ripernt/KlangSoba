@@ -19,7 +19,7 @@ from item import Item
 
 
 class Level:
-	def __init__(self, n=1, mapa="ground", scale=1, player = None):
+	def __init__(self, n=1, mapa="ground", scale=1, player=None):
 		
 		 
 		self.display_surface = pygame.display.get_surface()
@@ -33,9 +33,11 @@ class Level:
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
 		self.capasCargadas = 0
-
+  
 		self.player = player
 		self.posInit = (0,0)
+ 
+ 
 		# sprite setup
 		self.create_map(n)
 
@@ -52,6 +54,9 @@ class Level:
 		# particles
 		self.animation_player = AnimationPlayer()
 		self.magic_player = MagicPlayer(self.animation_player)
+
+		#items
+		#self.items = Player(self.itemsRecolectados)
   
 	def cargarCSV(self, style, layout, graphics):
 		from enemy import Enemy
@@ -79,7 +84,7 @@ class Level:
 
 						if style == 'entities':
 							if col == '394':
-								if(self.player == None):
+								if(self.player==None):
 									self.posInit = (x,y)
 									self.player = Player(
 										(x,y),
@@ -88,8 +93,10 @@ class Level:
 										self.create_attack,
 										self.destroy_attack,
 										self.create_magic, 
-         								self.display_surface)
-								else: 
+										self.display_surface)
+										#self.items)
+								else:
+									
 									self.posInit = (x,y)
 									print("esta es la posicion inicial: ", self.posInit)
 								
@@ -124,12 +131,27 @@ class Level:
 		}
 
 		for style,layout in layouts.items():
-			print("Optimizacion")
 			threadLevel = threading.Thread(target=self.cargarCSV, args=(style, layout, graphics))
 			threadLevel.start()
             
 
 		print("se ha creado el mapa")					
+	def resetPlayer(self):
+		self.player.kill()
+		self.player.add([self.visible_sprites])
+		
+		"""self.obstacle_sprites,
+										self.create_attack,
+										self.destroy_attack,
+										self.create_magic, 
+										self.display_surface"""
+		self.player.obstacle_sprites = self.obstacle_sprites
+		self.player.create_attack = self.create_attack
+		self.player.destroy_attack = self.destroy_attack
+		self.player.create_magic = self.create_magic
+		self.player.barra.display_surface = self.display_surface
+  
+		self.player.hitbox.topleft = self.posInit
 	def create_attack(self):
 		
 		self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
@@ -140,8 +162,12 @@ class Level:
 
 		if style == 'flame':
 			self.magic_player.flame(self.player,cost,[self.visible_sprites,self.attack_sprites])
+		if style == 'ray':
+			self.magic_player.ray(self.player,cost,[self.visible_sprites,self.attack_sprites])
+		if style == 'magic':
+			self.magic_player.magic(self.player,cost,[self.visible_sprites,self.attack_sprites])
 	def drop_item(self, pos):
-		Item([self.visible_sprites], "bateria", pos, self.display_surface)
+		Item([self.visible_sprites], "bateria", pos, self.display_surface, player=self.player)
 
 	def destroy_attack(self):
 		if self.current_attack:
@@ -193,6 +219,7 @@ class Level:
 			self.visible_sprites.enemy_update(self.player)
 
 			self.player_attack_logic()
+
 
 class Level_2 (Level):
     def __init__(self, player=None):

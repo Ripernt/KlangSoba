@@ -1,12 +1,9 @@
-import pygame, sys, settings
+import pygame, sys, threading, settings
 from GUI.button import Button
 from tkinter import messagebox
 from logros import Logros
 
-
 clock = pygame.time.Clock() 
-
-
 
 def Movimiento_suave(bar_x=0,bar_y=0,square_x=None,square_y=None, error=0.75):
     #se lleva acabo el movimineto suave
@@ -60,7 +57,7 @@ class BarraDeVida:
         self.display_surface.blit(self.barra_vida,(self.bar_x, self.bar_y))
         
         resp = self.level.obtener_posRespecto_camara(self.objetoEntity)
-        pos1 = (self.objetoEntity.rect.x,self.objetoEntity.rect.y)
+        pos1 = (self.objetoEntity.rect.x - 10,self.objetoEntity.rect.y - 30)
 
         self.objetoEntity.updateMess(self.display_surface)
         
@@ -89,14 +86,14 @@ class BarraDeVida:
         current_health_ratio = vida_actual/vida_completa
         ancho_actual_barra = self.barra_max_ancho * current_health_ratio #regla de 3
         vida_barra_rect = pygame.Rect(self.barra_vida_relleno, (ancho_actual_barra,self.barra_alto))
-        pygame.draw.rect(self.display_surface,'#FF2D2D', vida_barra_rect)
+        pygame.draw.rect(self.display_surface,'#73ebe3', vida_barra_rect)
         
         pygame.display.update()
 
+
     def Muerte(self,size= [settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT], muerto=False):
+
         from reinicio import Reinicio
-
-
         self.reinicio = Reinicio()
 
 
@@ -105,26 +102,26 @@ class BarraDeVida:
         
         fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20)  
 
-        menu_text = fontsito.render("Haz Muerto", True, "red")
+        menu_text = fontsito.render("Haz Muerto", True, "#8E73F3")
         menu_rect = menu_text.get_rect(center=(size[0]/2, size[1]/10))
 
-        boton=pygame.image.load("graphics/elementos_graficos/button.png")
+        boton=pygame.image.load("graphics/elementos_graficos/botonkS.png")
         boton=pygame.transform.scale(boton,(240,90))
 
-        musica_muerte = pygame.mixer.Sound('audio/Gustavo Cerati - Crimen (8 bits).wav')
+        
 
-        fondo = pygame.image.load("graphics/elementos_graficos/fondosgenerico.png")
+        fondo = pygame.image.load("graphics/elementos_graficos/shinee.png")
 
         fondo = pygame.transform.scale(fondo, (size[0], size[1]))
 
-        Reiniciar = Button(image=boton, pos=(size[0]//2, 150),text_input="Reiniciar",font=fontsito,base_color="#7467F2",hovering_color="#F13816")
+        Reiniciar = Button(image=boton, pos=(size[0]//2, 150),text_input="Reiniciar",font=fontsito,base_color="#84091C",hovering_color="#FA1A3D")
 
-        salir_botton = Button(image=boton, pos=(size[0]//2, 250),text_input="Salir",font=fontsito,base_color="#7467F2",hovering_color="#F13816")
-        
+        salir_botton = Button(image=boton, pos=(size[0]//2, 250),text_input="Salir",font=fontsito,base_color="#84091C",hovering_color="#FA1A3D")
+        self.musica_muerte = pygame.mixer.Sound('audio/Gustavo Cerati - Crimen (8 bits).wav')
         
         while True:
             
-            musica_muerte.play(-1)
+            self.musica_muerte.play(-1)
 
             self.display_surface.blit(fondo, (0,0))
             self.display_surface.blit(menu_text, menu_rect)
@@ -163,13 +160,13 @@ class BarraDeVida:
                     if Reiniciar.checkForInput(pygame.mouse.get_pos()):
 
                         Reiniciar.click(self.display_surface)
-                        #pygame.mixer.music.stop()
-                        musica_muerte.stop()
+                        pygame.mixer.music.stop()
+                        self.musica_muerte.stop()
                         print("Reiniciar nivel")
                         self.logros.agregar_logro("B3")
-                        
+
                         self.reinicio.ReiniciarNivel()
- 
+                        
                     elif salir_botton.checkForInput(pygame.mouse.get_pos()):
                         salir_botton.click(self.display_surface)
                         pygame.quit()

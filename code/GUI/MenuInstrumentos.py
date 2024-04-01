@@ -1,5 +1,6 @@
 import pygame
 from GUI.button import Button
+from GUI.UIPiano import InterfazPiano
 import settings
 from pygame.locals import *
 class MInstrumentos:
@@ -15,10 +16,11 @@ class MInstrumentos:
         fonti = pygame.font.Font('graphics/font/joystix.ttf', 20)
         self.screen.fill((50,50,50))
 
-        instrumentos_text = fonti.render("Menu instrumentos", True, "white") 
+        instrumentos_text = fonti.render("Menu de instrumentos", True, "white") 
         instrumentos_rect = instrumentos_text.get_rect(center=(settings.SCREEN_WIDTH/2, settings.SCREEN_HEIGHT/11))
 
         piano_Button = Button(image=settings.botonPiano, pos=(300,300), text_input="Piano", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+        
         sintetizador_Button = Button(image=settings.botonSintetizador, pos=(600,300), text_input="Sintetizador", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
         fondo = pygame.image.load("graphics/elementos_graficos/Menuinstrumentos.png")
         fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
@@ -57,6 +59,17 @@ class MInstrumentos:
                         self.sound.pause()
                         self.musicap.stop()
                         return self.instrumentos
+                    if piano_Button.checkForInput(pygame.mouse.get_pos()):
+                        self.instrumentos = False
+                        piano_Button.click(self.screen)
+                        self.inst = InterfazPiano(self.screen)
+                        self.sound.pause()
+                        self.musicap.stop()
+                        eee = self.inst.mostrar_menu_piano()
+                        if eee == False:
+                            self.musicap.stop()
+                        return self.instrumentos 
+                        
 
             pygame.display.update()
                 

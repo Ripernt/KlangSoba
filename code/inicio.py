@@ -90,7 +90,7 @@ class Inicio:
         self.screen = pygame.display.set_mode(size)
 
         bioc = pygame.image.load("graphics/papu/bclogo.png")
-        fasts = pygame.image.load("graphics/papu/logo-fs.gif")
+        fasts = pygame.image.load("graphics/papu/logo-fs.png")
         elmejorjuego = pygame.image.load("graphics/papu/spinelogo.gif")
         klangsoba = pygame.image.load("graphics/papu/ks (1).png")
 

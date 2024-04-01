@@ -3,9 +3,9 @@ from spritesheet_functions import SpriteSheet
 from settings import *
 from GUI.MenuInstrumentos import MInstrumentos
 from math import sqrt, pow
-from level import Level, Level_2
+from level import *
 
-def eucDis(p1, p2): 
+def eucDis(p1, p2):
     difx = p1[0]-p2[0]
     dify = p1[1]-p2[1]
     
@@ -17,22 +17,34 @@ class Reinicio():
 
     def __init__(self):
         pygame.init()
+        self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.progreso = 0
+        self.level = None
+        self.player = None
+        self.Clevel2 = False
+        self.downloaded_level = []
+        self.currentLevelNum = 0
 
     def ReCargarNivel(self):
         print("Reiniciando el nivel")
-        self.clock = pygame.time.Clock()
-        self.progreso = 20
-        self.progreso = 30
+        self.Clevel2 = self.CargarNivel()
+        
         self.main_sound = pygame.mixer
         self.main_sound.music.load('audio/Monkberry Moon Delight.ogg')
-        self.progreso = 50
+        self.progreso = 20
+        self.progreso = 30
+        print(self.Clevel2)
+        self.musica_instrumentos = pygame.mixer.Sound("audio/[CHIPTUNE] Pink Floyd - Have A Cigar.wav")
         self.musica_personalizada = pygame.mixer.Sound("audio/bass-loops-006-with-drums-long-loop-120-bpm-6111.mp3")
-        self.progreso = 503
+        if self.Clevel2 != False:
+            self.progreso = 503
+        
 
     def CargarNivel(self):
-
+        self.level = Level()
+        print("level hecho")
+        self.progreso = 300
         print("inicializando niveles")
         self.downloaded_level.append(Level())
         print("primer nivel...")
@@ -41,9 +53,15 @@ class Reinicio():
         
         self.level = self.downloaded_level[0]
         
-        self.player = self.level.player
+        self.progreso = 400
         
+        self.player = self.level.player
+        self.Clevel = True
+        print(self.Clevel)
         print("level hecho")
+        self.progreso = 503
+    
+        return self.Clevel
 
     def Animacion_Carga(self):
         print("Mostrar animación")
@@ -108,13 +126,13 @@ class Reinicio():
                     if event.key == pygame.K_ESCAPE:
                         self.main_sound.music.pause()
                         self.musica_personalizada.play(1)
-                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada)
-                        xd = self.Pausita.show_menu()
+                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada, self.player)
+                        xd = self.Pausita.show_menu(self.screen)
                         if xd == False:
                             self.main_sound.music.unpause()
                     if event.key == pygame.K_m:
                         self.main_sound.music.pause()
-                        self.musica_instrumentos.play(-1)
+                        self.musica_instrumentos.play(1)
                         self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos)#Cambiar la musica
                         hola = self.Instrumentos.mostrar_instrumentos()
                         if hola == False:
@@ -123,7 +141,10 @@ class Reinicio():
             self.screen.fill(WATER_COLOR)
             self.level.run()
             
-            if(eucDis(self.player.rect.topleft, (3743, 670))<70 and self.currentLevelNum != 1):
+            print(self.player.rect.topleft)
+            
+            
+            if(eucDis(self.player.rect.topleft, (4001, 705))<70 and self.currentLevelNum != 1):
                 print("que sucede chaval")
                 self.currentLevelNum = 1
                 self.level = self.downloaded_level[self.currentLevelNum]
@@ -133,10 +154,10 @@ class Reinicio():
                 self.currentLevelNum = 0
                 self.level = self.downloaded_level[self.currentLevelNum]
                 self.level.resetPlayer()
-                
+
             pygame.display.update()
             self.clock.tick(FPS)
-            
+
             pygame.display.set_caption(f'fps: {round(self.clock.get_fps())}')
 
     def ReiniciarNivel(self):
@@ -145,6 +166,8 @@ class Reinicio():
         threadReLevel.start()
         threadReCargaNivel = threading.Thread(target= self.ReCargarNivel)
         threadReCargaNivel.start()
+        
         self.Animacion_Carga()
         threadReLevel.join()
         self.run()
+
