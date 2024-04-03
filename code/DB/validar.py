@@ -56,21 +56,19 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
     elif validar_correo(correo): 
         
         if contraseña == confirmcontra:
-            registrarUsuario(usuario,correo, contraseña, conexion, cursor)
-            print("se ha registrado exitosamente")
-            return "OK"
-            """if not encontrarUsuario(correo, conexion, cursor):
-                res = autentificarCorreoUsuario(correo, conexion, cursor)
-                print("se enviaa correo")
-                if res:"""
+
+            if not encontrarUsuario(correo, conexion, cursor):
+                    res = autentificarCorreoUsuario(correo, conexion, cursor)
+                    print("se enviaa correo")
+                    if res:
                     
-               #     registrarUsuario(usuario,correo, contraseña, conexion, cursor)
-               #     print("se ha registrado exitosamente")
-               #     return "OK"
-               # else:
-               #     return "codigo incorrecto, vuelva a intentarlo"
-            #else:
-            #    return "El correo ya existe"
+                        registrarUsuario(usuario,correo, contraseña, conexion, cursor)
+                        print("se ha registrado exitosamente")
+                        return "OK"
+                    else:
+                        return "codigo incorrecto, vuelva a intentarlo"
+            else:
+                return "El correo ya existe"
         else:
             return "las contraseñas no coinciden"
     else:
@@ -153,7 +151,7 @@ def validar_correo(correo):
     else:
         return False
     
-"""def enviarCorreo(correo):
+def enviarCorreo(correo):
     url = 'https://Francis.pythonanywhere.com/enviar_codigo'
     # Dirección de correo electrónico a la que se enviará el código
     # Realizar la solicitud POST al servidor Flask
@@ -166,9 +164,9 @@ def validar_correo(correo):
         return response.json()['codigo']
     else:
         return "Error"
-    """
+    
 """codigo de verificacion"""   
-"""def autentificarCorreoUsuario(correo, conexion, cursor):
+def autentificarCorreoUsuario(correo, conexion, cursor):
     pygame.display.update()
 
     code = enviarCorreo(correo)
@@ -227,4 +225,4 @@ def validar_correo(correo):
         entrada.update(events)
 
 
-        pygame.display.update()"""
+        pygame.display.update()
