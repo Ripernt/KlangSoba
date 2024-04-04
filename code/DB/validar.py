@@ -152,7 +152,7 @@ def validar_correo(correo):
         return False
     
 def enviarCorreo(correo):
-    url = 'https://Francis.pythonanywhere.com/enviar_codigo'
+    url = 'https://carapia7.pythonanywhere.com/enviar_codigo'
     # Dirección de correo electrónico a la que se enviará el código
     # Realizar la solicitud POST al servidor Flask
     data = {'correo': correo}

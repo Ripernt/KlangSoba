@@ -1,6 +1,4 @@
-import threading
-import time
-import pygame 
+import threading, time, pygame, random
 from settings import *
 from tile import Tile
 from player import Player
@@ -166,8 +164,15 @@ class Level:
 			self.magic_player.ray(self.player,cost,[self.visible_sprites,self.attack_sprites])
 		if style == 'magic':
 			self.magic_player.magic(self.player,cost,[self.visible_sprites,self.attack_sprites])
+
 	def drop_item(self, pos):
-		Item([self.visible_sprites], "bateria", pos, self.display_surface, player=self.player)
+		materiales = ["bateria","cuerdas","cables","madera"]
+		eleccion = random.choice(materiales)
+		Item([self.visible_sprites],  eleccion, pos, self.display_surface, player = self.player)
+		#Item([self.visible_sprites], "bateria", pos, self.display_surface, player=self.player)
+		#Item([self.visible_sprites], "cuerdas", pos, self.display_surface, player=self.player)
+		#Item([self.visible_sprites], "cables", pos, self.display_surface, player = self.player)
+		#Item([self.visible_sprites], "madera", pos, self.display_surface, player = self.player)
 
 	def destroy_attack(self):
 		if self.current_attack:
