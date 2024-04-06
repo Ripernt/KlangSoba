@@ -1,6 +1,7 @@
 import pygame
 from entity import Entity
 
+
 from math import sin
 class Item(Entity):
     def __init__(self, groups, name, pos, surface, scale = 0.2, player=None):
@@ -26,6 +27,7 @@ class Item(Entity):
         self.name = name
         
         self.display_surface = surface
+
     def update(self):
         self.rect.y = self.pos[1] + sin((pygame.time.get_ticks()-self.timeInit)/200)*10 - 5
         if(pygame.time.get_ticks()-self.timeInit > 11000):
@@ -45,8 +47,12 @@ class Item(Entity):
             
             print(f"recogiendo {self.name}")    
             print(self.player.items_num)
-            
             self.kill()
-            
+        return self.player.items_num
+
+
+    def valor(self):
+        return self.player.items_num
+    
                 
             

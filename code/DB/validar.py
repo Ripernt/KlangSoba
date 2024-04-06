@@ -13,9 +13,9 @@ from GUI.button import Button
 
 
 #valida inicio de sesion
+
 def validar(correo,contraseña,cursor,conexion):
     global s
-
     correo = correo.lower()
     print(correo)
     if correo == "" or contraseña == "":
@@ -77,6 +77,8 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
 
 """ingresa info a la base de datos, registra"""
 def registrarUsuario(usuario,correo, contraseña, conexionR = None, cursorR = None):
+    global usu
+    usu = correo
     query = "INSERT into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s, %s, %s, %s);"
     #cifrado = Cifradito()
     #contraseña_cifrada = cifrado.encriptado(contraseña)
@@ -96,6 +98,8 @@ def registrarUsuario(usuario,correo, contraseña, conexionR = None, cursorR = No
 
 """busca info a la base de datos, encuentra"""
 def encontrarUsuario(correo, conexionR = None, cursorR = None):
+    global usu
+    usu = correo
     query = "select usr_correo from usuario where usr_correo = %s;"
     
     if conexionR is None:
@@ -176,7 +180,7 @@ def autentificarCorreoUsuario(correo, conexion, cursor):
     pygame.mixer.music.pause()
 
     fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20) 
-    fontsito2 = pygame.font.Font('graphics/font/joystix.ttf', 15) 
+    fontsito2 = pygame.font.Font('graphics/font/joystix.ttf', 15)
 
     menu_text = fontsito.render("Valida tu Correo Electronico", True, "white")
     menu_rect = menu_text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/10))
@@ -226,3 +230,41 @@ def autentificarCorreoUsuario(correo, conexion, cursor):
 
 
         pygame.display.update()
+
+"""Insertar items"""
+def insertar_items(lista,conexionR,cursorR):
+    query = "Select usr_id from usuario where usr_nombre =%s;"
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+
+    cursor.execute(query,[usu])
+    id_usu = cursor.fetchone()
+    
+    query2 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
+    #Insert bateria
+    valores1 = (1,1,lista[0])
+
+    #Insert cables
+    valores2 = (1,3,lista[1])
+
+    #Insert cuerdas
+    valores3 = (1,4,lista[2])
+
+    #Insert madera
+    valores4 = (1,2,lista[3])
+
+    cursor.execute(query2,valores1)
+    cursor.execute(query2,valores2)
+    cursor.execute(query2,valores3)
+    cursor.execute(query2,valores4)
+    conexion.commit()
+    
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+
+

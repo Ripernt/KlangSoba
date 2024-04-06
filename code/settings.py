@@ -41,19 +41,19 @@ BAR_COLOR_SELECTED = '#111111'
 UPGRADE_BG_COLOR_SELECTED = '#EEEEEE'
 
 botonBlue = pygame.image.load("graphics/elementos_graficos/bluebut.png")
-botonBlue = pygame.transform.scale(botonBlue, (180, 180))
+botonBlue = pygame.transform.scale(botonBlue, (180, 100))
 
 botonRed = pygame.image.load("graphics/elementos_graficos/redbut.png")
-botonRed = pygame.transform.scale(botonRed, (180, 180))
+botonRed = pygame.transform.scale(botonRed, (180, 100))
 
 botonPur = pygame.image.load("graphics/elementos_graficos/purbut.png")
-botonPur = pygame.transform.scale(botonPur, (180, 180))
+botonPur = pygame.transform.scale(botonPur, (180, 100))
 
 botonPurChat = pygame.image.load("graphics/elementos_graficos/purbut.png")
 botonPurChat = pygame.transform.scale(botonPur, (80, 80))
 
 botonGreen = pygame.image.load("graphics/elementos_graficos/greenbut.png")
-botonGreen = pygame.transform.scale(botonGreen, (180, 180))
+botonGreen = pygame.transform.scale(botonGreen, (180, 100))
 
 botonPiano = pygame.image.load("graphics/elementos_graficos/Piano.png")
 botonPiano = pygame.transform.scale(botonPiano, (200, 200))

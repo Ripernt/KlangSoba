@@ -312,7 +312,7 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         self.main_sound.music.pause()
                         self.musica_personalizada.play(1)
-                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada,self.player, self.screen)
+                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada,self.player,self.conexion,self.cursor ,self.screen)
                         xd = self.Pausita.show_menu(self.screen)
                         if xd == False:
                             self.main_sound.music.unpause()
@@ -327,7 +327,7 @@ class Game:
             self.screen.fill(self.color_level[self.currentLevelNum])
             self.level.run()
             
-            print(self.player.rect.topleft)
+            #print(self.player.rect.topleft)
             
             
             if(eucDis(self.player.rect.topleft, (4001, 705))<70 and self.currentLevelNum != 1):

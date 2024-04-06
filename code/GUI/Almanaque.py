@@ -8,7 +8,7 @@ from GUI.PopUp import PopUp
 from GUI.button import Button
 
 class Almanaque():
-    def __init__(self, screen,player, background,rect= None, center = False):#, listaMateriales=None,rect= None, center=False):
+    def __init__(self, screen,player, background,rect= None, center = False):
         self.screen = screen
         self.player = player
         if not center:
@@ -83,16 +83,16 @@ class Almanaque():
 
             text_rect = self.nic.get_rect()
             text_rect.center = (50, 225)
-            self.screen.blit(self.nic, text_rect)  # Dibuja el texto en la pantalla
+            self.screen.blit(self.nic, text_rect)  # Dibuja el texto de cable en la pantalla
             text_rect = self.nia.get_rect()
             text_rect.center = (375, 225)
-            self.screen.blit(self.nia, text_rect)  # Dibuja el texto en la pantalla
+            self.screen.blit(self.nia, text_rect)  # Dibuja el texto de cuerda en la pantalla
             text_rect = self.nim.get_rect()
             text_rect.center = (675, 225)
-            self.screen.blit(self.nim, text_rect)  # Dibuja el texto en la pantalla
+            self.screen.blit(self.nim, text_rect)  # Dibuja el texto de madera en la pantalla
             text_rect = self.nib.get_rect()
             text_rect.center = (975, 225)
-            self.screen.blit(self.nib, text_rect)  # Dibuja el texto en la pantalla
+            self.screen.blit(self.nib, text_rect)  # Dibuja el texto de bateria en la pantalla
 
             self.salir_botton.cargar(self.screen)
             self.salir_botton.cambiar_color(pygame.mouse.get_pos())
