@@ -47,7 +47,7 @@ def responseI():
 
 
 """valida registro"""
-def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
+def validarRegistro(usuario,correo,contraseña,confirmcontra,lista,conexion, cursor):
     
     correo = correo.lower()
     # print(correo)
@@ -62,7 +62,7 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
                     print("se enviaa correo")
                     if res:
                     
-                        registrarUsuario(usuario,correo, contraseña, conexion, cursor)
+                        registrarUsuario(usuario,correo, contraseña, lista,conexion, cursor)
                         print("se ha registrado exitosamente")
                         return "OK"
                     else:
@@ -76,10 +76,11 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
     
 
 """ingresa info a la base de datos, registra"""
-def registrarUsuario(usuario,correo, contraseña, conexionR = None, cursorR = None):
+def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursorR = None, ):
     global usu
     usu = correo
     query = "INSERT into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s, %s, %s, %s);"
+    
     #cifrado = Cifradito()
     #contraseña_cifrada = cifrado.encriptado(contraseña)
     valores= (usuario,contraseña,correo,1)
@@ -92,6 +93,26 @@ def registrarUsuario(usuario,correo, contraseña, conexionR = None, cursorR = No
         cursor = cursorR
     cursor.execute(query, valores)
     conexion.commit()
+
+    query2 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
+    #Insert bateria
+    valores1 = (1,1,lista[0])
+
+    #Insert cables
+    valores2 = (1,3,lista[1])
+
+    #Insert cuerdas
+    valores3 = (1,4,lista[2])
+
+    #Insert madera
+    valores4 = (1,2,lista[3])
+
+    cursor.execute(query2,valores1)
+    cursor.execute(query2,valores2)
+    cursor.execute(query2,valores3)
+    cursor.execute(query2,valores4)
+    conexion.commit()
+
     if conexionR is None:
         cursor.close()
         conexion.close()
@@ -244,18 +265,18 @@ def insertar_items(lista,conexionR,cursorR):
     cursor.execute(query,[usu])
     id_usu = cursor.fetchone()
     
-    query2 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
-    #Insert bateria
-    valores1 = (1,1,lista[0])
+    query2 = "Update almanaque_item set ite_cantidad = %s where usr_id = %s and item_ite_id = %s;"
+    #Update bateria
+    valores1 = (lista[0],1,1)
 
-    #Insert cables
-    valores2 = (1,3,lista[1])
+    #Update cables
+    valores2 = (lista[1],1,3)
 
-    #Insert cuerdas
-    valores3 = (1,4,lista[2])
+    #Updates cuerdas
+    valores3 = (lista[2],1,4)
 
-    #Insert madera
-    valores4 = (1,2,lista[3])
+    #Update madera
+    valores4 = (lista[3],1,2)
 
     cursor.execute(query2,valores1)
     cursor.execute(query2,valores2)
@@ -266,5 +287,45 @@ def insertar_items(lista,conexionR,cursorR):
     if conexionR is None:
         cursor.close()
         conexion.close()
+
+def obtener_items(conexionR, cursorR):
+    listita = []
+    query = "Select ite_cantidad from almanaque_item where usr_id = %s and item_ite_id=%s;"
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+    #Cantidades por item
+    valores = (1,1) 
+    valores2 = (1,3) 
+    valores3= (1,4) 
+    valores4 = (1,2) 
+
+    cursor.execute(query,valores)
+    a = cursor.fetchone()
+    cursor.execute(query,valores2)
+    b = cursor.fetchone()
+    cursor.execute(query,valores3)
+    c = cursor.fetchone()
+    cursor.execute(query,valores4)
+    d = cursor.fetchone()
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+    if a == None:
+        a = (0,)
+    if b == None:
+        b = (0,)
+    if c == None:
+        c = (0,)
+    if d == None:
+        d = (0,)
+    listita = [*a, *b, *c, *d]
+    return listita
+    
+#def devolver_items():
+#    return a
 
 

@@ -54,5 +54,11 @@ class Item(Entity):
     def valor(self):
         return self.player.items_num
     
+    def carga_items(self, new_lista):
+
+        self.player.items_num = new_lista
+        
+    
+    
                 
             

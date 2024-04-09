@@ -55,6 +55,7 @@ class Game:
                 print("Se encontro un error al conectar a la base de datos: {}".format(error))
 
     def iniciarSesion(self):
+        global lista
         pygame.display.update()
 
         self.screen.fill((50, 50, 50))
@@ -117,6 +118,15 @@ class Game:
                         t1.start()
                         t1.join()
                         response = validar.responseI()
+                        #Crear funcion de carga de datos
+                        lista = Item.valor(self)
+                        re = validar.obtener_items(self.conexion, self.cursor)
+                        print("Lista del jugador")
+                        print(re)
+                        lista = re # Insertar los items guardados del usuario
+                        print("Lista")
+                        print(lista)
+                        Item.carga_items(self,lista)
                         if isinstance(response, Sesion):
                             return response
                         else:
@@ -124,9 +134,11 @@ class Game:
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(response, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 400))
+                    
                 
             pygame.display.update()
-
+    def mandar_lista():
+        return lista
     def Registrarse(self):
         pygame.display.update()
 
@@ -195,7 +207,8 @@ class Game:
                         confirmcontra = caja4.getText()
                         #renderT = None
                         #print(contraseña)
-                        response = validar.validarRegistro(usuario,correo,contraseña,confirmcontra, self.conexion, self.cursor)
+                        lista = Item.valor(self)
+                        response = validar.validarRegistro(usuario,correo,contraseña,confirmcontra,lista ,self.conexion, self.cursor)
                         if response == "OK":
                             return
                         else:
