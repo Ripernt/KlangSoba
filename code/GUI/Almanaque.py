@@ -40,9 +40,9 @@ class Almanaque():
         self.screen.fill((50,50,50))
 
         self.nib = self.fontsito.render(str(self.player.items_num[0]), True, (255, 255, 255))  # items bateria
-        self.nim = self.fontsito.render(str(self.player.items_num[1]), True, (255, 255, 255))  # items madera
-        self.nic = self.fontsito.render(str(self.player.items_num[2]), True, (255, 255, 255))  # items cable
-        self.nia = self.fontsito.render(str(self.player.items_num[3]), True, (255, 255, 255))  # items cuerda
+        self.nic = self.fontsito.render(str(self.player.items_num[1]), True, (255, 255, 255))  # items madera
+        self.nia = self.fontsito.render(str(self.player.items_num[2]), True, (255, 255, 255))  # items cable
+        self.nim = self.fontsito.render(str(self.player.items_num[3]), True, (255, 255, 255))  # items cuerda
 
         cables_text = self.fontsito.render("Cable", True, "white") 
         cuerda_text = self.fontsito.render("Cuerda", True, "white") 

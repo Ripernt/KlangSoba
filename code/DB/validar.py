@@ -38,9 +38,6 @@ def validar(correo,contraseña,cursor,conexion):
     else:
         s = "El correo electrónico no es válido."
 
-    
-
-        
 #obtiene el objeto sesion
 def responseI():
     return s
@@ -77,52 +74,59 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra,lista,conexion, cur
 
 """ingresa info a la base de datos, registra"""
 def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursorR = None, ):
-    global usu
-    usu = correo
+    global usu    
+
     query = "INSERT into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s, %s, %s, %s);"
-    
+    query2 = "select usr_id from usuario where usr_correo = %s;"
+
     #cifrado = Cifradito()
     #contraseña_cifrada = cifrado.encriptado(contraseña)
+
     valores= (usuario,contraseña,correo,1)
     #print(contraseña_cifrada)
+
     if conexionR is None:
         conexion = conectar.conectar()
         cursor = conexion.cursor()
     else:
         conexion = conexionR
         cursor = cursorR
+    
+
     cursor.execute(query, valores)
     conexion.commit()
+    cursor.execute(query2,[correo])
+    usu = cursor.fetchone()
 
-    query2 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
+    query3 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
     #Insert bateria
-    valores1 = (1,1,lista[0])
+    valores1 = (usu[0],1,lista[0])
 
     #Insert cables
-    valores2 = (1,3,lista[1])
+    valores2 = (usu[0],3,lista[1])
 
     #Insert cuerdas
-    valores3 = (1,4,lista[2])
+    valores3 = (usu[0],4,lista[2])
 
     #Insert madera
-    valores4 = (1,2,lista[3])
+    valores4 = (usu[0],2,lista[3])
 
-    cursor.execute(query2,valores1)
-    cursor.execute(query2,valores2)
-    cursor.execute(query2,valores3)
-    cursor.execute(query2,valores4)
+    cursor.execute(query3,valores1)
+    cursor.execute(query3,valores2)
+    cursor.execute(query3,valores3)
+    cursor.execute(query3,valores4)
     conexion.commit()
-
+    
     if conexionR is None:
         cursor.close()
         conexion.close()
 
 """busca info a la base de datos, encuentra"""
 def encontrarUsuario(correo, conexionR = None, cursorR = None):
-    global usu
-    usu = correo
+    global usu_correo
+    usu_correo = correo
     query = "select usr_correo from usuario where usr_correo = %s;"
-    
+    #query2 = "select usr_id from usuario where usr_correo= %s;"    
     if conexionR is None:
         conexion = conectar.conectar()
         cursor = conexion.cursor()
@@ -130,9 +134,12 @@ def encontrarUsuario(correo, conexionR = None, cursorR = None):
         conexion = conexionR
         cursor = cursorR
 
+        
     cursor.execute(query,[correo])
     resultado = cursor.fetchone()
-    
+    #cursor.execute(query2,[correo])
+    #usu = cursor.fetchone()
+
     if conexionR is None:
         cursor.close()
         conexion.close()
@@ -141,6 +148,43 @@ def encontrarUsuario(correo, conexionR = None, cursorR = None):
         return True
     else:
         return False
+    
+"""Insertar items"""
+def insertar_items(lista,conexionR,cursorR):
+    
+    query = "Select usr_id from usuario where usr_correo =%s;"
+    
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+    cursor.execute(query,[usu_correo])
+    usu = cursor.fetchone()
+    query2 = "Update almanaque_item set ite_cantidad = %s where usr_id = %s and item_ite_id = %s;"
+    #Update bateria
+    valores1 = (lista[0],usu[0],1)
+
+    #Update cables
+    valores2 = (lista[1],usu[0],3)
+
+    #Updates cuerdas
+    valores3 = (lista[2],usu[0],4)
+
+    #Update madera
+    valores4 = (lista[3],usu[0],2)
+
+    cursor.execute(query2,valores1)
+    cursor.execute(query2,valores2)
+    cursor.execute(query2,valores3)
+    cursor.execute(query2,valores4)
+    conexion.commit()
+    
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+
 
 """una vez encontrado, compueba la contraseña"""
 def validarContraseña(correo,contraseña, conexionR = None, cursorR = None):
@@ -252,64 +296,35 @@ def autentificarCorreoUsuario(correo, conexion, cursor):
 
         pygame.display.update()
 
-"""Insertar items"""
-def insertar_items(lista,conexionR,cursorR):
-    query = "Select usr_id from usuario where usr_nombre =%s;"
-    if conexionR is None:
-        conexion = conectar.conectar()
-        cursor = conexion.cursor()
-    else:
-        conexion = conexionR
-        cursor = cursorR
-
-    cursor.execute(query,[usu])
-    id_usu = cursor.fetchone()
-    
-    query2 = "Update almanaque_item set ite_cantidad = %s where usr_id = %s and item_ite_id = %s;"
-    #Update bateria
-    valores1 = (lista[0],1,1)
-
-    #Update cables
-    valores2 = (lista[1],1,3)
-
-    #Updates cuerdas
-    valores3 = (lista[2],1,4)
-
-    #Update madera
-    valores4 = (lista[3],1,2)
-
-    cursor.execute(query2,valores1)
-    cursor.execute(query2,valores2)
-    cursor.execute(query2,valores3)
-    cursor.execute(query2,valores4)
-    conexion.commit()
-    
-    if conexionR is None:
-        cursor.close()
-        conexion.close()
-
-def obtener_items(conexionR, cursorR):
+def obtener_items(correo,conexionR, cursorR):
     listita = []
-    query = "Select ite_cantidad from almanaque_item where usr_id = %s and item_ite_id=%s;"
+    corr = correo
+    query = "select usr_id from usuario where usr_correo = %s;"
+
+    query2 = "Select ite_cantidad from almanaque_item where usr_id = %s and item_ite_id=%s;"
     if conexionR is None:
         conexion = conectar.conectar()
         cursor = conexion.cursor()
     else:
         conexion = conexionR
         cursor = cursorR
-    #Cantidades por item
-    valores = (1,1) 
-    valores2 = (1,3) 
-    valores3= (1,4) 
-    valores4 = (1,2) 
 
-    cursor.execute(query,valores)
+    cursor.execute(query,[corr])
+    usu = cursor.fetchone()
+
+
+    valores = (usu[0],1) 
+    valores2 = (usu[0],3) 
+    valores3= (usu[0],4)
+    valores4 = (usu[0],2) 
+
+    cursor.execute(query2,valores)
     a = cursor.fetchone()
-    cursor.execute(query,valores2)
+    cursor.execute(query2,valores2)
     b = cursor.fetchone()
-    cursor.execute(query,valores3)
+    cursor.execute(query2,valores3)
     c = cursor.fetchone()
-    cursor.execute(query,valores4)
+    cursor.execute(query2,valores4)
     d = cursor.fetchone()
     if conexionR is None:
         cursor.close()
@@ -324,8 +339,10 @@ def obtener_items(conexionR, cursorR):
         d = (0,)
     listita = [*a, *b, *c, *d]
     return listita
-    
-#def devolver_items():
-#    return a
+
+
+
+
+
 
 
