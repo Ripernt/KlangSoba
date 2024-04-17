@@ -2,7 +2,7 @@ import pygame as pg
 
 class InputBox:
 
-    def __init__(self, rect, textSec='', colorValue=[(255,255,255), (255,255,255)], font = None):
+    def __init__(self, rect, textSec='', colorValue=[(255,255,255), (255,255,255)], font = None, hidden=False):
         self.rect = pg.Rect(rect)
         self.wMin = rect[2]
         self.colorValue = colorValue
@@ -15,7 +15,7 @@ class InputBox:
             self.font = font
         self.txt_surface = self.font.render(self.text, True, self.colorValue[0])
         self.active = False
-
+        self.hidden = hidden
 
         self.blink_interval = 500  # Intervalo de tiempo del cursor en milisegundos
         self.blink_timer = 0
@@ -39,6 +39,7 @@ class InputBox:
                 self.active = False
             # Change the current color of the input box.
             self.color = self.colorValue[1] if self.active else self.colorValue[1]
+        
         if event.type == pg.KEYDOWN:
             if self.active:
                 
@@ -88,5 +89,13 @@ class InputBox:
     def draw(self, screen):
         # Blit the rect.
         pg.draw.rect(screen, (255,255,255), self.rect)
+        if self.hidden:
+            hidden_text = '*' * len(self.text)
+            txt_surface = self.font.render(hidden_text, True, self.colorValue[0])
+        else:
+            txt_surface = self.txt_surface
         # Blit the text.
-        screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
+        screen.blit(txt_surface, (self.rect.x+5, self.rect.y+5))
+
+        
+    

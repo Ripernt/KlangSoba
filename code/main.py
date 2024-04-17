@@ -44,6 +44,7 @@ class Game:
         self.player = None
         
         self.currentLevelNum = 0
+
         
     def conectarBase(self):
         try: 
@@ -70,7 +71,7 @@ class Game:
         botoniniciar = Button(image=generalButton, pos=(SCREEN_WIDTH/2,500),text_input="Iniciar Sesion",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
 
         cajaI = InputBox((200,200,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)])
-        cajaC = InputBox((200,300,400,32), "Contraseña", colorValue=[(0,0,0), (255,0,0)])
+        cajaC = InputBox((200,300,400,32), "Contraseña", colorValue=[(0,0,0), (255,0,0)], hidden = True)
 
         renderT = None
 
@@ -118,15 +119,20 @@ class Game:
                         t1.start()
                         t1.join()
                         response = validar.responseI()
-                        #Crear funcion de carga de datos
+
+                        #Crear funcion de carga de datos del alamanaque (items)
                         lista = Item.valor(self)
-                        re = validar.obtener_items(self.conexion, self.cursor)
+                        re = validar.obtener_items(correo,self.conexion, self.cursor)
                         print("Lista del jugador")
                         print(re)
                         lista = re # Insertar los items guardados del usuario
                         print("Lista")
                         print(lista)
                         Item.carga_items(self,lista)
+
+                        
+              
+
                         if isinstance(response, Sesion):
                             return response
                         else:
@@ -134,8 +140,7 @@ class Game:
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(response, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 400))
-                    
-                
+                   
             pygame.display.update()
     def mandar_lista():
         return lista
@@ -154,8 +159,8 @@ class Game:
         
         caja = InputBox((SCREEN_WIDTH/2,100,400,32), "Nombre de usuario", colorValue=[(0,0,0), (255,0,0)]) 
         caja2 = InputBox((SCREEN_WIDTH/2,175,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)]) 
-        caja3 = InputBox((SCREEN_WIDTH/2,250,400,32), "contraseña", colorValue=[(0,0,0), (255,0,0)]) 
-        caja4 = InputBox((SCREEN_WIDTH/2,325,400,32), "confirmacion", colorValue=[(0,0,0), (255,0,0)]) 
+        caja3 = InputBox((SCREEN_WIDTH/2,250,400,32), "contraseña", colorValue=[(0,0,0), (255,0,0)], hidden = True) 
+        caja4 = InputBox((SCREEN_WIDTH/2,325,400,32), "confirmacion", colorValue=[(0,0,0), (255,0,0)], hidden= True) 
 
         renderT = None
 
@@ -332,7 +337,8 @@ class Game:
                     if event.key == pygame.K_m:
                         self.main_sound.music.pause()
                         self.musica_personalizada.play(1)
-                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos)#Cambiar la musica
+                        listaIn = Item.valor(self)
+                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos, self.player, self.conexion, self.cursor)#Cambiar la musica
                         hola = self.Instrumentos.mostrar_instrumentos()
                         if hola == False:
                             self.main_sound.music.unpause()
