@@ -1,23 +1,128 @@
-import pygame, sys, pyaudio, settings
+import pygame, settings, time, wave
+import numpy as np
+from GUI.button2 import Button2
 from GUI.button import Button
+from pygame.locals import *
+
+
+    
+
+def obtener_notas():
+    pass
+
+def crearWav(nombre_archivo,tiempo_grabacion,framerate=44100,nchannels=2):
+    with wave.open(nombre_archivo, 'wb') as wf:
+        wf.setnchannels(nchannels)
+        wf.setsampwidth(2)
+        wf.setframerate(framerate)
+        blank_audio = np.zeros(int(tiempo_grabacion * framerate * nchannels), dtype=np.int16)
+        wf.writeframes(blank_audio)
+  
+
 
 class InterfazPiano:
 
-    def __init__(self, screen):
+    def __init__(self, screen, instrumentos):
+        self. instrumentos = instrumentos
         self.screen = screen
         self.piano = True
         self.fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20)
+        #Teclas para tocar el piano
+        #2,4,5,8,9,0,'
+        #qwertuiop
+        #asfgjkl
+        #zxcvbnm,.
 
 
     def mostrar_menu_piano(self):
         self.screen.fill((50,50,50))
-        fondo = pygame.image.load("graphics/elementos_graficos/Menuinstrumentos.png")
+        fondo = pygame.image.load("graphics/elementos_graficos/fondosgenerico.png")
         fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
         boton=pygame.image.load("graphics/elementos_graficos/botonT.png")
         boton=pygame.transform.scale(boton,(50,50))
 
-        self.pianito = pygame.image.load('graphics/elementos_graficos/pianoPianito.png')
-        self.pianito = pygame.transform.scale(self.pianito, (900,300))
+        grabar = False
+
+        # c
+        self.botonTt = Button2(image=settings.botonDOPiano, pos=(200,420), text_input="t", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # c#
+        self.botonT5 = Button2(image=settings.botonNEGRAPiano, pos=(220,380), text_input="5", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # d
+        self.botonTr = Button2(image=settings.botonREPiano, pos=(241,420), text_input="r", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # d#
+        self.botonT4 = Button2(image=settings.botonNEGRAPiano, pos=(261,380), text_input="4", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # e
+        self.botonTe = Button2(image=settings.botonMIPiano, pos=(282,420), text_input="e", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # f
+        self.botonTw = Button2(image=settings.botonDOPiano, pos=(323,420), text_input="w", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # f#
+        self.botonT2 = Button2(image=settings.botonNEGRAPiano, pos=(343,380), text_input="2", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # g
+        self.botonTa = Button2(image=settings.botonREPiano, pos=(364,420), text_input="a", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # g#
+        self.botonTq = Button2(image=settings.botonNEGRAPiano, pos=(384,380), text_input="q", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # a
+        self.botonTz = Button2(image=settings.botonREPiano, pos=(405,420), text_input="z", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # a#
+        self.botonTs = Button2(image=settings.botonNEGRAPiano, pos=(425,380), text_input="s", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # b
+        self.botonTx = Button2(image=settings.botonMIPiano, pos=(446,420), text_input="x", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # c1
+        self.botonTc = Button2(image=settings.botonDOPiano, pos=(487,420), text_input="c", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # c1#
+        self.botonTf = Button2(image=settings.botonNEGRAPiano, pos=(507,380), text_input="f", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # d1
+        self.botonTv = Button2(image=settings.botonREPiano, pos=(528,420), text_input="v", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # d1#
+        self.botonTg = Button2(image=settings.botonNEGRAPiano, pos=(548,380), text_input="g", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # e1
+        self.botonTb = Button2(image=settings.botonMIPiano, pos=(569,420), text_input="b", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # f1
+        self.botonTn = Button2(image=settings.botonDOPiano, pos=(610,420), text_input="n", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # f1#
+        self.botonTj = Button2(image=settings.botonNEGRAPiano, pos=(630,380), text_input="j", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # g1
+        self.botonTm = Button2(image=settings.botonREPiano, pos=(651,420), text_input="m", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # g1#
+        self.botonTk = Button2(image=settings.botonNEGRAPiano, pos=(671,380), text_input="k", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # a1
+        self.botonTComa = Button2(image=settings.botonREPiano, pos=(692,420), text_input=",", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # a1#
+        self.botonTl = Button2(image=settings.botonNEGRAPiano, pos=(712,380), text_input="l", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # b1
+        self.botonTPunto = Button2(image=settings.botonMIPiano, pos=(733,420), text_input=".", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # c2
+        self.botonTFlechaArriba = Button2(image=settings.botonDOPiano, pos=(774,420),text_input="↑", font=self.fontsito, base_color="#4D4D5C", hovering_color="75E2EC")
+        # c2#
+        self.botonTFlechaAbajo = Button2(image=settings.botonNEGRAPiano, pos=(794,380),text_input="↓" , font=self.fontsito, base_color="#4D4D5C", hovering_color="75E2EC")
+        # d2
+        self.botonTComilla = Button2(image=settings.botonREPiano, pos=(815,420), text_input="'", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # d2#
+        self.botonTF10 = Button2(image=settings.botonNEGRAPiano, pos=(835,380), text_input="F10", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # e2
+        self.botonTBorrar = Button2(image=settings.botonMIPiano, pos=(856,420), text_input="DEL", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # f2
+        self.botonTp = Button2(image=settings.botonDOPiano, pos=(897,420), text_input="p", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # f2#
+        self.botonT0 = Button2(image=settings.botonNEGRAPiano, pos=(917,380), text_input="0", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # g2
+        self.botonTo = Button2(image=settings.botonREPiano, pos=(938,420), text_input="o", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # g2#
+        self.botonT9 = Button2(image=settings.botonNEGRAPiano, pos=(958,380), text_input="9", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # a2
+        self.botonTi = Button2(image=settings.botonREPiano, pos=(979,420), text_input="i", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # a2#
+        self.botonT8 = Button2(image=settings.botonNEGRAPiano, pos=(999,380), text_input="8", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        # b2
+        self.botonTu = Button2(image=settings.botonMIPiano, pos=(1020,420), text_input="u", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+
+
+
+
+        #self.pianito = pygame.image.load('graphics/elementos_graficos/pianoPianito.png')
+        #self.pianito = pygame.transform.scale(self.pianito, (900,300))
+        self.botonG = Button(image=settings.botonGrabar, pos=(500,200), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonSG = Button(image=settings.botonStopGrabar, pos=(600,200), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
 
         self.salir_botton = Button(image=boton, pos=(100,100), text_input="",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
 
@@ -29,8 +134,8 @@ class InterfazPiano:
                 pygame.K_2, pygame.K_a, pygame.K_q, pygame.K_z, pygame.K_s, pygame.K_x,
                 pygame.K_c, pygame.K_f, pygame.K_v, pygame.K_g, pygame.K_b, pygame.K_n,
                 pygame.K_j, pygame.K_m, pygame.K_k, pygame.K_COMMA, pygame.K_l, pygame.K_PERIOD,
-                pygame.K_SLASH, pygame.K_SEMICOLON, pygame.K_QUOTE, pygame.K_RIGHTBRACKET,
-                pygame.K_LEFTBRACKET, pygame.K_p, pygame.K_0, pygame.K_o, pygame.K_9,
+                pygame.K_UP, pygame.K_DOWN, pygame.K_QUOTE, pygame.K_F10,
+                pygame.K_BACKSPACE, pygame.K_p, pygame.K_0, pygame.K_o, pygame.K_9,
                 pygame.K_i, pygame.K_8, pygame.K_u]
         self.keyDict = {bk: pk for bk, pk in zip(self.boardKey, self.pianoKey)}
         self.colorDict = {bk: (4*i, 4*i, 4*i) for i, bk in enumerate(self.boardKey, 1)}
@@ -41,8 +146,115 @@ class InterfazPiano:
 
             self.salir_botton.cargar(self.screen)
             self.salir_botton.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonG.cargar(self.screen)
             
-            self.screen.blit(self.pianito, (200,370))
+
+            self.botonSG.cargar(self.screen)
+        
+            self.botonT2.cargar(self.screen)
+            #self.botonT2.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonT4.cargar(self.screen) 
+            #self.botonT4.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonT5.cargar(self.screen) 
+            #self.botonT8.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonT8.cargar(self.screen)
+
+            self.botonT9.cargar(self.screen)  
+            #self.botonT9.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonT0.cargar(self.screen) 
+            #self.botonT0.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTComilla.cargar(self.screen)  
+            #self.botonTComilla.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTq.cargar(self.screen)  
+            #self.botonTq.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTw.cargar(self.screen) 
+            #self.botonTw.cambiar_color(pygame.mouse.get_pos()) 
+
+            self.botonTe.cargar(self.screen) 
+            #self.botonTe.cambiar_color(pygame.mouse.get_pos()) 
+
+            self.botonTr.cargar(self.screen)  
+            #self.botonTr.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTt.cargar(self.screen)  
+            #self.botonTt.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTu.cargar(self.screen)  
+            #self.botonTu.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTi.cargar(self.screen)  
+            #self.botonTi.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTo.cargar(self.screen)  
+            #self.botonTo.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTp.cargar(self.screen)  
+            #self.botonTp.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTa.cargar(self.screen) 
+            #self.botonTa.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTs.cargar(self.screen)  
+            #self.botonTs.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTf.cargar(self.screen)  
+            #self.botonTf.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTg.cargar(self.screen) 
+            #self.botonTg.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTj.cargar(self.screen)  
+            #self.botonTj.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTk.cargar(self.screen)  
+            #self.botonTk.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTl.cargar(self.screen)  
+            #self.botonTl.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTz.cargar(self.screen)  
+            #self.botonTz.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTx.cargar(self.screen)  
+            #self.botonTx.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTc.cargar(self.screen)  
+            #self.botonTc.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTv.cargar(self.screen)  
+            #self.botonTv.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTb.cargar(self.screen)  
+            #self.botonTb.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTn.cargar(self.screen)  
+            #self.botonTn.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTm.cargar(self.screen)  
+            #self.botonTm.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTComa.cargar(self.screen)  
+            #self.botonTComa.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTPunto.cargar(self.screen)  
+            #self.botonTPunto.cambiar_color(pygame.mouse.get_pos())
+
+            self.botonTFlechaArriba.cargar(self.screen)
+
+            self.botonTFlechaAbajo.cargar(self.screen)
+
+            self.botonTF10.cargar(self.screen)
+
+            self.botonTBorrar.cargar(self.screen)           
+            #self.screen.blit(self.pianito, (200,370))
 
             events = pygame.event.get()
 
@@ -51,13 +263,118 @@ class InterfazPiano:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.salir_botton.checkForInput(pygame.mouse.get_pos()):
                         self.piano = False
+                        self.instrumentos = True
                         self.salir_botton.click(self.screen)
                         #self.musica_almanaque.stop() //Agregar
-                        return self.piano
+                        return self.piano, self.instrumentos
+
+                    if self.botonG.checkForInput(pygame.mouse.get_pos()):
+                        self.botonG.click(self.screen)
+                        print("Grabando")
+                        grabar = True
+                        
+                        #pygame.time.get_ticks()
+                        Egrabar = time.time() 
+                        #print(Egrabar)    
+
+                            
+                    
+                    if self.botonSG.checkForInput(pygame.mouse.get_pos()):
+                        self.botonSG.click(self.screen)
+                        print("Dejo de grabar")
+                        grabar = False
+                       
+                        Dgrabar = time.time()
+                        Duracion = Dgrabar-Egrabar
+                        print("Duracion: ", Duracion)
+                        nombre = "lista.wav"
+                        crearWav(nombre, Duracion, nchannels=2)
+
+                                
                 if event.type == pygame.KEYDOWN:
                     if event.key in self.keyDict.keys():
+                        lista = []
                         #print(self.keyDict.keys())
                         fileName = "audio/audios/" + str(self.keyDict[event.key]) + ".wav"
+                        lista.append(fileName)
+                        #print(lista)
                         pygame.mixer.Sound(fileName).play()
+                    if event.key == K_2:
+                        self.botonT2.click(self.screen)                        
+                    if event.key == K_4:
+                        self.botonT4.click(self.screen)
+                    if event.key == K_5:
+                        self.botonT5.click(self.screen)
+                    if event.key == K_8:
+                        self.botonT8.click(self.screen)
+                    if event.key == K_9:
+                        self.botonT9.click(self.screen)
+                    if event.key == K_0:
+                        self.botonT0.click(self.screen)
+                    if event.key == K_QUOTE:
+                        self.botonTComilla.click(self.screen)                
+                    if event.key == K_q:
+                        self.botonTq.click(self.screen)
+                    if event.key == K_w:
+                        self.botonTw.click(self.screen)
+                    if event.key == K_e:
+                        self.botonTe.click(self.screen)
+                    if event.key == K_r:
+                        self.botonTr.click(self.screen)
+                    if event.key == K_t:
+                        self.botonTt.click(self.screen)
+                    if event.key == K_u:
+                        self.botonTu.click(self.screen)
+                    if event.key == K_i:
+                        self.botonTi.click(self.screen)
+                    if event.key == K_o:
+                        self.botonTo.click(self.screen)
+                    if event.key == K_p:
+                        self.botonTp.click(self.screen)
+                    if event.key == K_a:
+                        self.botonTa.click(self.screen)
+                    if event.key == K_s:
+                        self.botonTs.click(self.screen)
+                    if event.key == K_f:
+                        self.botonTf.click(self.screen)  
+                    if event.key == K_g:
+                        self.botonTg.click(self.screen)
+                    if event.key == K_j:
+                        self.botonTj.click(self.screen)
+                    if event.key == K_k:
+                        self.botonTk.click(self.screen)
+                    if event.key == K_l:
+                        self.botonTl.click(self.screen)
+                    if event.key == K_z:
+                        self.botonTz.click(self.screen)
+                    if event.key == K_x:
+                        self.botonTx.click(self.screen)
+                    if event.key == K_c:
+                        self.botonTc.click(self.screen)
+                    if event.key == K_v:
+                        self.botonTv.click(self.screen)
+                    if event.key == K_b:
+                        self.botonTb.click(self.screen)
+                    if event.key == K_n:
+                        self.botonTn.click(self.screen)
+                    if event.key == K_m:
+                        self.botonTm.click(self.screen)
+                    if event.key == K_COMMA:
+                        self.botonTComa.click(self.screen)
+                    if event.key == K_PERIOD:
+                        self.botonTPunto.click(self.screen)
+                    if event.key == K_F10:
+                        self.botonTF10.click(self.screen)
+                    if event.key == K_UP:
+                        self.botonTFlechaArriba.click(self.screen)
+                    if event.key == K_DOWN:
+                        self.botonTFlechaAbajo.click(self.screen)
+                    if event.key == K_BACKSPACE:
+                        self.botonTBorrar.click(self.screen)
+
+
+                        
+                                              
                 pygame.display.update()
-        
+    
+

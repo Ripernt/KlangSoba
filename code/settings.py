@@ -58,7 +58,28 @@ botonGreen = pygame.transform.scale(botonGreen, (180, 100))
 botonPiano = pygame.image.load("graphics/elementos_graficos/Piano.png")
 botonPiano = pygame.transform.scale(botonPiano, (200, 200))
 
+#botonTPiano = pygame.image.load("graphics/elementos_graficos/purbut.png")
+#botonTPiano = pygame.transform.scale(botonTPiano, (50,50))
 
+
+#Botones del piano
+botonREPiano = pygame.image.load("graphics/elementos_graficos/re.png")
+botonREPiano = pygame.transform.scale(botonREPiano, (40,150))
+botonTECLAPiano = pygame.image.load("graphics/elementos_graficos/tecla.png")
+botonTECLAPiano = pygame.transform.scale(botonTECLAPiano, (40,150))
+botonDOPiano = pygame.image.load("graphics/elementos_graficos/do.png")
+botonDOPiano = pygame.transform.scale(botonDOPiano, (40,150))
+botonMIPiano = pygame.image.load("graphics/elementos_graficos/mi.png")
+botonMIPiano = pygame.transform.scale(botonMIPiano, (40,150))
+botonNEGRAPiano = pygame.image.load("graphics/elementos_graficos/negra.png")
+botonNEGRAPiano = pygame.transform.scale(botonNEGRAPiano, (10,80))
+
+botonGrabar = pygame.image.load("graphics/elementos_graficos/rec_start.png")
+botonGrabar = pygame.transform.scale(botonGrabar, (50,50))
+
+botonStopGrabar = pygame.image.load("graphics/elementos_graficos/rec_stop.png")
+botonStopGrabar = pygame.transform.scale(botonStopGrabar, (50,50))
+#Boton sintetizador
 botonSintetizador = pygame.image.load("graphics/elementos_graficos/Sintetizador.png")
 botonSintetizador = pygame.transform.scale(botonSintetizador,(200, 200))
 

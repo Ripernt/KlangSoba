@@ -81,7 +81,12 @@ class Player(Entity):
 
 		self.timeAnt = 0
 		self.dt = 0
-		self.items_num = [0,0,0,0]
+		self.items_num = [0,0,0,0] 
+
+		#Instrumentos
+		self.T_piano = [1]
+
+
   
 
 	def import_player_assets(self):

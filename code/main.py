@@ -123,15 +123,18 @@ class Game:
                         #Crear funcion de carga de datos del alamanaque (items)
                         lista = Item.valor(self)
                         re = validar.obtener_items(correo,self.conexion, self.cursor)
-                        print("Lista del jugador")
-                        print(re)
+                        #print("Lista del jugador")
+                        #print(re)
                         lista = re # Insertar los items guardados del usuario
-                        print("Lista")
-                        print(lista)
+                        #print("Lista")
+                        #print(lista)
                         Item.carga_items(self,lista)
 
-                        
-              
+                        #Crear funcion de carga de datos del instrumento
+                        instrumento = validar.obtener_instrumento_piano(correo,self.conexion,self.cursor)
+                        print(instrumento)
+                    
+                        MInstrumentos.carga_instrumento(self,instrumento)
 
                         if isinstance(response, Sesion):
                             return response
@@ -140,7 +143,8 @@ class Game:
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(response, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 400))
-                   
+                    
+                #DELTA TIMEEEEEEE
             pygame.display.update()
     def mandar_lista():
         return lista
@@ -338,7 +342,7 @@ class Game:
                         self.main_sound.music.pause()
                         self.musica_personalizada.play(1)
                         listaIn = Item.valor(self)
-                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos, self.player, self.conexion, self.cursor)#Cambiar la musica
+                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos, listaIn, self.player, self.conexion, self.cursor)#Cambiar la musica
                         hola = self.Instrumentos.mostrar_instrumentos()
                         if hola == False:
                             self.main_sound.music.unpause()

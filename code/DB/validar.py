@@ -78,6 +78,8 @@ def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursor
 
     query = "INSERT into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s, %s, %s, %s);"
     query2 = "select usr_id from usuario where usr_correo = %s;"
+    query3 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
+    query4 = "INSERT INTO almanaque_instrumento(ins_id,usr_id) values(%s,%s)"
 
     #cifrado = Cifradito()
     #contraseña_cifrada = cifrado.encriptado(contraseña)
@@ -98,7 +100,7 @@ def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursor
     cursor.execute(query2,[correo])
     usu = cursor.fetchone()
 
-    query3 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
+    
     #Insert bateria
     valores1 = (usu[0],1,lista[0])
 
@@ -115,6 +117,10 @@ def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursor
     cursor.execute(query3,valores2)
     cursor.execute(query3,valores3)
     cursor.execute(query3,valores4)
+    conexion.commit()
+
+    valores5 = (1,usu[0])
+    cursor.execute(query4,valores5)
     conexion.commit()
     
     if conexionR is None:
@@ -181,6 +187,30 @@ def insertar_items(lista,conexionR,cursorR):
     cursor.execute(query2,valores4)
     conexion.commit()
     
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+
+def instrumento_piano(piano,conexionR,cursorR):
+    query = "Select usr_id from usuario where usr_correo =%s;"
+    query2 = "Update almanaque_instrumento set ins_id = %s where usr_id = %s;"
+
+
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+
+    cursor.execute(query,[usu_correo])
+    usu = cursor.fetchone()
+    
+    valores = (piano[0],usu[0])
+
+    cursor.execute(query2,valores)
+    conexion.commit()
+
     if conexionR is None:
         cursor.close()
         conexion.close()
@@ -326,9 +356,11 @@ def obtener_items(correo,conexionR, cursorR):
     c = cursor.fetchone()
     cursor.execute(query2,valores4)
     d = cursor.fetchone()
+
     if conexionR is None:
         cursor.close()
         conexion.close()
+        
     if a == None:
         a = (0,)
     if b == None:
@@ -339,6 +371,37 @@ def obtener_items(correo,conexionR, cursorR):
         d = (0,)
     listita = [*a, *b, *c, *d]
     return listita
+
+
+def obtener_instrumento_piano(correo,conexionR,cursorR):
+
+    lista_instrumento = []
+
+    query = "Select usr_id from usuario where usr_correo = %s"
+    query2 = "Select ins_id from almanaque_instrumento where usr_id = %s;"
+
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+
+    cursor.execute(query,[correo])
+    usu = cursor.fetchone()
+
+    cursor.execute(query2,usu)
+    piano = cursor.fetchone()
+
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+
+    lista_instrumento = [*piano]
+
+    return lista_instrumento
+
+
 
 
 
