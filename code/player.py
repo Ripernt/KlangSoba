@@ -6,10 +6,13 @@ import numpy as np
 from time import time
 from math import pi, cos, sin
 import settings
+
+from GUI import Barra_Vida
+
 class Player(Entity):
 
 	
-	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic,):
+	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic, surface):
 		super().__init__(groups)
 		self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
@@ -42,7 +45,7 @@ class Player(Entity):
 		self.magic_switch_time = None
 
 		# stats
-		self.stats = {'health': 100,'energy':60,'attack': 10,'magic': 4,'speed': 5}
+		self.stats = {'health': 150,'energy':60,'attack': 10,'magic': 4,'speed': 0.25}
 		self.max_stats = {'health': 300, 'energy': 140, 'attack': 20, 'magic' : 10, 'speed': 10}
 		self.upgrade_cost = {'health': 100, 'energy': 100, 'attack': 100, 'magic' : 100, 'speed': 100}
 		self.health = self.stats['health'] * 0.5
@@ -68,10 +71,18 @@ class Player(Entity):
 		self.wM = 0
 		self.fA = 0
 		self.hM = 40 
+  
+		self.barra = Barra_Vida.BarraDeVida(surface)
+
+		
 
 		#cositas para las notas
-		self.font = pygame.font.Font(None, 22)
-		
+		self.font = pygame.font.Font(None, 22)		
+
+		self.timeAnt = 0
+		self.dt = 0
+		self.items_num = [0,0,0,0]
+  
 
 	def import_player_assets(self):
 		character_path = 'graphics/player/'
@@ -162,6 +173,9 @@ class Player(Entity):
 		else:
 			if 'attack' in self.status:
 				self.status = self.status.replace('_attack','')
+		
+		self.barra.Mostrar_vida(self.health,self.stats['health'],self)
+		
 
 	def cooldowns(self):
 		current_time = pygame.time.get_ticks()
@@ -187,7 +201,7 @@ class Player(Entity):
 		animation = self.animations[self.status]
 
 		# loop over the frame index 
-		self.frame_index += self.animation_speed
+		self.frame_index += self.animation_speed*self.dt
 		if self.frame_index >= len(animation):
 			self.frame_index = 0
 
@@ -275,6 +289,8 @@ class Player(Entity):
 		self.cooldowns()
 		self.get_status()
 		self.animate()
-		self.move(self.stats['speed'])
+		self.move(self.stats['speed']*self.dt)
 		self.energy_recovery()
+		self.dt = (pygame.time.get_ticks()-self.timeAnt)
+		self.timeAnt = pygame.time.get_ticks()
 	

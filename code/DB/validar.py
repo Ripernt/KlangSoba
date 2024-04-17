@@ -1,25 +1,21 @@
 import re
-from secure.cifrado import Cifradito
+#from secure.cifrado import Cifradito
 from DB.Sesion import Sesion
-# from platform_scroller import iniciarSesion, registrarUsuario
+#from main import iniciarSesion, registrarUsuario
 from DB import conectar
 from DB.playerBD import obtenerDataJugador
 from settings import*
 import requests
-
 import pygame
-
 import sys
-
-
 from GUI.EntryS import Entry
 from GUI.button import Button
 
 
-"""valida inicio de sesion"""
+#valida inicio de sesion
+
 def validar(correo,contraseña,cursor,conexion):
     global s
-
     correo = correo.lower()
     print(correo)
     if correo == "" or contraseña == "":
@@ -34,6 +30,7 @@ def validar(correo,contraseña,cursor,conexion):
             if validarcontra:
                 print("SE VALIDADO LA CONTRASEÑA ")
                 s = Sesion(obtenerDataJugador(correo, conexion, cursor))
+                return s
             else:
                 s = "contraseña incorrecta"
         else:
@@ -41,14 +38,13 @@ def validar(correo,contraseña,cursor,conexion):
     else:
         s = "El correo electrónico no es válido."
 
-        
-"""obtiene el objeto sesion"""
+#obtiene el objeto sesion
 def responseI():
     return s
 
 
 """valida registro"""
-def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
+def validarRegistro(usuario,correo,contraseña,confirmcontra,lista,conexion, cursor):
     
     correo = correo.lower()
     # print(correo)
@@ -59,15 +55,15 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
         if contraseña == confirmcontra:
 
             if not encontrarUsuario(correo, conexion, cursor):
-                res = autentificarCorreoUsuario(correo, conexion, cursor)
-                print("se enviaa correo")
-                if res:
+                    res = autentificarCorreoUsuario(correo, conexion, cursor)
+                    print("se enviaa correo")
+                    if res:
                     
-                    registrarUsuario(usuario,correo,contraseña, conexion, cursor)
-                    print("se ha registrado exitosamente")
-                    return "OK"
-                else:
-                    return "codigo incorrecto, vuelva a intentarlo"
+                        registrarUsuario(usuario,correo, contraseña, lista,conexion, cursor)
+                        print("se ha registrado exitosamente")
+                        return "OK"
+                    else:
+                        return "codigo incorrecto, vuelva a intentarlo"
             else:
                 return "El correo ya existe"
         else:
@@ -77,28 +73,60 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra, conexion, cursor):
     
 
 """ingresa info a la base de datos, registra"""
-def registrarUsuario(usuario,correo, contraseña, conexionR = None, cursorR = None):
-    query = "insert into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s,%s,%s,%s);"
-    cifrado = Cifradito()
-    contraseña_cifrada = cifrado.encriptado(contraseña)
-    valores= (usuario,contraseña_cifrada,correo,1)
-    print(contraseña_cifrada)
+def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursorR = None, ):
+    global usu    
+
+    query = "INSERT into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s, %s, %s, %s);"
+    query2 = "select usr_id from usuario where usr_correo = %s;"
+
+    #cifrado = Cifradito()
+    #contraseña_cifrada = cifrado.encriptado(contraseña)
+
+    valores= (usuario,contraseña,correo,1)
+    #print(contraseña_cifrada)
+
     if conexionR is None:
         conexion = conectar.conectar()
         cursor = conexion.cursor()
     else:
         conexion = conexionR
         cursor = cursorR
-    cursor.execute(query,valores)
+    
+
+    cursor.execute(query, valores)
     conexion.commit()
+    cursor.execute(query2,[correo])
+    usu = cursor.fetchone()
+
+    query3 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
+    #Insert bateria
+    valores1 = (usu[0],1,lista[0])
+
+    #Insert cables
+    valores2 = (usu[0],3,lista[1])
+
+    #Insert cuerdas
+    valores3 = (usu[0],4,lista[2])
+
+    #Insert madera
+    valores4 = (usu[0],2,lista[3])
+
+    cursor.execute(query3,valores1)
+    cursor.execute(query3,valores2)
+    cursor.execute(query3,valores3)
+    cursor.execute(query3,valores4)
+    conexion.commit()
+    
     if conexionR is None:
         cursor.close()
         conexion.close()
 
 """busca info a la base de datos, encuentra"""
 def encontrarUsuario(correo, conexionR = None, cursorR = None):
+    global usu_correo
+    usu_correo = correo
     query = "select usr_correo from usuario where usr_correo = %s;"
-    
+    #query2 = "select usr_id from usuario where usr_correo= %s;"    
     if conexionR is None:
         conexion = conectar.conectar()
         cursor = conexion.cursor()
@@ -106,9 +134,12 @@ def encontrarUsuario(correo, conexionR = None, cursorR = None):
         conexion = conexionR
         cursor = cursorR
 
+        
     cursor.execute(query,[correo])
     resultado = cursor.fetchone()
-    
+    #cursor.execute(query2,[correo])
+    #usu = cursor.fetchone()
+
     if conexionR is None:
         cursor.close()
         conexion.close()
@@ -117,10 +148,47 @@ def encontrarUsuario(correo, conexionR = None, cursorR = None):
         return True
     else:
         return False
+    
+"""Insertar items"""
+def insertar_items(lista,conexionR,cursorR):
+    
+    query = "Select usr_id from usuario where usr_correo =%s;"
+    
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+    cursor.execute(query,[usu_correo])
+    usu = cursor.fetchone()
+    query2 = "Update almanaque_item set ite_cantidad = %s where usr_id = %s and item_ite_id = %s;"
+    #Update bateria
+    valores1 = (lista[0],usu[0],1)
+
+    #Update cables
+    valores2 = (lista[1],usu[0],3)
+
+    #Updates cuerdas
+    valores3 = (lista[2],usu[0],4)
+
+    #Update madera
+    valores4 = (lista[3],usu[0],2)
+
+    cursor.execute(query2,valores1)
+    cursor.execute(query2,valores2)
+    cursor.execute(query2,valores3)
+    cursor.execute(query2,valores4)
+    conexion.commit()
+    
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+
 
 """una vez encontrado, compueba la contraseña"""
 def validarContraseña(correo,contraseña, conexionR = None, cursorR = None):
-    cifrado = Cifradito()
+    #cifrado = Cifradito()
     query = "select usr_contraseña from usuario where usr_correo = %s;"
     
     if conexionR is None:
@@ -153,7 +221,7 @@ def validar_correo(correo):
         return False
     
 def enviarCorreo(correo):
-    url = 'https://MauFS.pythonanywhere.com/enviar_codigo'
+    url = 'https://carapia7.pythonanywhere.com/enviar_codigo'
     # Dirección de correo electrónico a la que se enviará el código
     # Realizar la solicitud POST al servidor Flask
     data = {'correo': correo}
@@ -165,7 +233,7 @@ def enviarCorreo(correo):
         return response.json()['codigo']
     else:
         return "Error"
-
+    
 """codigo de verificacion"""   
 def autentificarCorreoUsuario(correo, conexion, cursor):
     pygame.display.update()
@@ -177,7 +245,7 @@ def autentificarCorreoUsuario(correo, conexion, cursor):
     pygame.mixer.music.pause()
 
     fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20) 
-    fontsito2 = pygame.font.Font('graphics/font/joystix.ttf', 15) 
+    fontsito2 = pygame.font.Font('graphics/font/joystix.ttf', 15)
 
     menu_text = fontsito.render("Valida tu Correo Electronico", True, "white")
     menu_rect = menu_text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/10))
@@ -227,3 +295,54 @@ def autentificarCorreoUsuario(correo, conexion, cursor):
 
 
         pygame.display.update()
+
+def obtener_items(correo,conexionR, cursorR):
+    listita = []
+    corr = correo
+    query = "select usr_id from usuario where usr_correo = %s;"
+
+    query2 = "Select ite_cantidad from almanaque_item where usr_id = %s and item_ite_id=%s;"
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+
+    cursor.execute(query,[corr])
+    usu = cursor.fetchone()
+
+
+    valores = (usu[0],1) 
+    valores2 = (usu[0],3) 
+    valores3= (usu[0],4)
+    valores4 = (usu[0],2) 
+
+    cursor.execute(query2,valores)
+    a = cursor.fetchone()
+    cursor.execute(query2,valores2)
+    b = cursor.fetchone()
+    cursor.execute(query2,valores3)
+    c = cursor.fetchone()
+    cursor.execute(query2,valores4)
+    d = cursor.fetchone()
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+    if a == None:
+        a = (0,)
+    if b == None:
+        b = (0,)
+    if c == None:
+        c = (0,)
+    if d == None:
+        d = (0,)
+    listita = [*a, *b, *c, *d]
+    return listita
+
+
+
+
+
+
+

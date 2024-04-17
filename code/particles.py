@@ -4,11 +4,15 @@ from random import choice
 
 class AnimationPlayer:
 	def __init__(self):
+		
+  
 		self.frames = {
 			# magic
 			'flame': import_folder('graphics/particles/flame/frames'),
+			'ray': import_folder('graphics/particles/ray/frames'),
 			'aura': import_folder('graphics/particles/aura'),
 			'heal': import_folder('graphics/particles/heal/frames'),
+			'magic': import_folder('graphics/particles/magic/frames'),
 			
 			# attacks 
 			'claw': import_folder('graphics/particles/claw'),
@@ -63,17 +67,31 @@ class ParticleEffect(pygame.sprite.Sprite):
 		super().__init__(groups)
 		self.sprite_type = 'magic'
 		self.frame_index = 0
-		self.animation_speed = 0.15
+		self.timeAnte = 1
+		self.deltaT = 0
+		self.animation_speed = 0.07
 		self.frames = animation_frames
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
+		
 
 	def animate(self):
-		self.frame_index += self.animation_speed
+		self.frame_index += self.animation_speed * self.deltaT
+		# print(self.animation_speed * self.deltaT)
 		if self.frame_index >= len(self.frames):
-			self.kill()
+			self.kill()	
+			del self
 		else:
 			self.image = self.frames[int(self.frame_index)]
 
 	def update(self):
+		
+  
+		
+  
 		self.animate()
+		self.deltaT = (pygame.time.get_ticks()-self.timeAnte)/100
+		print(self.deltaT, self.timeAnte, pygame.time.get_ticks())
+		self.timeAnte = pygame.time.get_ticks()
+  
+		

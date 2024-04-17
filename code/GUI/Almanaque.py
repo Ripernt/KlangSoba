@@ -8,8 +8,9 @@ from GUI.PopUp import PopUp
 from GUI.button import Button
 
 class Almanaque():
-    def __init__(self, screen, background, listaAnimales=None,rect=None, center=False):
+    def __init__(self, screen,player, background,rect= None, center = False):
         self.screen = screen
+        self.player = player
         if not center:
             self.rect = pygame.Rect(rect)
         else:
@@ -20,117 +21,92 @@ class Almanaque():
         self.background = pygame.image.load(background)
         self.background = pygame.transform.scale(self.background,self.rect.size)
 
-        self.fontsito = pygame.font.Font('Fonts/pixelart.TTF', 20)  
+        self.almanaque = True
 
         self.hojaActual = 0
 
-        self.listaAnimales = np.array(listaAnimales).copy()
+    def show_almanaque(self, screen):
 
+        self.pila = pygame.image.load('graphics/elementos_graficos/marcoPila.png')
+        self.pila = pygame.transform.scale(self.pila, (250,250))
+        self.madera = pygame.image.load('graphics/elementos_graficos/marcoMadera.png')
+        self.madera = pygame.transform.scale(self.madera, (250,250))
+        self.cable = pygame.image.load('graphics/elementos_graficos/marcoCable.png')
+        self.cable = pygame.transform.scale(self.cable, (250,250))
+        self.cuerda = pygame.image.load('graphics/elementos_graficos/marcoCuerda.png')
+        self.cuerda = pygame.transform.scale(self.cuerda, (250,250))
 
-        for animal in self.listaAnimales:
-            animal.enable = False
-            animal.direction = "SR"
-        numAnimales = len(self.listaAnimales)
+        self.fontsito = pygame.font.Font('graphics/font/pixelart.TTF', 20)  
+        self.screen.fill((50,50,50))
 
-        self.pressed = False
-        self.pressedAnt = False
+        self.nib = self.fontsito.render(str(self.player.items_num[0]), True, (255, 255, 255))  # items bateria
+        self.nic = self.fontsito.render(str(self.player.items_num[1]), True, (255, 255, 255))  # items madera
+        self.nia = self.fontsito.render(str(self.player.items_num[2]), True, (255, 255, 255))  # items cable
+        self.nim = self.fontsito.render(str(self.player.items_num[3]), True, (255, 255, 255))  # items cuerda
 
-        numHojas = int(numAnimales/6)
-        if numAnimales/6>int(numAnimales/6):
-            numHojas+=1
+        cables_text = self.fontsito.render("Cable", True, "white") 
+        cuerda_text = self.fontsito.render("Cuerda", True, "white") 
+        madera_text = self.fontsito.render("Madera", True, "white") 
+        pila_text = self.fontsito.render("Pila", True, "white") 
+
+        boton=pygame.image.load("graphics/elementos_graficos/botonT.png")
+        boton=pygame.transform.scale(boton,(50,50))
         
-        self.hojas = np.empty((numHojas, 2, 3), dtype=object)
-        self.hojas.fill(None)
-
-        if self.listaAnimales is not None:
-            for i, animal in enumerate(self.listaAnimales):
-                columna = i%3
-                fila = int((i/3)%2)
-                hoja= int((i/6))
-
-                animal.direction = "SR"
-                animal.enable = False
-
-                self.hojas[hoja][fila][columna] = animal
-
-        self.ancho_parte = screen.get_width() // 4
-        self.alto_parte = screen.get_height() // 2
-
-
-        boton=pygame.image.load("Graficos/elementos_img/button.png")
-        boton=pygame.transform.scale(boton,(240,90))
-
-
-        imageButton = pygame.image.load("Graficos/elementos_img/botonT.png")
+        imageButton = pygame.image.load("graphics/elementos_graficos/botonT.png")
         imageButton = pygame.transform.scale(imageButton, (35,35))
-        self.buttonN = Button(imageButton, (screen.get_width()-imageButton.get_width()//2-10,screen.get_height()//2), "", pygame.font.Font("Fonts/RobotoMono-VariableFont_wght.TTF", 12), (0,0,0), (0,0,0))
-
         imageButton = pygame.transform.flip(imageButton, True, False)
-        self.buttonR = Button(imageButton, (imageButton.get_width()//2+10,screen.get_height()//2), "", pygame.font.Font("Fonts/RobotoMono-VariableFont_wght.TTF", 12), (0,0,0), (0,0,0))
+
+        self.buttonN = Button(imageButton, (screen.get_width()-imageButton.get_width()//2-10,screen.get_height()//2), "", pygame.font.Font("graphics/font/RobotoMono-VariableFont_wght.ttf", 12), (0,0,0), (0,0,0))
+
+        
+        self.buttonR = Button(imageButton, (imageButton.get_width()//2+10,screen.get_height()//2), "", pygame.font.Font("graphics/font/RobotoMono-VariableFont_wght.TTF", 12), (0,0,0), (0,0,0))
         self.popUp = None
 
 
-        self.salir_botton = Button(image=boton, pos=(400,515),text_input="Regresar",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
+        self.salir_botton = Button(image=boton, pos=(100,650), text_input="",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
 
         self.timeCreate = time()
 
         self.enable = True
-
-    def update(self, events):
-        self.pressed = pygame.mouse.get_pressed()[0]
-            
-
-            
-        self.superficie.blit(self.background, (0,0))
-        if len(self.hojas)>0:
-            hoja = self.hojas[self.hojaActual]
-            for i, fila in enumerate(hoja):
-                for j, animal in enumerate(fila):
-                    if animal is not None:
-                        rect = animal.image.get_rect(center = ((j+1) * self.ancho_parte, self.alto_parte+ (-73 if i==0 else 73)))
-                        rectFondo = animal.imageBackground.get_rect(center = ((j+1) * self.ancho_parte, self.alto_parte+ (-73 if i==0 else 73)))
-                        self.superficie.blit(animal.imageBackground, rectFondo)
-                        self.superficie.blit(animal.image, rect)
-                        animal.etiqueta.set_position(rectFondo.centerx-animal.etiqueta.rect.width//2, rectFondo.bottom-animal.etiqueta.rect.height//2)
-                        animal.etiqueta.update(self.superficie)
-
-                        if animal.nuevo:
-                            animal.etiquetaNew.set_position(rectFondo.centerx-animal.etiquetaNew.rect.width//2, rectFondo.top-animal.etiqueta.rect.height//2)
-                            animal.etiquetaNew.update(self.superficie)
-
-                        if  not self.pressedAnt and self.pressed:
-                            if rectFondo.collidepoint(pygame.mouse.get_pos()) and (self.popUp is None or not self.popUp.enabled) and time()-self.timeCreate>0.5:
-                                self.popUp = PopUp(self.screen, 300, 420, "Detalles", animal.image, nombreCien=animal.nombreCien, nombre=animal.nombre, descripcion=animal.descripcion, parametros=animal.parametros, tipo=animal.tipo, colorD=animal.colorDetalles, num_especies = animal.especimenes)
-                                animal.nuevo = False
-                                self.popUp.active()
-                        # if rect.collidepoint(pygame.mouse.get_pos()):
-                        #     print("hover")
-
-        if(self.hojaActual<len(self.hojas)-1):
-            self.buttonN.cargar(self.superficie)
-        if(self.hojaActual>0):
-            self.buttonR.cargar(self.superficie)
-
-        self.salir_botton.cargar(self.superficie)
-        self.salir_botton.cambiar_color(pygame.mouse.get_pos())
-
-        self.screen.blit(self.superficie, self.rect)
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN and  (self.popUp is None or not self.popUp.enabled):
-                if self.buttonN.checkForInput(pygame.mouse.get_pos()) and self.hojaActual<len(self.hojas)-1:
-                    self.buttonN.click(self.screen)
-                    self.hojaActual+=1
-                if self.buttonR.checkForInput(pygame.mouse.get_pos()) and self.hojaActual>0:
-                    self.hojaActual-=1
-                    self.buttonR.click(self.screen)
-                if self.salir_botton.checkForInput(pygame.mouse.get_pos()):
-                        self.enable = False
         
-            
-        if self.popUp is not None:
-            self.popUp.show(events) 
+        while self.almanaque:
 
-        for animal in self.listaAnimales:
-            animal.update()
+            self.screen.blit(self.cable, (50, 225))
+            self.screen.blit(self.cuerda, (375, 225))
+            self.screen.blit(self.madera, (675, 225))
+            self.screen.blit(self.pila, (975, 225))
 
-        self.pressedAnt = self.pressed
+            self.screen.blit(cables_text, (140,200))
+            self.screen.blit(cuerda_text, (460, 200))
+            self.screen.blit(madera_text, (750,200))
+            self.screen.blit(pila_text, (1075, 200))
+
+            text_rect = self.nic.get_rect()
+            text_rect.center = (50, 225)
+            self.screen.blit(self.nic, text_rect)  # Dibuja el texto de cable en la pantalla
+            text_rect = self.nia.get_rect()
+            text_rect.center = (375, 225)
+            self.screen.blit(self.nia, text_rect)  # Dibuja el texto de cuerda en la pantalla
+            text_rect = self.nim.get_rect()
+            text_rect.center = (675, 225)
+            self.screen.blit(self.nim, text_rect)  # Dibuja el texto de madera en la pantalla
+            text_rect = self.nib.get_rect()
+            text_rect.center = (975, 225)
+            self.screen.blit(self.nib, text_rect)  # Dibuja el texto de bateria en la pantalla
+
+            self.salir_botton.cargar(self.screen)
+            self.salir_botton.cambiar_color(pygame.mouse.get_pos())
+
+            events = pygame.event.get()
+
+            for event in events:
+                #Salir
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.salir_botton.checkForInput(pygame.mouse.get_pos()):
+                        self.almanaque = False
+                        self.salir_botton.click(self.screen)
+                        #self.musica_almanaque.stop() //Agregar
+                        return self.almanaque
+                
+                pygame.display.update()
+                    

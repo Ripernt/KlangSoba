@@ -3,16 +3,21 @@ from settings import *
 from entity import Entity
 from support import *
 from ui import UI
-from GUI.Barra_Vida import BarraDeVida
+
 from logros import Logros
 
+from GUI.Barra_Vida import BarraDeVida
+
+ataque_audio = pygame.mixer.Sound("audio/attack/i-see-clouds-171354.mp3")
+hit_sonido = pygame.mixer.Sound('audio/hit.wav')
+muerte_sonido = pygame.mixer.Sound('audio/death.wav')
 class Enemy(Entity):
 
 	def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp, drop_item,surface):
-
+		
 		super().__init__(groups)
 		self.sprite_type = 'enemy'
-		self.musica_enemy = pygame.mixer.Sound("audio/attack/i-see-clouds-171354.mp3")
+		self.musica_enemy = ataque_audio
 		
 		# cositas de los graficos
 		self.import_graphics(monster_name)
@@ -52,8 +57,8 @@ class Enemy(Entity):
 		self.invincibility_duration = 300
 
 		# sonidos
-		self.death_sound = pygame.mixer.Sound('audio/death.wav')
-		self.hit_sound = pygame.mixer.Sound('audio/hit.wav')
+		self.death_sound = muerte_sonido
+		self.hit_sound = hit_sonido
 		self.attack_sound = pygame.mixer.Sound(monster_info['attack_sound'])
 		self.death_sound.set_volume(0.3)
 		self.hit_sound.set_volume(0.3)
@@ -61,7 +66,9 @@ class Enemy(Entity):
 
 		self.display_surface = surface
 		self.logros = Logros(self.display_surface)
-		self.barraVidaObject = BarraDeVida(screen=self.display_surface)
+  
+		self.timeAnt = 0
+		self.dt = 0
 	
 	def import_graphics(self,name):
 		self.animations = {'idle':[],'move':[],'attack':[]}
@@ -95,7 +102,7 @@ class Enemy(Entity):
 			if self.monster_name == 'raccoon':
 				self.musica_enemy.play(-1)
 			self.status = 'move'
-			self.barraVidaObject.Mostrar_vida(player.health,player.stats['health'],player)
+			
 
 		else:
 			if self.monster_name == 'raccoon':
@@ -118,7 +125,7 @@ class Enemy(Entity):
 	def animate(self):
 		animation = self.animations[self.status]
 		
-		self.frame_index += self.animation_speed
+		self.frame_index += self.animation_speed*self.dt
 		if self.frame_index >= len(animation):
 			if self.status == 'attack':
 				self.can_attack = False
@@ -176,6 +183,9 @@ class Enemy(Entity):
 		self.animate()
 		self.cooldowns()
 		self.check_death()
+  
+		self.dt = (pygame.time.get_ticks()-self.timeAnt)
+		self.timeAnt = pygame.time.get_ticks()
 
 	def enemy_update(self,player):
 		self.get_status(player)
