@@ -11,6 +11,7 @@ class InputBox:
         if font is None:
             self.font = pg.font.Font("graphics/font/pixelart.TTF", int(rect[3]*0.55))
             # self.font.set_bold(True)
+            #holitA
         else:
             self.font = font
         self.txt_surface = self.font.render(self.text, True, self.colorValue[0])
