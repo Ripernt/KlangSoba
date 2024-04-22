@@ -73,13 +73,13 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra,lista,conexion, cur
     
 
 """ingresa info a la base de datos, registra"""
-def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursorR = None, ):
+def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursorR = None):
     global usu    
 
     query = "INSERT into usuario (usr_nombre, usr_contraseña, usr_correo, per_id) values (%s, %s, %s, %s);"
     query2 = "select usr_id from usuario where usr_correo = %s;"
     query3 = "INSERT INTO almanaque_item (usr_id, item_ite_id, ite_cantidad) values(%s,%s,%s);"
-    query4 = "INSERT INTO almanaque_instrumento(ins_id,usr_id) values(%s,%s)"
+    query4 = "INSERT INTO almanaque_instrumento(ins_id,usr_id,alm_instrumento) values(%s,%s,%s);"
 
     #cifrado = Cifradito()
     #contraseña_cifrada = cifrado.encriptado(contraseña)
@@ -119,8 +119,12 @@ def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursor
     cursor.execute(query3,valores4)
     conexion.commit()
 
-    valores5 = (1,usu[0])
+    #valores5 = (1,usu[0])
+    valores5 = (2,usu[0],1)
+    valores6 = (3,usu[0],1)
+
     cursor.execute(query4,valores5)
+    cursor.execute(query4, valores6)
     conexion.commit()
     
     if conexionR is None:
@@ -193,6 +197,32 @@ def insertar_items(lista,conexionR,cursorR):
 
 def instrumento_piano(piano,conexionR,cursorR):
     query = "Select usr_id from usuario where usr_correo =%s;"
+    query2 = "Update almanaque_instrumento set alm_instrumento = %s where usr_id = %s and ins_id = %s;"
+
+
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+
+    cursor.execute(query,[usu_correo])
+    usu = cursor.fetchone()
+    
+    valores = (piano[0],usu[0],2)
+    valores2 = (piano[1],usu[0],3)
+
+    cursor.execute(query2,valores)
+    cursor.execute(query2,valores2)
+    conexion.commit()
+
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+
+"""def instrumento_sintetizador(piano,conexionR,cursorR):
+    query = "Select usr_id from usuario where usr_correo =%s;"
     query2 = "Update almanaque_instrumento set ins_id = %s where usr_id = %s;"
 
 
@@ -213,7 +243,8 @@ def instrumento_piano(piano,conexionR,cursorR):
 
     if conexionR is None:
         cursor.close()
-        conexion.close()
+        conexion.close()"""
+
 
 
 """una vez encontrado, compueba la contraseña"""
@@ -374,11 +405,11 @@ def obtener_items(correo,conexionR, cursorR):
 
 
 def obtener_instrumento_piano(correo,conexionR,cursorR):
-
+    
     lista_instrumento = []
 
     query = "Select usr_id from usuario where usr_correo = %s"
-    query2 = "Select ins_id from almanaque_instrumento where usr_id = %s;"
+    query2 = "Select alm_instrumento from almanaque_instrumento where usr_id = %s and ins_id = %s;"
 
     if conexionR is None:
         conexion = conectar.conectar()
@@ -390,14 +421,18 @@ def obtener_instrumento_piano(correo,conexionR,cursorR):
     cursor.execute(query,[correo])
     usu = cursor.fetchone()
 
-    cursor.execute(query2,usu)
-    piano = cursor.fetchone()
+    valores = (*usu,2)
+    valores1 = (*usu,3)
+    cursor.execute(query2,valores)
+    a = cursor.fetchone()
+    cursor.execute(query2,valores1)
+    b = cursor.fetchone()
 
     if conexionR is None:
         cursor.close()
         conexion.close()
 
-    lista_instrumento = [*piano]
+    lista_instrumento = [*a,*b]
 
     return lista_instrumento
 

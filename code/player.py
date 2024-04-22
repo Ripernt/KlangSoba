@@ -84,7 +84,7 @@ class Player(Entity):
 		self.items_num = [0,0,0,0] 
 
 		#Instrumentos
-		self.T_piano = [1]
+		self.T_piano = [1,1]
 
 
   

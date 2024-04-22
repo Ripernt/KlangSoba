@@ -120,7 +120,7 @@ class Game:
                         t1.join()
                         response = validar.responseI()
 
-                        #Crear funcion de carga de datos del alamanaque (items)
+                        #Crear funcion de carga de datos del alamanaque items
                         lista = Item.valor(self)
                         re = validar.obtener_items(correo,self.conexion, self.cursor)
                         #print("Lista del jugador")

@@ -5,7 +5,6 @@ from GUI.Range import Range
 from tkinter import messagebox
 from GUI.Almanaque import Almanaque
 from DB import validar
-from DB import conectar as Conectar
 from DB.conectar import *
 from item import Item
 
