@@ -4,6 +4,7 @@ from GUI.button2 import Button2
 from GUI.button import Button
 from pygame.locals import *
 
+position = 0
 
     
 
@@ -23,7 +24,7 @@ def crearWav(nombre_archivo,tiempo_grabacion,framerate=44100,nchannels=2):
 class InterfazPiano:
 
     def __init__(self, screen, instrumentos):
-        self. instrumentos = instrumentos
+        self.instrumentos = instrumentos
         self.screen = screen
         self.piano = True
         self.fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20)
@@ -33,97 +34,116 @@ class InterfazPiano:
         #asfgjkl
         #zxcvbnm,.
 
+    def background(self):
+
+            global position
+            fondo = pygame.image.load("graphics/elementos_graficos/pianoBG.png")
+            fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+            self.screen.fill((0,0,0))
+
+            self.screen.blit(fondo,(position,0))
+            self.screen.blit(fondo,(fondo.get_width()+position,0))
+
+            position -= 5
+
+            if abs(position) > fondo.get_width():
+                position = 0
 
     def mostrar_menu_piano(self):
-        self.screen.fill((50,50,50))
-        fondo = pygame.image.load("graphics/elementos_graficos/fondosgenerico.png")
-        fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+        self.screen.fill((50, 50, 50))
+        
         boton=pygame.image.load("graphics/elementos_graficos/botonT.png")
         boton=pygame.transform.scale(boton,(50,50))
 
         grabar = False
 
         # c
-        self.botonTt = Button2(image=settings.botonDOPiano, pos=(200,420), text_input="t", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTt = Button2(image=settings.botonDOPiano, pos=(35,620), text_input="t", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # c#
-        self.botonT5 = Button2(image=settings.botonNEGRAPiano, pos=(220,380), text_input="5", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonT5 = Button2(image=settings.botonNEGRAPiano, pos=(65,565), text_input="5", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # d
-        self.botonTr = Button2(image=settings.botonREPiano, pos=(241,420), text_input="r", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTr = Button2(image=settings.botonREPiano, pos=(96,620), text_input="r", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # d#
-        self.botonT4 = Button2(image=settings.botonNEGRAPiano, pos=(261,380), text_input="4", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonT4 = Button2(image=settings.botonNEGRAPiano, pos=(126,565), text_input="4", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # e
-        self.botonTe = Button2(image=settings.botonMIPiano, pos=(282,420), text_input="e", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTe = Button2(image=settings.botonMIPiano, pos=(157,620), text_input="e", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # f
-        self.botonTw = Button2(image=settings.botonDOPiano, pos=(323,420), text_input="w", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTw = Button2(image=settings.botonDOPiano, pos=(218,620), text_input="w", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # f#
-        self.botonT2 = Button2(image=settings.botonNEGRAPiano, pos=(343,380), text_input="2", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonT2 = Button2(image=settings.botonNEGRAPiano, pos=(248,565), text_input="2", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # g
-        self.botonTa = Button2(image=settings.botonREPiano, pos=(364,420), text_input="a", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTa = Button2(image=settings.botonREPiano, pos=(279,620), text_input="a", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # g#
-        self.botonTq = Button2(image=settings.botonNEGRAPiano, pos=(384,380), text_input="q", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTq = Button2(image=settings.botonNEGRAPiano, pos=(309,565), text_input="q", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # a
-        self.botonTz = Button2(image=settings.botonREPiano, pos=(405,420), text_input="z", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTz = Button2(image=settings.botonREPiano, pos=(340,620), text_input="z", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # a#
-        self.botonTs = Button2(image=settings.botonNEGRAPiano, pos=(425,380), text_input="s", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTs = Button2(image=settings.botonNEGRAPiano, pos=(370,565), text_input="s", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # b
-        self.botonTx = Button2(image=settings.botonMIPiano, pos=(446,420), text_input="x", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTx = Button2(image=settings.botonMIPiano, pos=(401,620), text_input="x", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # c1
-        self.botonTc = Button2(image=settings.botonDOPiano, pos=(487,420), text_input="c", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTc = Button2(image=settings.botonDOPiano, pos=(462,620), text_input="c", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # c1#
-        self.botonTf = Button2(image=settings.botonNEGRAPiano, pos=(507,380), text_input="f", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTf = Button2(image=settings.botonNEGRAPiano, pos=(492,565), text_input="f", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # d1
-        self.botonTv = Button2(image=settings.botonREPiano, pos=(528,420), text_input="v", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTv = Button2(image=settings.botonREPiano, pos=(523,620), text_input="v", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # d1#
-        self.botonTg = Button2(image=settings.botonNEGRAPiano, pos=(548,380), text_input="g", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTg = Button2(image=settings.botonNEGRAPiano, pos=(553,565), text_input="g", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # e1
-        self.botonTb = Button2(image=settings.botonMIPiano, pos=(569,420), text_input="b", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTb = Button2(image=settings.botonMIPiano, pos=(584,620), text_input="b", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # f1
-        self.botonTn = Button2(image=settings.botonDOPiano, pos=(610,420), text_input="n", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTn = Button2(image=settings.botonDOPiano, pos=(645,620), text_input="n", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # f1#
-        self.botonTj = Button2(image=settings.botonNEGRAPiano, pos=(630,380), text_input="j", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTj = Button2(image=settings.botonNEGRAPiano, pos=(675,565), text_input="j", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # g1
-        self.botonTm = Button2(image=settings.botonREPiano, pos=(651,420), text_input="m", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTm = Button2(image=settings.botonREPiano, pos=(706,620), text_input="m", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # g1#
-        self.botonTk = Button2(image=settings.botonNEGRAPiano, pos=(671,380), text_input="k", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTk = Button2(image=settings.botonNEGRAPiano, pos=(736,565), text_input="k", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # a1
-        self.botonTComa = Button2(image=settings.botonREPiano, pos=(692,420), text_input=",", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTComa = Button2(image=settings.botonREPiano, pos=(767,620), text_input=",", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # a1#
-        self.botonTl = Button2(image=settings.botonNEGRAPiano, pos=(712,380), text_input="l", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTl = Button2(image=settings.botonNEGRAPiano, pos=(797,565), text_input="l", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # b1
-        self.botonTPunto = Button2(image=settings.botonMIPiano, pos=(733,420), text_input=".", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTPunto = Button2(image=settings.botonMIPiano, pos=(828,620), text_input=".", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # c2
-        self.botonTFlechaArriba = Button2(image=settings.botonDOPiano, pos=(774,420),text_input="↑", font=self.fontsito, base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTFlechaArriba = Button2(image=settings.botonDOPiano, pos=(889,620),text_input="↑", font=self.fontsito, base_color="#4D4D5C", hovering_color="75E2EC")
         # c2#
-        self.botonTFlechaAbajo = Button2(image=settings.botonNEGRAPiano, pos=(794,380),text_input="↓" , font=self.fontsito, base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTFlechaAbajo = Button2(image=settings.botonNEGRAPiano, pos=(919,565),text_input="↓" , font=self.fontsito, base_color="#4D4D5C", hovering_color="75E2EC")
         # d2
-        self.botonTComilla = Button2(image=settings.botonREPiano, pos=(815,420), text_input="'", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTComilla = Button2(image=settings.botonREPiano, pos=(950,620), text_input="'", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # d2#
-        self.botonTF10 = Button2(image=settings.botonNEGRAPiano, pos=(835,380), text_input="F10", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTF10 = Button2(image=settings.botonNEGRAPiano, pos=(980,565), text_input="F10", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # e2
-        self.botonTBorrar = Button2(image=settings.botonMIPiano, pos=(856,420), text_input="DEL", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTBorrar = Button2(image=settings.botonMIPiano, pos=(1011,620), text_input="DEL", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # f2
-        self.botonTp = Button2(image=settings.botonDOPiano, pos=(897,420), text_input="p", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTp = Button2(image=settings.botonDOPiano, pos=(1072,620), text_input="p", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # f2#
-        self.botonT0 = Button2(image=settings.botonNEGRAPiano, pos=(917,380), text_input="0", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonT0 = Button2(image=settings.botonNEGRAPiano, pos=(1102,565), text_input="0", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # g2
-        self.botonTo = Button2(image=settings.botonREPiano, pos=(938,420), text_input="o", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTo = Button2(image=settings.botonREPiano, pos=(1133,620), text_input="o", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # g2#
-        self.botonT9 = Button2(image=settings.botonNEGRAPiano, pos=(958,380), text_input="9", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonT9 = Button2(image=settings.botonNEGRAPiano, pos=(1163,565), text_input="9", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # a2
-        self.botonTi = Button2(image=settings.botonREPiano, pos=(979,420), text_input="i", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonTi = Button2(image=settings.botonREPiano, pos=(1194,620), text_input="i", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # a2#
-        self.botonT8 = Button2(image=settings.botonNEGRAPiano, pos=(999,380), text_input="8", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonT8 = Button2(image=settings.botonNEGRAPiano, pos=(1224,565), text_input="8", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         # b2
-        self.botonTu = Button2(image=settings.botonMIPiano, pos=(1020,420), text_input="u", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
-
-
-
+        self.botonTu = Button2(image=settings.botonMIPiano, pos=(1255,620), text_input="u", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
 
         #self.pianito = pygame.image.load('graphics/elementos_graficos/pianoPianito.png')
         #self.pianito = pygame.transform.scale(self.pianito, (900,300))
-        self.botonG = Button(image=settings.botonGrabar, pos=(500,200), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
-        self.botonSG = Button(image=settings.botonStopGrabar, pos=(600,200), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
 
+        #Boton grabar
+        self.botonG = Button(image=settings.botonGrabar, pos=(100,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        #Boton dejar de grabar
+        self.botonSG = Button(image=settings.botonStopGrabar, pos=(180,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        #Boton no grabando
+        self.Nograbando = Button(image=settings.botonNoGrabando, pos=(260,450),text_input="",font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        #Boton guardar pista
+        self.botonGuardar = Button(image=settings.botonGuardarPista, pos=(1200,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        #Boton grabando
+        #Por agregar
+        #Boton salir
         self.salir_botton = Button(image=boton, pos=(100,100), text_input="",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
 
         #Teclas para tocar el piano
@@ -144,6 +164,9 @@ class InterfazPiano:
 
         while self.piano:
 
+            self.background()
+            
+            
             self.salir_botton.cargar(self.screen)
             self.salir_botton.cambiar_color(pygame.mouse.get_pos())
 
@@ -256,17 +279,25 @@ class InterfazPiano:
             self.botonTBorrar.cargar(self.screen)           
             #self.screen.blit(self.pianito, (200,370))
 
+
+            #Carga el boton Nograbando
+            self.Nograbando.cargar(self.screen)
+            
+            #Carga el boton GuardarPista
+            self.botonGuardar.cargar(self.screen)
+            
             events = pygame.event.get()
 
             for event in events:
+                
                 #Salir
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.salir_botton.checkForInput(pygame.mouse.get_pos()):
                         self.piano = False
-                        self.instrumentos = True
+                        #self.instrumentos = True
                         self.salir_botton.click(self.screen)
                         #self.musica_almanaque.stop() //Agregar
-                        return self.piano, self.instrumentos
+                        return self.piano
 
                     if self.botonG.checkForInput(pygame.mouse.get_pos()):
                         self.botonG.click(self.screen)
@@ -277,8 +308,6 @@ class InterfazPiano:
                         Egrabar = time.time() 
                         #print(Egrabar)    
 
-                            
-                    
                     if self.botonSG.checkForInput(pygame.mouse.get_pos()):
                         self.botonSG.click(self.screen)
                         print("Dejo de grabar")
@@ -289,6 +318,10 @@ class InterfazPiano:
                         print("Duracion: ", Duracion)
                         nombre = "lista.wav"
                         crearWav(nombre, Duracion, nchannels=2)
+                        
+                    #Accion del boton guardar
+                    if self.botonGuardar.checkForInput(pygame.mouse.get_pos()):
+                        self.botonGuardar.click(self.screen)
 
                                 
                 if event.type == pygame.KEYDOWN:
@@ -371,10 +404,7 @@ class InterfazPiano:
                         self.botonTFlechaAbajo.click(self.screen)
                     if event.key == K_BACKSPACE:
                         self.botonTBorrar.click(self.screen)
-
-
+                
                         
                                               
                 pygame.display.update()
-    
-
