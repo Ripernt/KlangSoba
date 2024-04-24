@@ -1,5 +1,5 @@
 user = 'root'
-password = 'gbIMzXAYLTgeBNJYwFVstDYGdqTrREjQ' #gbIMzXAYLTgeBNJYwFVstDYGdqTrREjQ
-host = 'roundhouse.proxy.rlwy.net' #roundhouse.proxy.rlwy.net
+password = 'n0m3l0' #gbIMzXAYLTgeBNJYwFVstDYGdqTrREjQ
+host = 'localhost' #roundhouse.proxy.rlwy.net
 db = 'railway'
-port = '11973' #11973
+port = '3306' #11973

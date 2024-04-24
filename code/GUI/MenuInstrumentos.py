@@ -33,13 +33,13 @@ class MInstrumentos:
         instrumentos_text = fonti.render("Menu de instrumentos", True, "white") 
         instrumentos_rect = instrumentos_text.get_rect(center=(settings.SCREEN_WIDTH/2, settings.SCREEN_HEIGHT/11))
 
-        piano_Button = Button(image=settings.botonPiano, pos=(300,300), text_input="Piano", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+        piano_Button = Button(image=settings.botonPiano, pos=(420,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
         
-        sintetizador_Button = Button(image=settings.botonSintetizador, pos=(600,300), text_input="Sintetizador", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+        sintetizador_Button = Button(image=settings.botonSintetizador, pos=(820,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
         fondo = pygame.image.load("graphics/elementos_graficos/Menuinstrumentos.png")
         fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
-        regresar_button = Button(image=settings.botonBlue, pos=(1100, 600), text_input="Regresar", font=fonti,
+        regresar_button = Button(image=settings.botonRegresar, pos=(200, 600), text_input="", font=fonti,
         base_color="#4D4D5C", hovering_color="#75E2EC")
 
         self.fontsito = pygame.font.Font('graphics/font/pixelart.TTF', 20)  
