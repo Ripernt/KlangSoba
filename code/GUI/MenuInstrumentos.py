@@ -26,6 +26,7 @@ class MInstrumentos:
         #CV2 liberias para modificar las imagenes |open cv --python
         
         piano_costo = 3
+        sintetizador_costo = 3
 
         fonti = pygame.font.Font('graphics/font/joystix.ttf', 20)
         self.screen.fill((50,50,50))
@@ -45,9 +46,16 @@ class MInstrumentos:
         self.fontsito = pygame.font.Font('graphics/font/pixelart.TTF', 20)  
         self.screen.fill((50,50,50))
 
-        madera_text = self.fontsito.render("x3", True, "white") 
+        #Items para el instrumento piano
+        madera_text = self.fontsito.render("x"+str(piano_costo), True, "white") 
+        piano_text = self.fontsito.render("Piano", True, "white")
         madera_img = pygame.image.load("graphics/items/madera.png")
         madera_img = pygame.transform.scale(madera_img,(50,50))
+                #Items para el instrumento sintetizador
+        pila_text = self.fontsito.render("x"+str(sintetizador_costo), True, "white")
+        sintetizador_text = self.fontsito.render("Sintetizador", True, "white")
+        pila_img = pygame.image.load("graphics/items/bateria.png")
+        pila_img = pygame.transform.scale(pila_img,(50,50))
         renderT = None
         
         while self.instrumentos:
