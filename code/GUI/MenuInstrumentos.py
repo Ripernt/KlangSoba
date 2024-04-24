@@ -43,6 +43,10 @@ class MInstrumentos:
         regresar_button = Button(image=settings.botonRegresar, pos=(200, 600), text_input="", font=fonti,
         base_color="#4D4D5C", hovering_color="#75E2EC")
 
+        #Boton piano bloqueado
+        piano_bloqueado = Button(image=settings.botonPianoBloqueado, pos=(420,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+        sintetizador_bloqueado = Button(image=settings.botonSintetizadorBloqueado, pos=(820,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+
         self.fontsito = pygame.font.Font('graphics/font/pixelart.TTF', 20)  
         self.screen.fill((50,50,50))
 
@@ -60,20 +64,73 @@ class MInstrumentos:
         
         while self.instrumentos:
 
+            """#Mostrar piano y sintetizador
+            if piano_bloqueado is not None:
+                piano_bloqueado.cargar
+                piano_bloqueado.cambiar_color(pygame.mouse.get_cursor())
+            elif piano_bloqueado is None:
+                piano_Button.cargar(self.screen)
+                piano_Button.cambiar_color(pygame.mouse.get_cursor())
+                
+            if sintetizador_bloqueado is not None:
+                sintetizador_bloqueado.cargar(self.screen)
+                sintetizador_bloqueado.cambiar_color(pygame.mouse.get_cursor())
+            elif sintetizador_bloqueado is None:
+                sintetizador_Button.cargar(self.screen)
+                sintetizador_Button.cambiar_color(pygame.mouse.get_cursor())"""
+            #Valida si tiene el instrumento piano
+            """if self.player.T_piano[0] == 1:
+                no_tiene_piano = True
+            else:
+                no_tiene_piano = False
+            #Valida si tiene el instrumento sintetizador
+            if self.player.T_piano[1] == 1:
+                no_tiene_sintetizador = True
+            else:
+                no_tiene_sintetizador = False"""
+
             self.screen.blit(fondo, (0,0))
             self.screen.blit(instrumentos_text, instrumentos_rect)
             if renderT is not None:
                 self.screen.blit(renderT, rect)
+
+            #Mostrar boton regresar    
             regresar_button.cargar(self.screen)
             regresar_button.cambiar_color(pygame.mouse.get_pos())
 
-            sintetizador_Button.cargar(self.screen)
-            sintetizador_Button.cambiar_color(pygame.mouse.get_pos())
-            piano_Button.cargar(self.screen)
-            piano_Button.cambiar_color(pygame.mouse.get_pos())
+            #Mostrar boton bloqueado o desbloqueado
+            if self.player.T_piano[0] == 1:
+                piano_bloqueado.cargar(self.screen)
+                piano_bloqueado.cambiar_color(pygame.mouse.get_pos())
+            else:
+                #Mostrar boton piano
+                piano_Button.cargar(self.screen)
+                piano_Button.cambiar_color(pygame.mouse.get_pos())
+            if self.player.T_piano[1] == 1:
+                sintetizador_bloqueado.cargar(self.screen)
+                sintetizador_bloqueado.cambiar_color(pygame.mouse.get_pos())
+            else:
+                #Mostrar boton sintetizador
+                sintetizador_Button.cargar(self.screen)
+                sintetizador_Button.cambiar_color(pygame.mouse.get_pos())
 
-            self.screen.blit(madera_img,(250,400))
-            self.screen.blit(madera_text,(290,400))
+
+            
+            #Mostrar items para el instrumento piano
+            if self.player.T_piano[0] == 1:
+                self.screen.blit(madera_img,(365,390))
+                self.screen.blit(madera_text,(420,400))
+            else:
+                self.screen.blit(piano_text,(390,400))
+             
+                
+            
+            #Mostrar items para el instrumento sintetizador
+            if self.player.T_piano[1] == 1:
+                self.screen.blit(pila_img,(765,390))
+                self.screen.blit(pila_text,(820,400))
+            else:
+                self.screen.blit(sintetizador_text,(770,400))
 
             evento = pygame.event.get()
 
