@@ -1,6 +1,7 @@
 import pygame
 from GUI.button import Button
 from GUI.UIPiano import InterfazPiano
+from GUI.UISintetizador import InterfazSintetizador
 import settings
 from pygame.locals import *
 from DB import validar
@@ -25,29 +26,39 @@ class MInstrumentos:
     def mostrar_instrumentos(self):
         #CV2 liberias para modificar las imagenes |open cv --python
         
-        piano_costo = 3
-        sintetizador_costo = 3
+        #Costo del intrumento piano
+        piano_costo = 1
+        #Costo del instrumento sintetizador
+        sintetizador_costo = 1
 
         fonti = pygame.font.Font('graphics/font/joystix.ttf', 20)
         self.screen.fill((50,50,50))
 
+        #Texto menu de instrumentos
         instrumentos_text = fonti.render("Menu de instrumentos", True, "white") 
         instrumentos_rect = instrumentos_text.get_rect(center=(settings.SCREEN_WIDTH/2, settings.SCREEN_HEIGHT/11))
 
+        #Boton piano
         piano_Button = Button(image=settings.botonPiano, pos=(420,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
-        
+
+        #Boton sintetizador
         sintetizador_Button = Button(image=settings.botonSintetizador, pos=(820,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+
+        #Fondo de menu instrumentos
         fondo = pygame.image.load("graphics/elementos_graficos/Menuinstrumentos.png")
         fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
+        #Boton regresar
         regresar_button = Button(image=settings.botonRegresar, pos=(200, 600), text_input="", font=fonti,
         base_color="#4D4D5C", hovering_color="#75E2EC")
 
         #Boton piano bloqueado
         piano_bloqueado = Button(image=settings.botonPianoBloqueado, pos=(420,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
         sintetizador_bloqueado = Button(image=settings.botonSintetizadorBloqueado, pos=(820,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
-
+    
+        #Fuente de la letra
         self.fontsito = pygame.font.Font('graphics/font/pixelart.TTF', 20)  
+        #Pantalla
         self.screen.fill((50,50,50))
 
         #Items para el instrumento piano
@@ -55,31 +66,19 @@ class MInstrumentos:
         piano_text = self.fontsito.render("Piano", True, "white")
         madera_img = pygame.image.load("graphics/items/madera.png")
         madera_img = pygame.transform.scale(madera_img,(50,50))
-                #Items para el instrumento sintetizador
+        #Items para el instrumento sintetizador
         pila_text = self.fontsito.render("x"+str(sintetizador_costo), True, "white")
         sintetizador_text = self.fontsito.render("Sintetizador", True, "white")
         pila_img = pygame.image.load("graphics/items/bateria.png")
         pila_img = pygame.transform.scale(pila_img,(50,50))
+
+
         renderT = None
         
         while self.instrumentos:
 
-            """#Mostrar piano y sintetizador
-            if piano_bloqueado is not None:
-                piano_bloqueado.cargar
-                piano_bloqueado.cambiar_color(pygame.mouse.get_cursor())
-            elif piano_bloqueado is None:
-                piano_Button.cargar(self.screen)
-                piano_Button.cambiar_color(pygame.mouse.get_cursor())
-                
-            if sintetizador_bloqueado is not None:
-                sintetizador_bloqueado.cargar(self.screen)
-                sintetizador_bloqueado.cambiar_color(pygame.mouse.get_cursor())
-            elif sintetizador_bloqueado is None:
-                sintetizador_Button.cargar(self.screen)
-                sintetizador_Button.cambiar_color(pygame.mouse.get_cursor())"""
             #Valida si tiene el instrumento piano
-            """if self.player.T_piano[0] == 1:
+            if self.player.T_piano[0] == 1:
                 no_tiene_piano = True
             else:
                 no_tiene_piano = False
@@ -87,64 +86,58 @@ class MInstrumentos:
             if self.player.T_piano[1] == 1:
                 no_tiene_sintetizador = True
             else:
-                no_tiene_sintetizador = False"""
+                no_tiene_sintetizador = False
 
             self.screen.blit(fondo, (0,0))
             self.screen.blit(instrumentos_text, instrumentos_rect)
             if renderT is not None:
                 self.screen.blit(renderT, rect)
 
+            if no_tiene_sintetizador == True:
+                #Mostrar boton sintetizador bloqueado
+                sintetizador_bloqueado.cargar(self.screen)
+                #sintetizador_bloqueado.cambiar_color(pygame.mouse.get_pos())
+                self.screen.blit(pila_img,(765,390))
+                self.screen.blit(pila_text,(820,400))
+                pass
+            else:
+                #Mostrar boton sintetizador
+                sintetizador_Button.cargar(self.screen)
+                #sintetizador_Button.cambiar_color(pygame.mouse.get_pos())
+                self.screen.blit(sintetizador_text,(770,400))
+
+            #Mostrar boton bloqueado o desbloqueado
+            if no_tiene_piano == True:
+               
+                piano_bloqueado.cargar(self.screen)
+                #piano_bloqueado.cambiar_color(pygame.mouse.get_pos())
+                self.screen.blit(madera_img,(365,390))
+                self.screen.blit(madera_text,(420,400))
+                
+            else:
+                #Mostrar boton piano
+                piano_Button.cargar(self.screen)
+                #piano_Button.cambiar_color(pygame.mouse.get_pos())
+                self.screen.blit(piano_text,(390,400))
+
             #Mostrar boton regresar    
             regresar_button.cargar(self.screen)
             regresar_button.cambiar_color(pygame.mouse.get_pos())
 
-            #Mostrar boton bloqueado o desbloqueado
-            if self.player.T_piano[0] == 1:
-                piano_bloqueado.cargar(self.screen)
-                piano_bloqueado.cambiar_color(pygame.mouse.get_pos())
-            else:
-                #Mostrar boton piano
-                piano_Button.cargar(self.screen)
-                piano_Button.cambiar_color(pygame.mouse.get_pos())
-            if self.player.T_piano[1] == 1:
-                sintetizador_bloqueado.cargar(self.screen)
-                sintetizador_bloqueado.cambiar_color(pygame.mouse.get_pos())
-            else:
-                #Mostrar boton sintetizador
-                sintetizador_Button.cargar(self.screen)
-                sintetizador_Button.cambiar_color(pygame.mouse.get_pos())
-
-
-            
-            #Mostrar items para el instrumento piano
-            if self.player.T_piano[0] == 1:
-                self.screen.blit(madera_img,(365,390))
-                self.screen.blit(madera_text,(420,400))
-            else:
-                self.screen.blit(piano_text,(390,400))
-             
-                
-            
-            #Mostrar items para el instrumento sintetizador
-            if self.player.T_piano[1] == 1:
-                self.screen.blit(pila_img,(765,390))
-                self.screen.blit(pila_text,(820,400))
-            else:
-                self.screen.blit(sintetizador_text,(770,400))
-
             evento = pygame.event.get()
-
 
             for event in evento:
             
                 if event.type == pygame.KEYDOWN:
+                    #Accion regresar por medio de teclas
                     if event.key == K_m or event.key == K_ESCAPE:
                         self.instrumentos = False
                         regresar_button.click(self.screen)
                         self.sound.pause()
                         self.musicap.stop()
                         return self.instrumentos
-                elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    #Accion regresar por medio del boton
                     if regresar_button.checkForInput(pygame.mouse.get_pos()):
                         self.instrumentos = False
                         regresar_button.click(self.screen)
@@ -152,32 +145,117 @@ class MInstrumentos:
                         self.musicap.stop()
                         return self.instrumentos
                     
-                    if self.player.T_piano[0] == 1:
+                    if sintetizador_bloqueado.checkForInput(pygame.mouse.get_pos()) and no_tiene_sintetizador == True:
+                        print("Sintetizador bloqueadin")
+                        sintetizador_bloqueado.click(self.screen)
+                        if sintetizador_costo <= self.lista[0]:
+                            self.player.T_piano[1] = 3
+                            constante2 = self.lista[0] - sintetizador_costo
+                            self.lista[0] = constante2
+                            validar.insertar_items(self.lista,self.conexion,self.cursor)
+                            print("desbloqueado: ", self.player.T_piano[1])
+                            validar.instrumento_piano(self.player.T_piano,self.conexion,self.cursor)
+                            #if self.player.T_piano[1] == 3:
+                            #    no_tiene_sintetizador = False
+                        else:
+                            print("No se tienen suficientes items para el sintetizador")
+                            text_no_sintetizador = "No se tienen suficientes items para el sintetizador"
+                            textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                            renderT = textR.render(text_no_sintetizador, True, (255,0,0))
+                            rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
 
-                        if piano_Button.checkForInput(pygame.mouse.get_pos()):  
+                    
+                        
+                    elif sintetizador_Button.checkForInput(pygame.mouse.get_pos()) and no_tiene_sintetizador == False:
+                        print("Pianopianito no bloqueado")
+                        print("piano: ", no_tiene_piano)
+                        print("sintetizador: ", no_tiene_sintetizador)
+                        self.instrumentos = False
+                        sintetizador_Button.click(self.screen)
+                        self.inst = InterfazSintetizador(self.screen, self.instrumentos)
+                        self.sound.pause()
+                        self.musicap.stop()
+                        eee = self.inst.mostrar_menu_sintetizador()
+                        if eee == False:
+                            self.musicap.stop()
+                                            
+                            return self.instrumentos 
+                       
+                    if piano_bloqueado.checkForInput(pygame.mouse.get_pos()) and no_tiene_piano == True:
+                        print("Pianopianito bloqueado")
+                        piano_bloqueado.click(self.screen)
+                        if piano_costo <= self.lista[3]:
+                            self.player.T_piano[0] = 2
+                            constante = self.lista[3] - piano_costo
+                            self.lista[3] = constante
+                            validar.insertar_items(self.lista,self.conexion,self.cursor)
+                            print("desbloqueado: ", self.player.T_piano[0])
+                            validar.instrumento_piano(self.player.T_piano,self.conexion,self.cursor)
+                            #if self.player.T_piano[0] == 2:
+                            #    no_tiene_piano = False
+                        else:
+                            print("No se tienen suficientes items para el piano")
+                            text_no_piano = "No se tienen suficientes items para el piano"
+                            textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                            renderT = textR.render(text_no_piano, True, (255,0,0))
+                            rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
+                        
+                    elif piano_Button.checkForInput(pygame.mouse.get_pos()) and no_tiene_piano == False:
+                        print("Pianopianito no bloqueado")
+                        print("piano: ", no_tiene_piano)
+                        print("sintetizador: ", no_tiene_sintetizador)
+                        self.instrumentos = False
+                        piano_Button.click(self.screen)
+                        self.inst = InterfazPiano(self.screen, self.instrumentos)
+                        self.sound.pause()
+                        self.musicap.stop()
+                        eee = self.inst.mostrar_menu_piano()
+                        if eee == False:
+                            self.musicap.stop()
+                                            
+                            return self.instrumentos 
+                        
+                  
+                        
+
+
+                        
+  
+                    """if self.player.T_piano[0] == 1 and piano_bloqueado is not None:# or self.player.T_piano[1] == 3:
+                        print("Parte desbloqueado")
+                        if piano_bloqueado.checkForInput(pygame.mouse.get_pos()):  
                             print("Items madera: ", self.lista[3])
+                                    
+                            #Valida si el jugador tiene los items necesarios para desbloquear el instrumento
                             if piano_costo <= self.lista[3]:
                                 self.player.T_piano[0] = 2
+                                print("Piano: ",self.player.T_piano[0])
                                 constante = self.lista[3] - piano_costo
                                 self.lista[3] = constante
                                 print(self.lista[3])
                                 print(self.player.T_piano[0])
+
                                 #Actualiza los items del usuario al desbloquear el piano
                                 validar.insertar_items(self.lista,self.conexion,self.cursor)
                                 print("desbloqueado: ", self.player.T_piano[0])
+
                                 #Instroduce el piano desbloqueado en la base de datos
                                 validar.instrumento_piano(self.player.T_piano,self.conexion,self.cursor)
-                                
-                                
+                                if self.player.T_piano[0] == 2:
+                                    piano_bloqueado = None
+                                            
                             else:
-                                a = "No se tienen suficientes items"
+                                print("No se tienen suficientes items para el piano")
+                                text_no_piano = "No se tienen suficientes items"
                                 textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
-                                renderT = textR.render(a, True, (255,0,0))
-                                rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 430))                                 
+                                renderT = textR.render(text_no_piano, True, (255,0,0))
+                                rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
+                    elif self.player.T_piano[0] == 2:
+                        print("Parte desbloqueado")
+                        piano_bloqueado = None
                         
-                    else:
-
-                        if piano_Button.checkForInput(pygame.mouse.get_pos()):
+                        if piano_bloqueado is None:
+                            #if self.player.T_piano[0] == 2:
                             self.instrumentos = False
                             piano_Button.click(self.screen)
                             self.inst = InterfazPiano(self.screen, self.instrumentos)
@@ -186,9 +264,59 @@ class MInstrumentos:
                             eee = self.inst.mostrar_menu_piano()
                             if eee == False:
                                 self.musicap.stop()
-                            return self.instrumentos 
-                
-                        
+                                        
+                                return self.instrumentos  
+                               
+                        #elif no_tiene_sintetizador == True:
+                    if self.player.T_piano[1] == 1 and sintetizador_bloqueado is not None:
+                        print("Parte bloqueado sintetizador")
+                        if sintetizador_bloqueado.checkForInput(pygame.mouse.get_pos()):
+                            if sintetizador_costo <= self.lista[0]:
+                                self.player.T_piano[1] = 3
+                                print("Sintetizador: ",self.player.T_piano[1])
+                                constante2 = self.lista[0] - sintetizador_costo
+                                self.lista[0] = constante2
+                                print(self.lista[0])
+                                print(self.player.T_piano[1])
 
-            pygame.display.update()
+                                #Actualiza los items del usuario al desbloquear el piano
+                                validar.insertar_items(self.lista,self.conexion,self.cursor)
+                                print("desbloqueado: ", self.player.T_piano[1])
+
+                                #Instroduce el piano desbloqueado en la base de datos
+                                validar.instrumento_piano(self.player.T_piano,self.conexion,self.cursor) 
+                                if self.player.T_piano[1] == 3:
+                                    sintetizador_bloqueado = None
+                                    
+                            else:
+                                print("No se tienen suficientes items para el piano")
+                                a = "No se tienen suficientes items"
+                                textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                                renderT = textR.render(a, True, (255,0,0))
+                                rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
+                    #checkforinput
+                    elif self.player.T_piano[1] == 3:
+                        print("Parte desbloqueado sintetizadore")
+                        sintetizador_bloqueado = None
+                        if sintetizador_bloqueado is None:
+                            #if self.player.T_piano[1] == 3:
+                            if sintetizador_Button.checkForInput(pygame.mouse.get_pos()):
+                                if sintetizador_Button.checkForInput(pygame.mouse.get_pos()):
+                                    self.instrumentos = False
+                                    sintetizador_Button.click(self.screen)
+                                    self.inst_sin = InterfazSintetizador(self.screen, self.instrumentos)
+                                    self.sound.pause()
+                                    self.musicap.stop()
+                                    eee2 = self.inst_sin.mostrar_menu_sintetizador()
+                                    if eee2 == False:
+                                        self.musicap.stop()
+                                                    
+                                        return self.instrumentos"""
+
+
+
+            pygame.display.update()                            
+
+                        
+            
                 
