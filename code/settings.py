@@ -64,30 +64,54 @@ botonPiano = pygame.transform.scale(botonPiano, (200, 200))
 
 #Botones del piano
 botonREPiano = pygame.image.load("graphics/elementos_graficos/re.png")
-botonREPiano = pygame.transform.scale(botonREPiano, (40,150))
+botonREPiano = pygame.transform.scale(botonREPiano, (60,200))
 botonTECLAPiano = pygame.image.load("graphics/elementos_graficos/tecla.png")
-botonTECLAPiano = pygame.transform.scale(botonTECLAPiano, (40,150))
+botonTECLAPiano = pygame.transform.scale(botonTECLAPiano, (60,200))
 botonDOPiano = pygame.image.load("graphics/elementos_graficos/do.png")
-botonDOPiano = pygame.transform.scale(botonDOPiano, (40,150))
+botonDOPiano = pygame.transform.scale(botonDOPiano, (60,200))
 botonMIPiano = pygame.image.load("graphics/elementos_graficos/mi.png")
-botonMIPiano = pygame.transform.scale(botonMIPiano, (40,150))
+botonMIPiano = pygame.transform.scale(botonMIPiano, (60,200))
 botonNEGRAPiano = pygame.image.load("graphics/elementos_graficos/negra.png")
-botonNEGRAPiano = pygame.transform.scale(botonNEGRAPiano, (10,80))
+botonNEGRAPiano = pygame.transform.scale(botonNEGRAPiano, (18,102))
 
+
+#Boton para grabar
 botonGrabar = pygame.image.load("graphics/elementos_graficos/rec_start.png")
 botonGrabar = pygame.transform.scale(botonGrabar, (50,50))
 
+#Boton para dejar de grabar
 botonStopGrabar = pygame.image.load("graphics/elementos_graficos/rec_stop.png")
 botonStopGrabar = pygame.transform.scale(botonStopGrabar, (50,50))
+
+#Boton para guardar pista
+botonGuardarPista = pygame.image.load("graphics/elementos_graficos/save.png")
+botonGuardarPista = pygame.transform.scale(botonGuardarPista, (50,50))
+
+#Boton grabando
+botonGrabando = pygame.image.load("graphics/elementos_graficos/recording.png")
+botonGrabando = pygame.transform.scale(botonGrabando, (50,50))
+
+#Boton no grabando
+botonNoGrabando = pygame.image.load("graphics/elementos_graficos/notRecording.png")
+botonNoGrabando = pygame.transform.scale(botonNoGrabando, (50,50))
+
 #Boton sintetizador
 botonSintetizador = pygame.image.load("graphics/elementos_graficos/Sintetizador.png")
 botonSintetizador = pygame.transform.scale(botonSintetizador,(200, 200))
+
+#Botones de instrumentos bloqueados
+botonSintetizadorBloqueado = pygame.image.load("graphics/elementos_graficos/sintetizadorBloqueado.png")
+botonSintetizadorBloqueado = pygame.transform.scale(botonSintetizadorBloqueado,(200,200))
+botonPianoBloqueado = pygame.image.load("graphics/elementos_graficos/pianoBloqueado.png")
+botonPianoBloqueado = pygame.transform.scale(botonPianoBloqueado,(200,200))
+
 
 generalButton=pygame.image.load("graphics/elementos_graficos/botonkS.png")
 generalButton=pygame.transform.scale(generalButton,(240,90))
 
 botonRegresar = pygame.image.load("graphics/elementos_graficos/botonT.png")
 botonRegresar = pygame.transform.scale(botonRegresar,(50,50))
+
 
 weapon_data = {
 	'sword': {'cooldown': 100, 'damage': 15,'graphic':'graphics/weapons/sword/full.png'},
