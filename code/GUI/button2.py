@@ -31,6 +31,8 @@ class Button2():
         self.efectoTime = 0.2
 
         self.link = link
+        
+        self.isClicked = False
 
     def parpadeo(self):
         par = bool(randint(0, 1))
@@ -69,17 +71,21 @@ class Button2():
         # Simular efecto de hundimiento
         #self.Button_sound.set_volume(0.4)
         #self.Button_sound.play()
-        
-        self.rect.move_ip(0, 5)
-        self.cargar(screen)
-        pygame.display.flip()
-        pygame.time.wait(50)
-        self.rect.move_ip(0, -5)
-        self.cargar(screen)
-        pygame.display.flip()
+        if not self.isClicked:
+            self.rect.move_ip(0, 5)
+            self.isClicked = True
 
         if self.link:
             webbrowser.open(self.link)
+            
+    def unclick(self,screen):
+        # Simular efecto de hundimiento
+        #self.Button_sound.set_volume(0.4)
+        #self.Button_sound.play()
+        if self.isClicked:
+            self.rect.move_ip(0, -5)
+            self.isClicked = False
+
         
 
     #def cambiar_color(self,position):

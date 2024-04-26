@@ -1,25 +1,34 @@
-import pygame, settings, time, wave
+import pygame, settings, time, wave, threading
 import numpy as np
+
+from tkinter import filedialog as fd
+import os
+from pydub import AudioSegment
+
 from GUI.button2 import Button2
 from GUI.button import Button
 from pygame.locals import *
 
 position = 0
 
-    
 
-def obtener_notas():
-    pass
 
-def crearWav(nombre_archivo,tiempo_grabacion,framerate=44100,nchannels=2):
-    with wave.open(nombre_archivo, 'wb') as wf:
-        wf.setnchannels(nchannels)
-        wf.setsampwidth(2)
-        wf.setframerate(framerate)
-        blank_audio = np.zeros(int(tiempo_grabacion * framerate * nchannels), dtype=np.int16)
-        wf.writeframes(blank_audio)
-  
-
+#Exportar archivo
+def mostrar_dialogo_guardar(grabacion):
+    global guardandoC, guardado
+    direccion = fd.asksaveasfilename(initialdir="/", title="Guardar como", filetypes=(("wav files", "*.wav"), ("todos los archivos", "*.*")))
+    print(direccion)
+    _, extension = os.path.splitext(direccion)
+    if(direccion != ""):
+        if extension == ".wav":
+            grabacion.export(direccion, format="wav")
+        else:
+            grabacion.export(direccion+".wav", format="wav")
+        guardado = True
+    guardandoC = False
+# guardadoCorr = False
+guardandoC = False
+guardado = True
 
 class InterfazPiano:
 
@@ -28,6 +37,20 @@ class InterfazPiano:
         self.screen = screen
         self.piano = True
         self.fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20)
+        
+        #Variables para la grabación del piano
+        self.grabar = False
+        self.Dgrabar = 0
+        self.Egrabar = 0
+
+        self.Duracion = 0
+        self.emptyTime = 0
+
+        self.tiempos = []
+        self.teclas = []
+
+        self.tiempo = "0:0"
+
         #Teclas para tocar el piano
         #2,4,5,8,9,0,'
         #qwertuiop
@@ -50,12 +73,11 @@ class InterfazPiano:
                 position = 0
 
     def mostrar_menu_piano(self):
+        global guardandoC, guardado
         self.screen.fill((50, 50, 50))
         
         boton=pygame.image.load("graphics/elementos_graficos/botonT.png")
         boton=pygame.transform.scale(boton,(50,50))
-
-        grabar = False
 
         # c
         self.botonTt = Button2(image=settings.botonDOPiano, pos=(35,620), text_input="t", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
@@ -132,6 +154,11 @@ class InterfazPiano:
 
         #self.pianito = pygame.image.load('graphics/elementos_graficos/pianoPianito.png')
         #self.pianito = pygame.transform.scale(self.pianito, (900,300))
+        sep = self.screen.get_width()//20*2
+
+        #Boton guardar pista
+        self.botonGuard = Button(image=settings.botonGuardarPista, pos=(1200,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")    
+        self.botonGuard.enable = False
 
         #Boton grabar
         self.botonG = Button(image=settings.botonGrabar, pos=(100,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
@@ -139,11 +166,14 @@ class InterfazPiano:
         self.botonSG = Button(image=settings.botonStopGrabar, pos=(180,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         #Boton no grabando
         self.Nograbando = Button(image=settings.botonNoGrabando, pos=(260,450),text_input="",font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
-        #Boton guardar pista
-        self.botonGuardar = Button(image=settings.botonGuardarPista, pos=(1200,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+
         #Boton grabando
-        #Por agregar
-        #Boton salir
+        self.Grabando = Button(image=settings.botonGrabando, pos=(260,450),text_input="",font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        
+        #Boton Borrar
+        self.botonDel = Button(image=settings.botonGuardarPista, pos=(1100,450), text_input="Borrar", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonDel.enable = False
+
         self.salir_botton = Button(image=boton, pos=(100,100), text_input="",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
 
         #Teclas para tocar el piano
@@ -162,18 +192,33 @@ class InterfazPiano:
         pygame.mixer.set_num_channels(256)
 
 
+
         while self.piano:
 
             self.background()
-            
+
+            if self.grabar:
+                print(self.teclas)
+
+            #self.screen.fill((50,50,50))            
             
             self.salir_botton.cargar(self.screen)
             self.salir_botton.cambiar_color(pygame.mouse.get_pos())
 
-            self.botonG.cargar(self.screen)
+            if not self.grabar:
+                self.botonG.cargar(self.screen)
+                #Carga de luz de grabando apagada
+                self.Nograbando.cargar(self.screen)
             
+            if self.grabar:
+                self.botonSG.cargar(self.screen)
+                #imagen de luz de grabando encendida
+                self.Grabando.cargar(self.screen)
 
-            self.botonSG.cargar(self.screen)
+
+            #self.botonG.cargar(self.screen)
+            
+            #self.botonSG.cargar(self.screen)
         
             self.botonT2.cargar(self.screen)
             #self.botonT2.cambiar_color(pygame.mouse.get_pos())
@@ -280,58 +325,167 @@ class InterfazPiano:
             #self.screen.blit(self.pianito, (200,370))
 
 
-            #Carga el boton Nograbando
-            self.Nograbando.cargar(self.screen)
             
             #Carga el boton GuardarPista
-            self.botonGuardar.cargar(self.screen)
-            
+            self.botonGuard.cargar(self.screen)
+            self.botonGuard.enable = not guardado
+
+            self.botonDel.cargar(self.screen)
+            self.botonDel.enable = not guardado
+
+            self.botonTBorrar.cargar(self.screen)
+
             events = pygame.event.get()
 
-            for event in events:
+            if(not guardado or self.grabar):
+                if(self.grabar):
+                    self.tiempo = str((pygame.time.get_ticks()-self.Egrabar-self.emptyTime)/1000).split('.')
                 
+                segundos = self.tiempo[0]
+                milisegundos = self.tiempo[1]+"0"*(3-len(self.tiempo[1]))
+                r = self.fontsito.render(segundos+":"+milisegundos,True,"#ffffff")
+            else:
+                r = self.fontsito.render("0:0",True,"#ffffff")
+            rect = r.get_rect(center=(self.screen.get_width()//2, self.screen.get_height()//10*6))
+            self.screen.blit(r,rect)
+
+
+            for event in events:    
                 #Salir
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.salir_botton.checkForInput(pygame.mouse.get_pos()):
                         self.piano = False
+                        self.instrumentos = True
                         #self.instrumentos = True
                         self.salir_botton.click(self.screen)
                         #self.musica_almanaque.stop() //Agregar
                         return self.piano
 
-                    if self.botonG.checkForInput(pygame.mouse.get_pos()):
-                        self.botonG.click(self.screen)
-                        print("Grabando")
-                        grabar = True
-                        
-                        #pygame.time.get_ticks()
-                        Egrabar = time.time() 
-                        #print(Egrabar)    
-
-                    if self.botonSG.checkForInput(pygame.mouse.get_pos()):
+                    if self.botonSG.checkForInput(pygame.mouse.get_pos()) and self.grabar:
                         self.botonSG.click(self.screen)
-                        print("Dejo de grabar")
-                        grabar = False
-                       
-                        Dgrabar = time.time()
-                        Duracion = Dgrabar-Egrabar
-                        print("Duracion: ", Duracion)
-                        nombre = "lista.wav"
-                        crearWav(nombre, Duracion, nchannels=2)
-                        
-                    #Accion del boton guardar
-                    if self.botonGuardar.checkForInput(pygame.mouse.get_pos()):
-                        self.botonGuardar.click(self.screen)
+                        self.grabar = False
+                        self.Dgrabar = pygame.time.get_ticks()
+                        guardado = False
+                    
+                    elif self.botonG.checkForInput(pygame.mouse.get_pos()) and not self.grabar and not guardandoC:
+                        self.botonG.click(self.screen)
+                        self.grabar = True
 
-                                
+                        if not guardado:
+                            self.emptyTime += pygame.time.get_ticks()-self.Dgrabar
+                        else:
+                            self.Egrabar = pygame.time.get_ticks()
+                            self.emptyTime = 0
+                            self.Duracion = 0
+                            self.teclas = []
+                            self.tiempos = []
+                    
+                    elif self.botonDel.checkForInput(pygame.mouse.get_pos()) and not self.grabar and not guardandoC and not guardado:  
+                        self.botonDel.click(self.screen)
+                        self.grabar = False
+                        guardado = True
+                        self.emptyTime = 0
+                        self.Duracion = 0
+                        self.teclas = []
+                        self.tiempos = []
+
+                    elif self.botonGuard.checkForInput(pygame.mouse.get_pos()) and not self.grabar and not guardado and not guardandoC:
+                        guardadoC = True
+                        self.botonGuard.click(self.screen)
+                        self.Duracion = self.Dgrabar-self.Egrabar-self.emptyTime
+                        #Crear audio vacio
+                        grabacion = AudioSegment.silent(duration=self.Duracion,frame_rate=44100)
+                        
+                        for i, t in enumerate(self.teclas):
+                            fileName = "audio/audios/" + str(self.keyDict[t]) + ".wav"
+                            teclaAudio = AudioSegment.from_file(fileName,format="wav")
+                            grabacion = grabacion.overlay(teclaAudio, position=self.tiempos[i])
+                        # Iniciar el hilo de tkinter
+                        thread = threading.Thread(target=mostrar_dialogo_guardar, args=(grabacion,))
+                        thread.start()
+
+                if event.type == pygame.KEYUP:
+                    if event.key == K_2:
+                        self.botonT2Neg.unclick(self.screen)                        
+                    if event.key == K_4:
+                        self.botonT4Neg.unclick(self.screen)
+                    if event.key == K_5:
+                        self.botonT5Neg.unclick(self.screen)
+                    if event.key == K_8:
+                        self.botonT8Neg.unclick(self.screen)
+                    if event.key == K_9:
+                        self.botonT9Neg.unclick(self.screen)
+                    if event.key == K_0:
+                        self.botonT0Neg.unclick(self.screen)
+                    if event.key == K_QUOTE:
+                        self.botonTComilla.unclick(self.screen)                
+                    if event.key == K_q:
+                        self.botonTqNeg.unclick(self.screen)
+                    if event.key == K_w:
+                        self.botonTw.unclick(self.screen)
+                    if event.key == K_e:
+                        self.botonTe.unclick(self.screen)
+                    if event.key == K_r:
+                        self.botonTr.unclick(self.screen)
+                    if event.key == K_t:
+                        self.botonTt.unclick(self.screen)
+                    if event.key == K_u:
+                        self.botonTu.unclick(self.screen)
+                    if event.key == K_i:
+                        self.botonTi.unclick(self.screen)
+                    if event.key == K_o:
+                        self.botonTo.unclick(self.screen)
+                    if event.key == K_p:
+                        self.botonTp.unclick(self.screen)
+                    if event.key == K_a:
+                        self.botonTa.unclick(self.screen)
+                    if event.key == K_s:
+                        self.botonTsNeg.unclick(self.screen)
+                    if event.key == K_f:
+                        self.botonTfNeg.unclick(self.screen)  
+                    if event.key == K_g:
+                        self.botonTgNeg.unclick(self.screen)
+                    if event.key == K_j:
+                        self.botonTjNeg.unclick(self.screen)
+                    if event.key == K_k:
+                        self.botonTkNeg.unclick(self.screen)
+                    if event.key == K_l:
+                        self.botonTlNeg.unclick(self.screen)
+                    if event.key == K_z:
+                        self.botonTz.unclick(self.screen)
+                    if event.key == K_x:
+                        self.botonTx.unclick(self.screen)
+                    if event.key == K_c:
+                        self.botonTc.unclick(self.screen)
+                    if event.key == K_v:
+                        self.botonTv.unclick(self.screen)
+                    if event.key == K_b:
+                        self.botonTb.unclick(self.screen)
+                    if event.key == K_n:
+                        self.botonTn.unclick(self.screen)
+                    if event.key == K_m:
+                        self.botonTm.unclick(self.screen)
+                    if event.key == K_COMMA:
+                        self.botonTComa.unclick(self.screen)
+                    if event.key == K_PERIOD:
+                        self.botonTPunto.unclick(self.screen)
+                    if event.key == K_F10:
+                        self.botonTFNeg10.unclick(self.screen)
+                    if event.key == K_UP:
+                        self.botonTFNeglechaArriba.unclick(self.screen)
+                    if event.key == K_DOWN:
+                        self.botonTFNeglechaAbajo.unclick(self.screen)
+                    if event.key == K_BACKSPACE:
+                        self.botonTBorrar.unclick(self.screen)
+
                 if event.type == pygame.KEYDOWN:
                     if event.key in self.keyDict.keys():
-                        lista = []
-                        #print(self.keyDict.keys())
                         fileName = "audio/audios/" + str(self.keyDict[event.key]) + ".wav"
-                        lista.append(fileName)
-                        #print(lista)
                         pygame.mixer.Sound(fileName).play()
+                        if self.grabar:
+                            self.teclas.append(event.key)
+                            self.tiempos.append(pygame.time.get_ticks()-self.Egrabar-self.emptyTime)
+                        
                     if event.key == K_2:
                         self.botonT2.click(self.screen)                        
                     if event.key == K_4:
