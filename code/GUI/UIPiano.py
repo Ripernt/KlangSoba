@@ -161,7 +161,7 @@ class InterfazPiano:
         self.botonGuard.enable = False
 
         #Boton grabar
-        self.botonG = Button(image=settings.botonGrabar, pos=(100,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonG = Button(image=settings.botonGrabar, pos=(180,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         #Boton dejar de grabar
         self.botonSG = Button(image=settings.botonStopGrabar, pos=(180,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         #Boton no grabando
@@ -171,7 +171,7 @@ class InterfazPiano:
         self.Grabando = Button(image=settings.botonGrabando, pos=(260,450),text_input="",font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         
         #Boton Borrar
-        self.botonDel = Button(image=settings.botonGuardarPista, pos=(1100,450), text_input="Borrar", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonDel = Button(image=settings.botonGuardarPista, pos=(340,450), text_input="Borrar", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         self.botonDel.enable = False
 
         self.salir_botton = Button(image=boton, pos=(100,100), text_input="",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
@@ -406,21 +406,21 @@ class InterfazPiano:
 
                 if event.type == pygame.KEYUP:
                     if event.key == K_2:
-                        self.botonT2Neg.unclick(self.screen)                        
+                        self.botonT2.unclick(self.screen)                        
                     if event.key == K_4:
-                        self.botonT4Neg.unclick(self.screen)
+                        self.botonT4.unclick(self.screen)
                     if event.key == K_5:
-                        self.botonT5Neg.unclick(self.screen)
+                        self.botonT5.unclick(self.screen)
                     if event.key == K_8:
-                        self.botonT8Neg.unclick(self.screen)
+                        self.botonT8.unclick(self.screen)
                     if event.key == K_9:
-                        self.botonT9Neg.unclick(self.screen)
+                        self.botonT9.unclick(self.screen)
                     if event.key == K_0:
-                        self.botonT0Neg.unclick(self.screen)
+                        self.botonT0.unclick(self.screen)
                     if event.key == K_QUOTE:
                         self.botonTComilla.unclick(self.screen)                
                     if event.key == K_q:
-                        self.botonTqNeg.unclick(self.screen)
+                        self.botonTq.unclick(self.screen)
                     if event.key == K_w:
                         self.botonTw.unclick(self.screen)
                     if event.key == K_e:
@@ -440,17 +440,17 @@ class InterfazPiano:
                     if event.key == K_a:
                         self.botonTa.unclick(self.screen)
                     if event.key == K_s:
-                        self.botonTsNeg.unclick(self.screen)
+                        self.botonTs.unclick(self.screen)
                     if event.key == K_f:
-                        self.botonTfNeg.unclick(self.screen)  
+                        self.botonTf.unclick(self.screen)  
                     if event.key == K_g:
-                        self.botonTgNeg.unclick(self.screen)
+                        self.botonTg.unclick(self.screen)
                     if event.key == K_j:
-                        self.botonTjNeg.unclick(self.screen)
+                        self.botonTj.unclick(self.screen)
                     if event.key == K_k:
-                        self.botonTkNeg.unclick(self.screen)
+                        self.botonTk.unclick(self.screen)
                     if event.key == K_l:
-                        self.botonTlNeg.unclick(self.screen)
+                        self.botonTl.unclick(self.screen)
                     if event.key == K_z:
                         self.botonTz.unclick(self.screen)
                     if event.key == K_x:
@@ -470,11 +470,11 @@ class InterfazPiano:
                     if event.key == K_PERIOD:
                         self.botonTPunto.unclick(self.screen)
                     if event.key == K_F10:
-                        self.botonTFNeg10.unclick(self.screen)
+                        self.botonTF10.unclick(self.screen)
                     if event.key == K_UP:
-                        self.botonTFNeglechaArriba.unclick(self.screen)
+                        self.botonTFlechaArriba.unclick(self.screen)
                     if event.key == K_DOWN:
-                        self.botonTFNeglechaAbajo.unclick(self.screen)
+                        self.botonTFlechaAbajo.unclick(self.screen)
                     if event.key == K_BACKSPACE:
                         self.botonTBorrar.unclick(self.screen)
 
