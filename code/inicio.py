@@ -131,9 +131,10 @@ class Inicio:
                              hovering_color="#C6DF29")
         registro = Button(image=settings.generalButton, pos=(self.logo_x+125, 620), text_input="Registrarse", font=fontsito, base_color="#4D4D5C",
                           hovering_color="#DFAD29")
-        
+
+        #Chat Ks
         chatKS = Button(image=settings.botonPurChat, pos=(1180, 670), text_input="CHAT", font=fontsito, base_color="#4D4D5C",
-                          hovering_color="#C66FF1", link="https://roomy-invented-bank.glitch.me/")
+                          hovering_color="#C66FF1", link="https://azure-pouncing-armchair.glitch.me/")
 
         """ pantalla de inicio """
         suelo = Plataforma()
