@@ -12,6 +12,7 @@ from GUI.Pausa import PausaMenu
 from GUI.button import Button
 from GUI.Entry import InputBox
 from GUI.MenuInstrumentos import MInstrumentos
+from GUI.MenuMezcladora import Mezcladora
 #from secure.cifrado import Cifradito
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
@@ -346,7 +347,8 @@ class Game:
                         hola = self.Instrumentos.mostrar_instrumentos()
                         if hola == False:
                             self.main_sound.music.unpause()
-
+                    
+                        
             self.screen.fill(self.color_level[self.currentLevelNum])
             self.level.run()
             
