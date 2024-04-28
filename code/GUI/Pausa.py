@@ -4,9 +4,11 @@ from GUI.button import Button
 from GUI.Range import Range  
 from tkinter import messagebox
 from GUI.Almanaque import Almanaque
+from GUI.MenuMezcladora import Mezcladora
 from DB import validar
 from DB.conectar import *
 from item import Item
+
 
 
 class PausaMenu:
@@ -39,7 +41,11 @@ class PausaMenu:
                              base_color="#4D4D5C", hovering_color="#75E2EC")
         guardar_button = Button(image=settings.botonBlue, pos=(200,580), text_input="Guardar partida", font=fontsito,
                                 base_color="#4D4D5C", hovering_color="#75E2EC")
-
+        mezcladora_button = Button(image=settings.botonBlue, pos=(600,440), text_input="Mezcladora",font=fontsito,
+                                base_color="#4D4D5C", hovering_color="#75E2EC")
+        
+        #mezcladora_costo = 7
+        
         range_volumen = Range((900, 650, 250, 22), "Musica")
         range_volumen.range = self.sound.music.get_volume() * 10
     
@@ -64,6 +70,10 @@ class PausaMenu:
             #Mostrar boton de guardar partida
             guardar_button.cargar(self.screen)
             guardar_button.cambiar_color(pygame.mouse.get_pos())
+
+            #Mostrar boton para la mezcladora (PRUEBA)
+            mezcladora_button.cargar(self.screen)
+            mezcladora_button.cambiar_color(pygame.mouse.get_pos())
 
             #Volumen
             self.sound.music.set_volume(range_volumen.range / 10)
@@ -90,35 +100,51 @@ class PausaMenu:
                 
                 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.almanaque is None:
+                    #if self.almanaque is None:
                         #Accion del boton play
-                        if play_button.checkForInput(pygame.mouse.get_pos()):
-                            self.paused = False
-                            play_button.click(self.screen)
-                            self.pause_sound.stop()
+                    if play_button.checkForInput(pygame.mouse.get_pos()):
+                        self.paused = False
+                        play_button.click(self.screen)
+                        self.pause_sound.stop()
                             
-                            return self.paused
+                        return self.paused
                         #Accion del boton guardar
-                        if guardar_button.checkForInput(pygame.mouse.get_pos()):
-                            print("Guardando")
-                            lista = Item.valor(self)
-                            validar.insertar_items(lista,self.conexion,self.cursor)
+                    if guardar_button.checkForInput(pygame.mouse.get_pos()):
+                        print("Guardando")
+                        lista = Item.valor(self)
+                        validar.insertar_items(lista,self.conexion,self.cursor)
 
                         #Accion del boton almanaque
-                        elif pokedex_button.checkForInput(pygame.mouse.get_pos()):
-                            self.paused = False
-                            pokedex_button.click(self.screen)
-                            self.alm = Almanaque(screen, self.player, 'graphics/elementos_graficos/fondosgenerico.png', rect=(settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT),center=True) #listaMateriales = player.itemsRecolectados
-                            Elpepe = self.alm.show_almanaque(screen)
-                            if Elpepe == False:
-                                self.pause_sound.stop()
-                            return self.paused
+                    if pokedex_button.checkForInput(pygame.mouse.get_pos()):
+                        self.paused = False
+                        pokedex_button.click(self.screen)
+                        self.alm = Almanaque(screen, self.player, 'graphics/elementos_graficos/fondosgenerico.png', rect=(settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT),center=True) #listaMateriales = player.itemsRecolectados
+                        Elpepe = self.alm.show_almanaque(screen)
+                        if Elpepe == False:
+                            self.pause_sound.stop()                          
+                        return self.paused
                         
-                        elif salir_button.checkForInput(pygame.mouse.get_pos()):
-                            salir_button.click(self.screen)
-                            respuesta = messagebox.askyesno("Precaución", "Se perderán los avances de este nivel. ¿Estás seguro?")
-                            if respuesta:
-                                pygame.quit()
-                                sys.exit()
+                        #Accion para entrar al menu Mezcladora
+                    if mezcladora_button.checkForInput(pygame.mouse.get_pos()):
+                    #    if mezcladora_costo <= self.player.items_num[0]:
+                    #        constante = self.player.items_num[0] - mezcladora_costo
+                    #        self.player.items_num[0] = constante
+                            #validar.insertar_items(self.player.item_num, self.conexion, self.cursor)
+                    #    else:
+                    #        print("Necesitas mas items para usar la mezcladora")
+                        self.paused = False
+                        mezcladora_button.click(self.screen)   
+                        self.mez = Mezcladora(self.screen,self.paused)
+                        nose = self.mez.mostrar_menu_mezcladora()
+                        if nose == False:
+                            self.pause_sound.stop()
+                        return self.paused
+
+                    if salir_button.checkForInput(pygame.mouse.get_pos()):
+                        salir_button.click(self.screen)
+                        respuesta = messagebox.askyesno("Precaución", "Se perderán los avances de este nivel. ¿Estás seguro?")
+                        if respuesta:
+                            pygame.quit()
+                            sys.exit()
 
             pygame.display.update()
