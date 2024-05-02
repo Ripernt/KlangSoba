@@ -44,7 +44,8 @@ class PausaMenu:
         mezcladora_button = Button(image=settings.botonBlue, pos=(600,440), text_input="Mezcladora",font=fontsito,
                                 base_color="#4D4D5C", hovering_color="#75E2EC")
         
-        #mezcladora_costo = 7
+        mezcladora_costo = 7
+        permiso_mezcladora = False
         
         range_volumen = Range((900, 650, 250, 22), "Musica")
         range_volumen.range = self.sound.music.get_volume() * 10
@@ -126,19 +127,22 @@ class PausaMenu:
                         
                         #Accion para entrar al menu Mezcladora
                     if mezcladora_button.checkForInput(pygame.mouse.get_pos()):
-                    #    if mezcladora_costo <= self.player.items_num[0]:
-                    #        constante = self.player.items_num[0] - mezcladora_costo
-                    #        self.player.items_num[0] = constante
-                            #validar.insertar_items(self.player.item_num, self.conexion, self.cursor)
-                    #    else:
-                    #        print("Necesitas mas items para usar la mezcladora")
-                        self.paused = False
-                        mezcladora_button.click(self.screen)   
-                        self.mez = Mezcladora(self.screen,self.paused)
-                        nose = self.mez.mostrar_menu_mezcladora()
-                        if nose == False:
-                            self.pause_sound.stop()
-                        return self.paused
+                        if mezcladora_costo <= self.player.items_num[0] and permiso_mezcladora == False:
+                            constante = self.player.items_num[0] - mezcladora_costo
+                            self.player.items_num[0] = constante
+                            permiso_mezcladora = True
+                            validar.insertar_items(self.player.items_num, self.conexion, self.cursor)
+                        else:
+                            print("Necesitas mas items para usar la mezcladora")
+                        
+                        if permiso_mezcladora == True:
+                            self.paused = False
+                            mezcladora_button.click(self.screen)   
+                            self.mez = Mezcladora(self.screen,self.paused)
+                            nose = self.mez.mostrar_menu_mezcladora()
+                            if nose == False:
+                                self.pause_sound.stop()
+                            return self.paused
 
                     if salir_button.checkForInput(pygame.mouse.get_pos()):
                         salir_button.click(self.screen)
