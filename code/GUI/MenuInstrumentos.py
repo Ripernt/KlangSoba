@@ -76,10 +76,6 @@ class MInstrumentos:
         mezcladora_button = Button(image=settings.botonMezcladora, pos=(900,275), text_input="Mezcladora",font=fonti,
                                 base_color="#4D4D5C", hovering_color="#75E2EC")
         
-        mezcladora_costo = 1
-        permiso_mezcladora = False
-
-
         renderT = None
         
         while self.instrumentos:
@@ -97,6 +93,7 @@ class MInstrumentos:
 
             self.screen.blit(fondo, (0,0))
             self.screen.blit(instrumentos_text, instrumentos_rect)
+
             if renderT is not None:
                 self.screen.blit(renderT, rect)
 
@@ -226,28 +223,15 @@ class MInstrumentos:
 
                         #Accion para entrar al menu Mezcladora
                     if mezcladora_button.checkForInput(pygame.mouse.get_pos()):
-                        if mezcladora_costo <= self.player.items_num[0] and permiso_mezcladora == False:
-                            constante = self.player.items_num[0] - mezcladora_costo
-                            self.player.items_num[0] = constante
-                            permiso_mezcladora = True
-                            validar.insertar_items(self.player.items_num, self.conexion, self.cursor)
-                        else:
-                            print("Necesitas mas items para usar la mezcladora")
-                            text_no_piano = "No se tienen suficientes para usar la mezcladora"
-                            textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
-                            renderT = textR.render(text_no_piano, True, (255,0,0))
-                            rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
-                        
-                        if permiso_mezcladora == True:
-                            self.instrumentos = False
-                            mezcladora_button.click(self.screen)   
-                            self.mez = Mezcladora(self.screen,self.instrumentos)
-                            self.sound.pause()
+                        self.instrumentos = False
+                        mezcladora_button.click(self.screen)   
+                        self.mez = Mezcladora(self.screen,self.instrumentos,self.player,self.conexion,self.cursor)
+                        self.sound.pause()
+                        self.musicap.stop()
+                        nose = self.mez.mostrar_menu_mezcladora()
+                        if nose == False:
                             self.musicap.stop()
-                            nose = self.mez.mostrar_menu_mezcladora()
-                            if nose == False:
-                                self.musicap.stop()
-                            return self.instrumentos 
+                        return self.instrumentos 
 
 
 
