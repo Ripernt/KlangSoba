@@ -70,9 +70,10 @@ class Game:
         fondo = pygame.transform.scale(fondo, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
         botoniniciar = Button(image=generalButton, pos=(SCREEN_WIDTH/2,500),text_input="Iniciar Sesion",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
+        botonRegresarInicio = Button(image=botonRegresar, pos=(150,500), text_input="", font=self.fontsito, base_color="#4D4D5C",hovering_color="#75E2EC")
 
-        cajaI = InputBox((200,200,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)])
-        cajaC = InputBox((200,300,400,32), "Contraseña", colorValue=[(0,0,0), (255,0,0)], hidden = True)
+        cajaI = InputBox((SCREEN_WIDTH/3,200,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)])
+        cajaC = InputBox((SCREEN_WIDTH/3,300,400,32), "Contraseña", colorValue=[(0,0,0), (255,0,0)], hidden = True)
 
         renderT = None
 
@@ -86,6 +87,9 @@ class Game:
 
             botoniniciar.cargar(self.screen)
             botoniniciar.cambiar_color(pygame.mouse.get_pos())
+
+            botonRegresarInicio.cargar(self.screen)
+            botonRegresarInicio.cambiar_color(pygame.mouse.get_pos())
 
             cajaI.update(self.screen)
             cajaC.update(self.screen)
@@ -109,8 +113,12 @@ class Game:
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        botonRegresarInicio.click(self.screen)
                         self.Pantalla_incio()
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if botonRegresarInicio.checkForInput(pygame.mouse.get_pos()):
+                        botonRegresarInicio.click(self.screen)
+                        self.Pantalla_incio()
                     if botoniniciar.checkForInput(pygame.mouse.get_pos()):
                         botoniniciar.click(self.screen)
                         correo = cajaI.text
@@ -161,11 +169,12 @@ class Game:
         fondo = pygame.transform.scale(fondo, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
         botonregistrar = Button(image=generalButton, pos=(SCREEN_WIDTH/2,500),text_input="Registrar Usuario",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
-        
-        caja = InputBox((SCREEN_WIDTH/2,100,400,32), "Nombre de usuario", colorValue=[(0,0,0), (255,0,0)]) 
-        caja2 = InputBox((SCREEN_WIDTH/2,175,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)]) 
-        caja3 = InputBox((SCREEN_WIDTH/2,250,400,32), "contraseña", colorValue=[(0,0,0), (255,0,0)], hidden = True) 
-        caja4 = InputBox((SCREEN_WIDTH/2,325,400,32), "confirmacion", colorValue=[(0,0,0), (255,0,0)], hidden= True) 
+        botonRegresarRegistro = Button(image=botonRegresar, pos=(150,500),text_input="",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")
+
+        caja = InputBox((SCREEN_WIDTH/3,100,400,32), "Nombre de usuario", colorValue=[(0,0,0), (255,0,0)]) 
+        caja2 = InputBox((SCREEN_WIDTH/3,175,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)]) 
+        caja3 = InputBox((SCREEN_WIDTH/3,250,400,32), "contraseña", colorValue=[(0,0,0), (255,0,0)], hidden = True) 
+        caja4 = InputBox((SCREEN_WIDTH/3,325,400,32), "confirmacion", colorValue=[(0,0,0), (255,0,0)], hidden= True) 
 
         renderT = None
 
@@ -177,6 +186,9 @@ class Game:
 
             botonregistrar.cargar(self.screen)
             botonregistrar.cambiar_color(pygame.mouse.get_pos())
+
+            botonRegresarRegistro.cargar(self.screen)
+            botonRegresarRegistro.cambiar_color(pygame.mouse.get_pos())
 
             caja.update(self.screen)
             caja2.update(self.screen)
@@ -206,8 +218,13 @@ class Game:
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        botonRegresarRegistro.click(self.screen)
                         self.Pantalla_incio()
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if botonRegresarRegistro.checkForInput(pygame.mouse.get_pos()):
+                        botonRegresarRegistro.click(self.screen)
+                        self.Pantalla_incio()
+
                     if botonregistrar.checkForInput(pygame.mouse.get_pos()):
                         print("Registrando...")
                         botonregistrar.click(self.screen)
