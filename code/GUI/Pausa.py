@@ -44,7 +44,7 @@ class PausaMenu:
         mezcladora_button = Button(image=settings.botonBlue, pos=(600,440), text_input="Mezcladora",font=fontsito,
                                 base_color="#4D4D5C", hovering_color="#75E2EC")
         
-        mezcladora_costo = 7
+        mezcladora_costo = 1
         permiso_mezcladora = False
         
         range_volumen = Range((900, 650, 250, 22), "Musica")

@@ -39,10 +39,10 @@ class Almanaque():
         self.fontsito = pygame.font.Font('graphics/font/pixelart.TTF', 20)  
         self.screen.fill((50,50,50))
 
-        self.nib = self.fontsito.render(str(self.player.items_num[0]), True, (255, 255, 255))  # items bateria
-        self.nic = self.fontsito.render(str(self.player.items_num[1]), True, (255, 255, 255))  # items madera
-        self.nia = self.fontsito.render(str(self.player.items_num[2]), True, (255, 255, 255))  # items cable
-        self.nim = self.fontsito.render(str(self.player.items_num[3]), True, (255, 255, 255))  # items cuerda
+        self.nib = self.fontsito.render("x" + str(self.player.items_num[0]), True, (255, 255, 255))  # items bateria
+        self.nic = self.fontsito.render("x" + str(self.player.items_num[1]), True, (255, 255, 255))  # items cables
+        self.nia = self.fontsito.render("x" + str(self.player.items_num[2]), True, (255, 255, 255))  # items cuerdas
+        self.nim = self.fontsito.render("x" + str(self.player.items_num[3]), True, (255, 255, 255))  # items madera
 
         cables_text = self.fontsito.render("Cable", True, "white") 
         cuerda_text = self.fontsito.render("Cuerda", True, "white") 
@@ -82,16 +82,16 @@ class Almanaque():
             self.screen.blit(pila_text, (1075, 200))
 
             text_rect = self.nic.get_rect()
-            text_rect.center = (50, 225)
+            text_rect.center = (175,500)
             self.screen.blit(self.nic, text_rect)  # Dibuja el texto de cable en la pantalla
             text_rect = self.nia.get_rect()
-            text_rect.center = (375, 225)
+            text_rect.center = (500, 500)
             self.screen.blit(self.nia, text_rect)  # Dibuja el texto de cuerda en la pantalla
             text_rect = self.nim.get_rect()
-            text_rect.center = (675, 225)
+            text_rect.center = (800, 500)
             self.screen.blit(self.nim, text_rect)  # Dibuja el texto de madera en la pantalla
             text_rect = self.nib.get_rect()
-            text_rect.center = (975, 225)
+            text_rect.center = (1100, 500)
             self.screen.blit(self.nib, text_rect)  # Dibuja el texto de bateria en la pantalla
 
             self.salir_botton.cargar(self.screen)
