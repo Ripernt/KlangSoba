@@ -2,6 +2,7 @@ import pygame
 from GUI.button import Button
 from GUI.UIPiano import InterfazPiano
 from GUI.UISintetizador import InterfazSintetizador
+from GUI.MenuMezcladora import Mezcladora
 import settings
 from pygame.locals import *
 from DB import validar
@@ -39,10 +40,10 @@ class MInstrumentos:
         instrumentos_rect = instrumentos_text.get_rect(center=(settings.SCREEN_WIDTH/2, settings.SCREEN_HEIGHT/11))
 
         #Boton piano
-        piano_Button = Button(image=settings.botonPiano, pos=(420,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+        piano_Button = Button(image=settings.botonPiano, pos=(300,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
 
         #Boton sintetizador
-        sintetizador_Button = Button(image=settings.botonSintetizador, pos=(820,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+        sintetizador_Button = Button(image=settings.botonSintetizador, pos=(600,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
 
         #Fondo de menu instrumentos
         fondo = pygame.image.load("graphics/elementos_graficos/Menuinstrumentos.png")
@@ -53,8 +54,8 @@ class MInstrumentos:
         base_color="#4D4D5C", hovering_color="#75E2EC")
 
         #Boton piano bloqueado
-        piano_bloqueado = Button(image=settings.botonPianoBloqueado, pos=(420,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
-        sintetizador_bloqueado = Button(image=settings.botonSintetizadorBloqueado, pos=(820,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+        piano_bloqueado = Button(image=settings.botonPianoBloqueado, pos=(300,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
+        sintetizador_bloqueado = Button(image=settings.botonSintetizadorBloqueado, pos=(600,275), text_input="", font=fonti, base_color="#FFFFFF", hovering_color="#75E2EC")
     
         #Fuente de la letra
         self.fontsito = pygame.font.Font('graphics/font/pixelart.TTF', 20)  
@@ -71,6 +72,12 @@ class MInstrumentos:
         sintetizador_text = self.fontsito.render("Sintetizador", True, "white")
         pila_img = pygame.image.load("graphics/items/bateria.png")
         pila_img = pygame.transform.scale(pila_img,(50,50))
+
+        mezcladora_button = Button(image=settings.botonMezcladora, pos=(900,275), text_input="Mezcladora",font=fonti,
+                                base_color="#4D4D5C", hovering_color="#75E2EC")
+        
+        mezcladora_costo = 1
+        permiso_mezcladora = False
 
 
         renderT = None
@@ -97,32 +104,36 @@ class MInstrumentos:
                 #Mostrar boton sintetizador bloqueado
                 sintetizador_bloqueado.cargar(self.screen)
                 #sintetizador_bloqueado.cambiar_color(pygame.mouse.get_pos())
-                self.screen.blit(pila_img,(765,390))
-                self.screen.blit(pila_text,(820,400))
+                self.screen.blit(pila_img,(565,390))
+                self.screen.blit(pila_text,(620,400))
                 pass
             else:
                 #Mostrar boton sintetizador
                 sintetizador_Button.cargar(self.screen)
                 #sintetizador_Button.cambiar_color(pygame.mouse.get_pos())
-                self.screen.blit(sintetizador_text,(770,400))
+                self.screen.blit(sintetizador_text,(520,400))
 
             #Mostrar boton bloqueado o desbloqueado
             if no_tiene_piano == True:
                
                 piano_bloqueado.cargar(self.screen)
                 #piano_bloqueado.cambiar_color(pygame.mouse.get_pos())
-                self.screen.blit(madera_img,(365,390))
-                self.screen.blit(madera_text,(420,400))
+                self.screen.blit(madera_img,(255,390))
+                self.screen.blit(madera_text,(305,400))
                 
             else:
                 #Mostrar boton piano
                 piano_Button.cargar(self.screen)
                 #piano_Button.cambiar_color(pygame.mouse.get_pos())
-                self.screen.blit(piano_text,(390,400))
+                self.screen.blit(piano_text,(260,400))
 
             #Mostrar boton regresar    
             regresar_button.cargar(self.screen)
             regresar_button.cambiar_color(pygame.mouse.get_pos())
+
+            #Mostrar boton para la mezcladora (PRUEBA)
+            mezcladora_button.cargar(self.screen)
+            mezcladora_button.cambiar_color(pygame.mouse.get_pos())
 
             evento = pygame.event.get()
 
@@ -163,9 +174,7 @@ class MInstrumentos:
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(text_no_sintetizador, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
-
-                    
-                        
+             
                     elif sintetizador_Button.checkForInput(pygame.mouse.get_pos()) and no_tiene_sintetizador == False:
                         #print("Pianopianito no bloqueado")
                         #print("piano: ", no_tiene_piano)
@@ -213,7 +222,33 @@ class MInstrumentos:
                         if eee == False:
                             self.musicap.stop()
                                             
+                            return self.instrumentos
+
+                        #Accion para entrar al menu Mezcladora
+                    if mezcladora_button.checkForInput(pygame.mouse.get_pos()):
+                        if mezcladora_costo <= self.player.items_num[0] and permiso_mezcladora == False:
+                            constante = self.player.items_num[0] - mezcladora_costo
+                            self.player.items_num[0] = constante
+                            permiso_mezcladora = True
+                            validar.insertar_items(self.player.items_num, self.conexion, self.cursor)
+                        else:
+                            print("Necesitas mas items para usar la mezcladora")
+                            text_no_piano = "No se tienen suficientes para usar la mezcladora"
+                            textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                            renderT = textR.render(text_no_piano, True, (255,0,0))
+                            rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
+                        
+                        if permiso_mezcladora == True:
+                            self.instrumentos = False
+                            mezcladora_button.click(self.screen)   
+                            self.mez = Mezcladora(self.screen,self.instrumentos)
+                            self.sound.pause()
+                            self.musicap.stop()
+                            nose = self.mez.mostrar_menu_mezcladora()
+                            if nose == False:
+                                self.musicap.stop()
                             return self.instrumentos 
+
 
 
             pygame.display.update()                            

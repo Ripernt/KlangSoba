@@ -105,6 +105,8 @@ botonSintetizadorBloqueado = pygame.transform.scale(botonSintetizadorBloqueado,(
 botonPianoBloqueado = pygame.image.load("graphics/elementos_graficos/pianoBloqueado.png")
 botonPianoBloqueado = pygame.transform.scale(botonPianoBloqueado,(200,200))
 
+botonMezcladora = pygame.image.load("graphics/elementos_graficos/purbut.png")
+botonMezcladora = pygame.transform.scale(botonMezcladora,(200,200))
 
 generalButton=pygame.image.load("graphics/elementos_graficos/botonkS.png")
 generalButton=pygame.transform.scale(generalButton,(240,90))

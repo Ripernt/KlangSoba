@@ -11,8 +11,6 @@ from pygame.locals import *
 
 position = 0
 
-
-
 #Exportar archivo
 def mostrar_dialogo_guardar(grabacion):
     global guardandoC, guardado
