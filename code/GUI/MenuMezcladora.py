@@ -3,11 +3,11 @@ from GUI.button import Button
 from settings import *
 
 class Mezcladora():
-    def __init__(self,screen, pausa): #= pygame.display.set_mode((settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))
+    def __init__(self,screen, instrumentos): #= pygame.display.set_mode((settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))
         #self.lista_consumir = lista
         self.mezcladora = True
         self.screen = screen
-        self.paused = pausa
+        self.instrumentos = instrumentos
         
         
     def mostrar_menu_mezcladora(self):
