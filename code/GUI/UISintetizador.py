@@ -58,14 +58,14 @@ class InterfazSintetizador:
     def background(self):
 
             global position
-            fondo = pygame.image.load("graphics/elementos_graficos/pianoBG.png")
+            fondo = pygame.image.load("graphics/elementos_graficos/chido.png")
             fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
             self.screen.fill((0,0,0))
 
             self.screen.blit(fondo,(position,0))
             self.screen.blit(fondo,(fondo.get_width()+position,0))
 
-            position -= 5
+            position -= 2
 
             if abs(position) > fondo.get_width():
                 position = 0
@@ -170,7 +170,7 @@ class InterfazSintetizador:
         self.Grabando = Button(image=settings.botonGrabando, pos=(260,450),text_input="",font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         
         #Boton Borrar
-        self.botonDel = Button(image=settings.botonGuardarPista, pos=(340,450), text_input="Borrar", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonDel = Button(image=settings.botonBorrarGrabacion, pos=(340,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         self.botonDel.enable = False
 
         self.salir_botton = Button(image=boton, pos=(100,100), text_input="",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")

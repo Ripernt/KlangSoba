@@ -114,6 +114,9 @@ generalButton=pygame.transform.scale(generalButton,(240,90))
 botonRegresar = pygame.image.load("graphics/elementos_graficos/botonT.png")
 botonRegresar = pygame.transform.scale(botonRegresar,(50,50))
 
+botonBorrarGrabacion = pygame.image.load("graphics/elementos_graficos/trash.png")
+botonBorrarGrabacion = pygame.transform.scale(botonBorrarGrabacion,(50,50))
+
 
 weapon_data = {
 	'sword': {'cooldown': 100, 'damage': 15,'graphic':'graphics/weapons/sword/full.png'},
