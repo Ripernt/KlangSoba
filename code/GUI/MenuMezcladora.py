@@ -22,14 +22,18 @@ class Mezcladora():
 
         boton_mezclar = Button(image=settings.generalButton, pos=(SCREEN_WIDTH/2,500), text_input="Mezclar", font=self.fontsito,
                              base_color="#4D4D5C", hovering_color="#75E2EC")
+        
+        #Texto menu de instrumentos
+        mezcladora_text = self.fontsito.render("Menu de mezcladora", True, "white") 
+        mezcladora_rect = mezcladora_text.get_rect(center=(settings.SCREEN_WIDTH/2, settings.SCREEN_HEIGHT/11))
 
         fondo = pygame.image.load("graphics/elementos_graficos/fondosgenerico.png")
         fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
-        archivo_img = pygame.image.load("graphics/elementos_graficos/bluebut.png")
+        archivo_img = pygame.image.load("graphics/elementos_graficos/foldermusica.png")
         archivo_img = pygame.transform.scale(archivo_img,(50,50))
 
-        archivo_img2 = pygame.image.load("graphics/elementos_graficos/bluebut.png")
+        archivo_img2 = pygame.image.load("graphics/elementos_graficos/foldermusica.png")
         archivo_img2 = pygame.transform.scale(archivo_img2,(50,50))
 
         #Cosas para mezclar
@@ -45,6 +49,8 @@ class Mezcladora():
             self.screen.fill((50,50,50))
             self.screen.blit(fondo,(0,0))
 
+            self.screen.blit(mezcladora_text, mezcladora_rect)
+
             self.screen.blit(archivo_img,(300,200))
             self.screen.blit(archivo_img2,(300,300))
 
@@ -55,7 +61,7 @@ class Mezcladora():
             boton_mezclar.cargar(self.screen)
             boton_mezclar.cambiar_color(pygame.mouse.get_cursor())
 
-            
+
 
             if renderT is not None:
                 self.screen.blit(renderT, rect)

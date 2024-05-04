@@ -2,7 +2,6 @@ import pygame, sys, threading
 #from time import time
 from settings import *
 from level import *
-from settings import *
 from inicio import Inicio
 from DB import conectar as Conectar
 from DB.conectar import *
