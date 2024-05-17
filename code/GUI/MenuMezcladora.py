@@ -5,6 +5,7 @@ from settings import *
 from DB import validar
 from tkinter import filedialog
 from moviepy.editor import AudioFileClip, CompositeAudioClip
+from pydub import AudioSegment
 
 def mostrar_dialogo_guardar(mezclado, audio):
     global guardandoC, guardado
@@ -128,7 +129,9 @@ class Mezcladora():
                         if mezcladora_costo <= self.player.items_num[0] and self.lista_audios != []:
                             constante = self.player.items_num[0] - mezcladora_costo
                             self.player.items_num[0] = constante
+
                             validar.insertar_items(self.player.items_num, self.conexion, self.cursor)
+
                             paga_mezcladora = True
                             if paga_mezcladora == True:
                                 audio_clips = [AudioFileClip(file) for file in self.lista_audios]
@@ -136,19 +139,25 @@ class Mezcladora():
                                 self.lista_audios.clear()
                                 caja_archivo1.setText("")
                                 caja_archivo2.setText("")
+                                mezcla_text = "Se ha mezclado!"
+                                textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                                renderT = textR.render(mezcla_text, True, (255,0,0))
+                                rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
+
                         else:
-                            #print("Debes de poner 2 pistas de audio para poder mezclar")
                             error_mezclar = "Debes de poner 2 pistas de audio para poder mezclar"
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(error_mezclar, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
                             
-                            
-
                     if boton_guardar_mezcla.checkForInput(pygame.mouse.get_pos()) and paga_mezcladora == True:
                         boton_guardar_mezcla.click(self.screen)
                         thread = threading.Thread(target=mostrar_dialogo_guardar, args=(result_audio,audio_clips,))
                         thread.start()
+                        guardar_text_mezcla = "Guardando la mezcla"
+                        textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                        renderT = textR.render(guardar_text_mezcla, True, (255,0,0))
+                        rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
 
 
 
