@@ -169,7 +169,7 @@ class InterfazPiano:
         self.Grabando = Button(image=settings.botonGrabando, pos=(260,450),text_input="",font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         
         #Boton Borrar
-        self.botonDel = Button(image=settings.botonGuardarPista, pos=(340,450), text_input="Borrar", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
+        self.botonDel = Button(image=settings.botonBorrarGrabacion, pos=(340,450), text_input="", font=self.fontsito,base_color="#4D4D5C", hovering_color="75E2EC")
         self.botonDel.enable = False
 
         self.salir_botton = Button(image=boton, pos=(100,100), text_input="",font=self.fontsito,base_color="#4D4D5C",hovering_color="#75E2EC")

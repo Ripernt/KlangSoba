@@ -1,7 +1,5 @@
 import pygame ,sys
-
 from tkinter import messagebox
-
 from plataforma import Plataforma
 import sistema
 import colores

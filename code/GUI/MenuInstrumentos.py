@@ -221,7 +221,7 @@ class MInstrumentos:
                                             
                             return self.instrumentos
 
-                        #Accion para entrar al menu Mezcladora
+                    #Accion para entrar al menu Mezcladora
                     if mezcladora_button.checkForInput(pygame.mouse.get_pos()):
                         self.instrumentos = False
                         mezcladora_button.click(self.screen)   
