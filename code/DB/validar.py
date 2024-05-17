@@ -13,7 +13,6 @@ from GUI.button import Button
 
 
 #valida inicio de sesion
-
 def validar(correo,contraseña,cursor,conexion):
     global s
     correo = correo.lower()
@@ -43,7 +42,7 @@ def responseI():
     return s
 
 
-"""valida registro"""
+#valida registro
 def validarRegistro(usuario,correo,contraseña,confirmcontra,lista,conexion, cursor):
     
     correo = correo.lower()
@@ -72,7 +71,7 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra,lista,conexion, cur
         return "El correo no es valido"
     
 
-"""ingresa info a la base de datos, registra"""
+#ingresa info a la base de datos, registra
 def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursorR = None):
     global usu    
 
@@ -131,7 +130,7 @@ def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursor
         cursor.close()
         conexion.close()
 
-"""busca info a la base de datos, encuentra"""
+#busca info a la base de datos, encuentra
 def encontrarUsuario(correo, conexionR = None, cursorR = None):
     global usu_correo
     usu_correo = correo

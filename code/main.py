@@ -114,6 +114,7 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         botonRegresarInicio.click(self.screen)
                         self.Pantalla_incio()
+                        
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if botonRegresarInicio.checkForInput(pygame.mouse.get_pos()):
                         botonRegresarInicio.click(self.screen)
@@ -131,11 +132,7 @@ class Game:
                         #Crear funcion de carga de datos del alamanaque items
                         lista = Item.valor(self)
                         re = validar.obtener_items(correo,self.conexion, self.cursor)
-                        #print("Lista del jugador")
-                        #print(re)
                         lista = re # Insertar los items guardados del usuario
-                        #print("Lista")
-                        #print(lista)
                         Item.carga_items(self,lista)
 
                         #Crear funcion de carga de datos del instrumento
@@ -152,7 +149,6 @@ class Game:
                             renderT = textR.render(response, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 400))
                     
-                #DELTA TIMEEEEEEE
             pygame.display.update()
     def mandar_lista():
         return lista
