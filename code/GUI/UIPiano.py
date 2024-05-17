@@ -321,8 +321,6 @@ class InterfazPiano:
 
             self.botonTBorrar.cargar(self.screen)           
             #self.screen.blit(self.pianito, (200,370))
-
-
             
             #Carga el boton GuardarPista
             self.botonGuard.cargar(self.screen)

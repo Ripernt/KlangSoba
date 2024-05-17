@@ -67,7 +67,7 @@ class Mezcladora():
 
         #Cosas para mezclar
         mezcladora_costo = 0
-        permiso_mezcladora = False
+        paga_mezcladora = False
         pila_img = pygame.image.load("graphics/items/bateria.png")
         pila_img = pygame.transform.scale(pila_img,(50,50))
         pila_text = self.fontsito.render("x"+str(mezcladora_costo), True, "white")
@@ -125,19 +125,27 @@ class Mezcladora():
                     #Accion para mezclar pistas de audio                  
                     if boton_mezclar.checkForInput(pygame.mouse.get_pos()):
                         boton_mezclar.click(self.screen)
-                        if mezcladora_costo <= self.player.items_num[0]:
+                        if mezcladora_costo <= self.player.items_num[0] and self.lista_audios != []:
                             constante = self.player.items_num[0] - mezcladora_costo
                             self.player.items_num[0] = constante
                             validar.insertar_items(self.player.items_num, self.conexion, self.cursor)
-                            permiso_mezcladora = True
-                            if permiso_mezcladora == True:
-                                if "" in self.lista_audios:
-                                    return
+                            paga_mezcladora = True
+                            if paga_mezcladora == True:
                                 audio_clips = [AudioFileClip(file) for file in self.lista_audios]
                                 result_audio = CompositeAudioClip(audio_clips)
+                                self.lista_audios.clear()
+                                caja_archivo1.setText("")
+                                caja_archivo2.setText("")
+                        else:
+                            #print("Debes de poner 2 pistas de audio para poder mezclar")
+                            error_mezclar = "Debes de poner 2 pistas de audio para poder mezclar"
+                            textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                            renderT = textR.render(error_mezclar, True, (255,0,0))
+                            rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
+                            
                             
 
-                    if boton_guardar_mezcla.checkForInput(pygame.mouse.get_pos()) and permiso_mezcladora == True:
+                    if boton_guardar_mezcla.checkForInput(pygame.mouse.get_pos()) and paga_mezcladora == True:
                         boton_guardar_mezcla.click(self.screen)
                         thread = threading.Thread(target=mostrar_dialogo_guardar, args=(result_audio,audio_clips,))
                         thread.start()
