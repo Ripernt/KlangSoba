@@ -45,12 +45,24 @@ class PausaMenu:
         range_volumen = Range((900, 650, 250, 22), "Musica")
         range_volumen.range = self.sound.music.get_volume() * 10
     
+        #Chat Ks
+        chatKS = Button(image=settings.botonPurChat, pos=(1180, 670), text_input="CHAT", font=fontsito, base_color="#4D4D5C",
+                          hovering_color="#C66FF1", link="https://azure-pouncing-armchair.glitch.me/")
+        
+        #Soporte ks
+        soporte_ks = Button(image=settings.botonSoporte, pos=(1100,670), text_input="", font=fontsito, base_color="#4D4D5C",
+                          hovering_color="#C66FF1", link="https://nicolasayalagomez.github.io/FASTSTERNLANDING/#box6")
         
         
         while self.paused:
             
             self.screen.blit(fondo, (0, 0))
             self.screen.blit(menu_text, menu_rect)
+
+            chatKS.cargar(self.screen)
+            chatKS.cambiar_color(pygame.mouse.get_pos())
+
+            soporte_ks.cargar(self.screen)
             
             #Mostrar boton de play
             play_button.cargar(self.screen)
@@ -92,7 +104,7 @@ class PausaMenu:
                 
                 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    #if self.almanaque is None:
+                 
                         #Accion del boton play
                     if play_button.checkForInput(pygame.mouse.get_pos()):
                         self.paused = False
@@ -115,6 +127,12 @@ class PausaMenu:
                         if Elpepe == False:
                             self.pause_sound.stop()                          
                         return self.paused
+
+                    if chatKS.checkForInput(pygame.mouse.get_pos()):
+                        chatKS.click(self.screen)
+
+                    if soporte_ks.checkForInput(pygame.mouse.get_pos()):
+                        soporte_ks.click(self.screen)
 
                     if salir_button.checkForInput(pygame.mouse.get_pos()):
                         salir_button.click(self.screen)
