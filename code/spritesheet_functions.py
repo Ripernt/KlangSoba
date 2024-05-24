@@ -8,7 +8,6 @@ class SpriteSheet(object):
 
     def __init__(self, file_name):
 
-        # Load the sprite sheet.
         self.sprite_sheet = pygame.image.load(file_name).convert()
 
     def getSize(self):

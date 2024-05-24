@@ -36,9 +36,15 @@ class Mezcladora():
         self.conexion = conexion
         self.cursor = cursor
         self.lista_audios = []
+        self.no_reproduciendo = True
+        
               
     def mostrar_menu_mezcladora(self):
         
+        pista_audio_mezclada =  pygame.mixer.Sound("resultado.wav")
+        
+        pausado = False
+
         self.fontsito = pygame.font.Font('graphics/font/joystix.ttf', 20)
         
         boton_regresar = Button(image=settings.botonRegresar, pos=(200,600),text_input="", font=self.fontsito,
@@ -49,6 +55,12 @@ class Mezcladora():
         
         boton_guardar_mezcla = Button(image=settings.botonGuardarPista, pos=(1000,600),text_input="",font=self.fontsito,
                                 base_color="#4D4D5C", hovering_color="#75E2EC")
+        
+        boton_reproducir_mezcla = Button(image=settings.botonGrabar, pos=(1050,600), text_input="", font=self.fontsito,
+                                         base_color="#4D4D5C", hovering_color="#75E2EC")
+        
+        boton_pausar_mezcla = Button(image=settings.botonPausar, pos=(1100,600), text_input="", font=self.fontsito,
+                                         base_color="#4D4D5C", hovering_color="#75E2EC")
 
         #Texto menu de instrumentos
         mezcladora_text = self.fontsito.render("Menu de mezcladora", True, "white") 
@@ -94,6 +106,12 @@ class Mezcladora():
 
             boton_guardar_mezcla.cargar(self.screen)
 
+            if self.no_reproduciendo:
+                boton_reproducir_mezcla.cargar(self.screen)
+
+            if not self.no_reproduciendo:
+                boton_pausar_mezcla.cargar(self.screen)
+
             boton_mezclar.cargar(self.screen)
             boton_mezclar.cambiar_color(pygame.mouse.get_cursor())
 
@@ -108,6 +126,7 @@ class Mezcladora():
                     if boton_regresar.checkForInput(pygame.mouse.get_pos()):
                         boton_regresar.click(self.screen)
                         self.mezcladora = False
+                        pista.stop()
                         return self.mezcladora
                     #Accion para agarrar un archivo .wav
                     if boton_archivo_musica1.checkForInput(pygame.mouse.get_pos()):
@@ -131,14 +150,15 @@ class Mezcladora():
                             self.player.items_num[0] = constante
 
                             validar.insertar_items(self.player.items_num, self.conexion, self.cursor)
-
                             paga_mezcladora = True
                             if paga_mezcladora == True:
                                 audio_clips = [AudioFileClip(file) for file in self.lista_audios]
                                 result_audio = CompositeAudioClip(audio_clips)
+                                result_audio.write_audiofile("resultado.wav", fps=audio_clips[0].fps)
                                 self.lista_audios.clear()
                                 caja_archivo1.setText("")
                                 caja_archivo2.setText("")
+                                
                                 mezcla_text = "Se ha mezclado!"
                                 textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                                 renderT = textR.render(mezcla_text, True, (255,0,0))
@@ -154,12 +174,24 @@ class Mezcladora():
                         boton_guardar_mezcla.click(self.screen)
                         thread = threading.Thread(target=mostrar_dialogo_guardar, args=(result_audio,audio_clips,))
                         thread.start()
-                        guardar_text_mezcla = "Guardando la mezcla"
+                        guardar_text_mezcla = "Guardando la mezcla" 
                         textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                         renderT = textR.render(guardar_text_mezcla, True, (255,0,0))
                         rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
 
+                    if boton_reproducir_mezcla.checkForInput(pygame.mouse.get_pos()) and self.no_reproduciendo:
+                        boton_reproducir_mezcla.click(self.screen)
+                        self.no_reproduciendo = False
+                        if pausado == False:
+                           pista = pista_audio_mezclada.play()
+                        else:
+                            pista.unpause()
+                            
 
-
-
+                    if boton_pausar_mezcla.checkForInput(pygame.mouse.get_pos()) and not self.no_reproduciendo:
+                        boton_pausar_mezcla.click(self.screen)
+                        self.no_reproduciendo = True
+                        pausado = True
+                        pista.pause()
+                        
             pygame.display.update()

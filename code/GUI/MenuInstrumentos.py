@@ -183,8 +183,7 @@ class MInstrumentos:
                         self.musicap.stop()
                         eee = self.inst.mostrar_menu_sintetizador()
                         if eee == False:
-                            self.musicap.stop()
-                                            
+                            self.musicap.stop()         
                             return self.instrumentos 
                        
                     if piano_bloqueado.checkForInput(pygame.mouse.get_pos()) and no_tiene_piano == True:
@@ -228,8 +227,9 @@ class MInstrumentos:
                         self.mez = Mezcladora(self.screen,self.instrumentos,self.player,self.conexion,self.cursor)
                         self.sound.pause()
                         self.musicap.stop()
-                        nose = self.mez.mostrar_menu_mezcladora()
-                        if nose == False:
+                        regresar = self.mez.mostrar_menu_mezcladora()
+                        
+                        if regresar == False:
                             self.musicap.stop()
                         return self.instrumentos 
 

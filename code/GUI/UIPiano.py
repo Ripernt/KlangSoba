@@ -212,11 +212,6 @@ class InterfazPiano:
                 self.botonSG.cargar(self.screen)
                 #imagen de luz de grabando encendida
                 self.Grabando.cargar(self.screen)
-
-
-            #self.botonG.cargar(self.screen)
-            
-            #self.botonSG.cargar(self.screen)
         
             self.botonT2.cargar(self.screen)
             #self.botonT2.cambiar_color(pygame.mouse.get_pos())

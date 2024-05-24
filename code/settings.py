@@ -123,6 +123,9 @@ botonArchivoMusica = pygame.transform.scale(botonArchivoMusica,(50,50))
 botonSoporte = pygame.image.load("graphics/elementos_graficos/soporte.png")
 botonSoporte = pygame.transform.scale(botonSoporte, (50,50))
 
+botonPausar = pygame.image.load("graphics/elementos_graficos/pausaboton.png")
+botonPausar = pygame.transform.scale(botonPausar, (50,50))
+
 weapon_data = {
 	'sword': {'cooldown': 100, 'damage': 15,'graphic':'graphics/weapons/sword/full.png'},
 	'lance': {'cooldown': 400, 'damage': 30,'graphic':'graphics/weapons/lance/full.png'},
