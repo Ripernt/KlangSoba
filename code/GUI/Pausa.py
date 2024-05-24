@@ -45,9 +45,7 @@ class PausaMenu:
         range_volumen = Range((900, 650, 250, 22), "Musica")
         range_volumen.range = self.sound.music.get_volume() * 10
     
-        #Chat Ks
-        chatKS = Button(image=settings.botonPurChat, pos=(1180, 670), text_input="CHAT", font=fontsito, base_color="#4D4D5C",
-                          hovering_color="#C66FF1", link="https://azure-pouncing-armchair.glitch.me/")
+
         
         #Soporte ks
         soporte_ks = Button(image=settings.botonSoporte, pos=(1100,670), text_input="", font=fontsito, base_color="#4D4D5C",
@@ -57,10 +55,7 @@ class PausaMenu:
         while self.paused:
             
             self.screen.blit(fondo, (0, 0))
-            self.screen.blit(menu_text, menu_rect)
-
-            chatKS.cargar(self.screen)
-            chatKS.cambiar_color(pygame.mouse.get_pos())
+            self.screen.blit(menu_text, menu_rect)            
 
             soporte_ks.cargar(self.screen)
             
@@ -127,9 +122,6 @@ class PausaMenu:
                         if Elpepe == False:
                             self.pause_sound.stop()                          
                         return self.paused
-
-                    if chatKS.checkForInput(pygame.mouse.get_pos()):
-                        chatKS.click(self.screen)
 
                     if soporte_ks.checkForInput(pygame.mouse.get_pos()):
                         soporte_ks.click(self.screen)

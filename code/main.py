@@ -11,7 +11,6 @@ from GUI.Pausa import PausaMenu
 from GUI.button import Button
 from GUI.Entry import InputBox
 from GUI.MenuInstrumentos import MInstrumentos
-from GUI.MenuMezcladora import Mezcladora
 #from secure.cifrado import Cifradito
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
@@ -356,8 +355,8 @@ class Game:
                         self.musica_personalizada.play(1)
                         listaIn = Item.valor(self)
                         self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos, listaIn, self.player, self.conexion, self.cursor)#Cambiar la musica
-                        hola = self.Instrumentos.mostrar_instrumentos()
-                        if hola == False:
+                        regreso_de_minstrumentos = self.Instrumentos.mostrar_instrumentos()
+                        if regreso_de_minstrumentos == False:
                             self.main_sound.music.unpause()
                     
                         
