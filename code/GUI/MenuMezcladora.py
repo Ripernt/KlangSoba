@@ -27,16 +27,16 @@ guardandoC = False
 guardado = True
 
 class Mezcladora():
-    def __init__(self,screen, instrumentos, player, conexion, cursor): #= pygame.display.set_mode((settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))
+    def __init__(self, player, conexion, cursor, screen): #= pygame.display.set_mode((settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))
         #self.lista_consumir = lista
         self.mezcladora = True
         self.screen = screen
-        self.instrumentos = instrumentos
         self.player = player
         self.conexion = conexion
         self.cursor = cursor
         self.lista_audios = []
         self.no_reproduciendo = True
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         
               
     def mostrar_menu_mezcladora(self):

@@ -155,3 +155,8 @@ logros_data = {
     "B6": {"nombre": "MUERTE", "descripcion": "Volveras mas fuerte"},
     
 	}
+
+npc_data = {
+    'mixer':{'notice_radius' : 150},
+    'jesus':{}
+}
