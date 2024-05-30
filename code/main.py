@@ -15,6 +15,7 @@ from GUI.MenuInstrumentos import MInstrumentos
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
 from math import sqrt, pow
+from Npc import * 
 
 def eucDis(p1, p2): 
     difx = p1[0]-p2[0]
@@ -333,7 +334,9 @@ class Game:
     def run(self):
         print("Run")
         self.main_sound.music.play(-1)
+        
         while True:
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -376,10 +379,10 @@ class Game:
                 self.currentLevelNum = 0
                 self.level = self.downloaded_level[self.currentLevelNum]
                 self.level.resetPlayer()
-                
+
             pygame.display.update()
             self.clock.tick(FPS)
-            
+
             pygame.display.set_caption(f'fps: {round(self.clock.get_fps())}')
     
 if __name__ == '__main__':

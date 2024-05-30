@@ -35,6 +35,7 @@ class Level:
 		self.player = player
 		self.posInit = (0,0)
  
+ 		
  
 		# sprite setup
 		self.create_map(n)
@@ -53,13 +54,10 @@ class Level:
 		self.animation_player = AnimationPlayer()
 		self.magic_player = MagicPlayer(self.animation_player)
 
-		#items
-		#self.items = Player(self.itemsRecolectados)
   
 	def cargarCSV(self, style, layout, graphics):
 		from enemy import Enemy
-
-		
+		from Npc import NPC
 
 		for row_index,row in enumerate(layout):
 				for col_index, col in enumerate(row):
@@ -92,26 +90,69 @@ class Level:
 										self.destroy_attack,
 										self.create_magic, 
 										self.display_surface)
-										#self.items)
 								else:
 									
 									self.posInit = (x,y)
 									print("esta es la posicion inicial: ", self.posInit)
 								
 							else:
-								if col == '390': monster_name = 'bamboo'
-								elif col == '391': monster_name = 'spirit'
-								elif col == '392': monster_name ='raccoon'
-								else: monster_name = 'squid'
-								Enemy(
-									monster_name,
-									(x,y),
-									[self.visible_sprites,self.attackable_sprites],
-									self.obstacle_sprites,
-									self.damage_player,
-									self.trigger_death_particles,
-									self.add_exp,
-         							self.drop_item, self.display_surface)
+								if col == '390': 
+									monster_name = 'bamboo'
+									Enemy(
+										monster_name,
+										(x,y),
+										[self.visible_sprites,self.attackable_sprites],
+										self.obstacle_sprites,
+										self.damage_player,
+										self.trigger_death_particles,
+										self.add_exp,
+										self.drop_item, self.display_surface)	
+								elif col == '391': 
+									monster_name = 'spirit'
+									Enemy(
+										monster_name,
+										(x,y),
+										[self.visible_sprites,self.attackable_sprites],
+										self.obstacle_sprites,
+										self.damage_player,
+										self.trigger_death_particles,
+										self.add_exp,
+										self.drop_item, self.display_surface)
+								elif col == '392': 
+									monster_name ='raccoon'
+									Enemy(
+										monster_name,
+										(x,y),
+										[self.visible_sprites,self.attackable_sprites],
+										self.obstacle_sprites,
+										self.damage_player,
+										self.trigger_death_particles,
+										self.add_exp,
+										self.drop_item, self.display_surface)
+								elif col == '397': 
+									npc_name = 'mixer'
+									print("Npc :", npc_name)
+									NPC(
+										npc_name,
+										(x,y),
+										[self.visible_sprites],
+										self.obstacle_sprites,
+										self.display_surface,
+										self.player	
+									)
+								#elif col == '398': npc_name = 'jesus'
+								else: 
+									monster_name = 'squid'
+									Enemy(
+										monster_name,
+										(x,y),
+										[self.visible_sprites,self.attackable_sprites],
+										self.obstacle_sprites,
+										self.damage_player,
+										self.trigger_death_particles,
+										self.add_exp,
+										self.drop_item, self.display_surface)
+						
 		self.capasCargadas+=1
 		print(style)
 
@@ -169,10 +210,6 @@ class Level:
 		materiales = ["bateria","cuerdas","cables","madera"]
 		eleccion = random.choice(materiales)
 		Item([self.visible_sprites],  eleccion, pos, self.display_surface, player = self.player)
-		#Item([self.visible_sprites], "bateria", pos, self.display_surface, player=self.player)
-		#Item([self.visible_sprites], "cuerdas", pos, self.display_surface, player=self.player)
-		#Item([self.visible_sprites], "cables", pos, self.display_surface, player = self.player)
-		#Item([self.visible_sprites], "madera", pos, self.display_surface, player = self.player)
 
 	def destroy_attack(self):
 		if self.current_attack:
@@ -222,6 +259,7 @@ class Level:
 		else:
 			self.visible_sprites.update()
 			self.visible_sprites.enemy_update(self.player)
+			self.visible_sprites.npc_update(self.player)
 
 			self.player_attack_logic()
 
@@ -233,6 +271,7 @@ class Level_2 (Level):
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self, tile, scale=1):
 		from enemy import Enemy
+		from Npc import NPC
 		# general setup 
 		super().__init__()
 		self.display_surface = pygame.display.get_surface()
@@ -266,6 +305,11 @@ class YSortCameraGroup(pygame.sprite.Group):
 		for enemy in enemy_sprites:
 			enemy.enemy_update(player)
 			#BARRRA DE VIDA HERE
+	
+	def npc_update(self, player):
+		npc_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'npc']
+		for npc in npc_sprites:
+			npc.npc_update(player)
 
 	def obtener_posRespecto_camara(self, objetoEntity):
 		self.offset.x = objetoEntity.rect.centerx - self.half_width
