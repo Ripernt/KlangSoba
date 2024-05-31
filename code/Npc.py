@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from settings import *
 from entity import Entity
 from support import *
@@ -8,6 +8,7 @@ from GUI.Barra_Vida import BarraDeVida
 from GUI.MenuMezcladora import *
 from item import Item
 from player import Player
+from pygame.locals import *
 
 
 npc_distancia_interactuar = 150
@@ -76,13 +77,18 @@ class NPC(Entity):
 		self.rect = self.image.get_rect(center = self.hitbox.center)
 
 	def get_status(self, player):
-
+		evento = pygame.event.get()
 		distance = self.get_player_distance_direction(player)[0]
 
 		if distance <= self.notice_radius:
-			for event in pygame.event.get():
+			print("Presiona n para interactuar")
+	
+			for event in evento:
+				
 				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_n and self.npc_name == 'mixer':
+
+					if event.key == K_n and self.npc_name == 'mixer':
+						print("Entro en el if de NPC MEZCLADORA")
 						pygame.mixer.music.pause()
 						self.mez = Mezcladora(self.player, self.conexion, self.cursor, self.screen)
 						regresar_mezcladora = self.mez.mostrar_menu_mezcladora()

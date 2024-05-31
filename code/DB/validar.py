@@ -71,6 +71,34 @@ def validarRegistro(usuario,correo,contraseña,confirmcontra,lista,conexion, cur
         return "El correo no es valido"
     
 
+#busca info a la base de datos, encuentra
+def encontrarUsuario(correo, conexionR = None, cursorR = None):
+    global usu_correo
+    usu_correo = correo
+    query = "select usr_correo from usuario where usr_correo = %s;"
+    #query2 = "select usr_id from usuario where usr_correo= %s;"    
+    if conexionR is None:
+        conexion = conectar.conectar()
+        cursor = conexion.cursor()
+    else:
+        conexion = conexionR
+        cursor = cursorR
+
+        
+    cursor.execute(query,[correo])
+    resultado = cursor.fetchone()
+    #cursor.execute(query2,[correo])
+    #usu = cursor.fetchone()
+
+    if conexionR is None:
+        cursor.close()
+        conexion.close()
+
+    if resultado is not None:
+        return True
+    else:
+        return False
+
 #ingresa info a la base de datos, registra
 def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursorR = None):
     global usu    
@@ -130,33 +158,7 @@ def registrarUsuario(usuario,correo, contraseña,lista, conexionR = None, cursor
         cursor.close()
         conexion.close()
 
-#busca info a la base de datos, encuentra
-def encontrarUsuario(correo, conexionR = None, cursorR = None):
-    global usu_correo
-    usu_correo = correo
-    query = "select usr_correo from usuario where usr_correo = %s;"
-    #query2 = "select usr_id from usuario where usr_correo= %s;"    
-    if conexionR is None:
-        conexion = conectar.conectar()
-        cursor = conexion.cursor()
-    else:
-        conexion = conexionR
-        cursor = cursorR
 
-        
-    cursor.execute(query,[correo])
-    resultado = cursor.fetchone()
-    #cursor.execute(query2,[correo])
-    #usu = cursor.fetchone()
-
-    if conexionR is None:
-        cursor.close()
-        conexion.close()
-
-    if resultado is not None:
-        return True
-    else:
-        return False
     
 """Insertar items"""
 def insertar_items(lista,conexionR,cursorR):

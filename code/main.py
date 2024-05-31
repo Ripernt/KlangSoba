@@ -72,7 +72,7 @@ class Game:
         botonRegresarInicio = Button(image=botonRegresar, pos=(150,500), text_input="", font=self.fontsito, base_color="#4D4D5C",hovering_color="#75E2EC")
 
         cajaI = InputBox((SCREEN_WIDTH/3,200,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)])
-        cajaC = InputBox((SCREEN_WIDTH/3,300,400,32), "Contraseña", colorValue=[(0,0,0), (255,0,0)], hidden = True)
+        cajaC = InputBox((SCREEN_WIDTH/3,300,400,32), "", colorValue=[(0,0,0), (255,0,0)], hidden = True)
 
         renderT = None
 
@@ -129,20 +129,18 @@ class Game:
                         t1.join()
                         response = validar.responseI()
 
-                        #Crear funcion de carga de datos del alamanaque items
-                        lista = Item.valor(self)
-                        re = validar.obtener_items(correo,self.conexion, self.cursor)
-                        lista = re # Insertar los items guardados del usuario
-                        Item.carga_items(self,lista)
-
-                        #Crear funcion de carga de datos del instrumento
-                        instrumento = validar.obtener_instrumento_piano(correo,self.conexion,self.cursor)
-                        print(instrumento)
-                    
-                        MInstrumentos.carga_instrumento(self,instrumento)
-
                         if isinstance(response, Sesion):
+                            #Crear funcion de carga de datos del alamanaque items
+                            lista = Item.valor(self)
+                            re = validar.obtener_items(correo,self.conexion, self.cursor)
+                            lista = re # Insertar los items guardados del usuario
+                            Item.carga_items(self,lista)
+                            #Crear funcion de carga de datos del instrumento
+                            instrumento = validar.obtener_instrumento_piano(correo,self.conexion,self.cursor)
+                            print(instrumento)
+                            MInstrumentos.carga_instrumento(self,instrumento)
                             return response
+
                         else:
                             print(response)
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
@@ -168,7 +166,7 @@ class Game:
 
         caja = InputBox((SCREEN_WIDTH/3,100,400,32), "Nombre de usuario", colorValue=[(0,0,0), (255,0,0)]) 
         caja2 = InputBox((SCREEN_WIDTH/3,175,400,32), "Correo", colorValue=[(0,0,0), (255,0,0)]) 
-        caja3 = InputBox((SCREEN_WIDTH/3,250,400,32), "contraseña", colorValue=[(0,0,0), (255,0,0)], hidden = True) 
+        caja3 = InputBox((SCREEN_WIDTH/3,250,400,32), "", colorValue=[(0,0,0), (255,0,0)], hidden = True) 
         caja4 = InputBox((SCREEN_WIDTH/3,325,400,32), "confirmacion", colorValue=[(0,0,0), (255,0,0)], hidden= True) 
 
         renderT = None
