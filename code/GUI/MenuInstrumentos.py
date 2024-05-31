@@ -25,11 +25,9 @@ class MInstrumentos:
          
 
     def mostrar_instrumentos(self):
-        #CV2 liberias para modificar las imagenes |open cv --python
         
-        #Costo del intrumento piano
         piano_costo = 1
-        #Costo del instrumento sintetizador
+        
         sintetizador_costo = 1
 
         fonti = pygame.font.Font('graphics/font/joystix.ttf', 20)
@@ -72,9 +70,6 @@ class MInstrumentos:
         sintetizador_text = self.fontsito.render("Sintetizador", True, "white")
         pila_img = pygame.image.load("graphics/items/bateria.png")
         pila_img = pygame.transform.scale(pila_img,(50,50))
-
-        mezcladora_button = Button(image=settings.botonMezcladora, pos=(900,275), text_input="Mezcladora",font=fonti,
-                                base_color="#4D4D5C", hovering_color="#75E2EC")
         
         renderT = None
         
@@ -128,16 +123,12 @@ class MInstrumentos:
             regresar_button.cargar(self.screen)
             regresar_button.cambiar_color(pygame.mouse.get_pos())
 
-            #Mostrar boton para la mezcladora (PRUEBA)
-            mezcladora_button.cargar(self.screen)
-            mezcladora_button.cambiar_color(pygame.mouse.get_pos())
-
             evento = pygame.event.get()
 
             for event in evento:
             
                 if event.type == pygame.KEYDOWN:
-                    #Accion regresar por medio de teclas
+                    
                     if event.key == K_m or event.key == K_ESCAPE:
                         self.instrumentos = False
                         regresar_button.click(self.screen)
@@ -145,7 +136,7 @@ class MInstrumentos:
                         self.musicap.stop()
                         return self.instrumentos
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    #Accion regresar por medio del boton
+
                     if regresar_button.checkForInput(pygame.mouse.get_pos()):
                         self.instrumentos = False
                         regresar_button.click(self.screen)
@@ -154,28 +145,25 @@ class MInstrumentos:
                         return self.instrumentos
                     
                     if sintetizador_bloqueado.checkForInput(pygame.mouse.get_pos()) and no_tiene_sintetizador == True:
-                        #print("Sintetizador bloqueadin")
+                        
                         sintetizador_bloqueado.click(self.screen)
                         if sintetizador_costo <= self.lista[0]:
                             self.player.T_piano[1] = 3
                             constante2 = self.lista[0] - sintetizador_costo
                             self.lista[0] = constante2
                             validar.insertar_items(self.lista,self.conexion,self.cursor)
-                            #print("desbloqueado: ", self.player.T_piano[1])
+                            
                             validar.instrumento_piano(self.player.T_piano,self.conexion,self.cursor)
-                            #if self.player.T_piano[1] == 3:
-                            #    no_tiene_sintetizador = False
+
                         else:
-                            #print("No se tienen suficientes items para el sintetizador")
+
                             text_no_sintetizador = "No se tienen suficientes items para el sintetizador"
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(text_no_sintetizador, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
              
                     elif sintetizador_Button.checkForInput(pygame.mouse.get_pos()) and no_tiene_sintetizador == False:
-                        #print("Pianopianito no bloqueado")
-                        #print("piano: ", no_tiene_piano)
-                        #print("sintetizador: ", no_tiene_sintetizador)
+                        
                         self.instrumentos = False
                         sintetizador_Button.click(self.screen)
                         self.inst = InterfazSintetizador(self.screen, self.instrumentos)
@@ -187,28 +175,25 @@ class MInstrumentos:
                             return self.instrumentos 
                        
                     if piano_bloqueado.checkForInput(pygame.mouse.get_pos()) and no_tiene_piano == True:
-                        #print("Pianopianito bloqueado")
+                        
                         piano_bloqueado.click(self.screen)
                         if piano_costo <= self.lista[3]:
                             self.player.T_piano[0] = 2
                             constante = self.lista[3] - piano_costo
                             self.lista[3] = constante
                             validar.insertar_items(self.lista,self.conexion,self.cursor)
-                            #print("desbloqueado: ", self.player.T_piano[0])
+                            
                             validar.instrumento_piano(self.player.T_piano,self.conexion,self.cursor)
-                            #if self.player.T_piano[0] == 2:
-                            #    no_tiene_piano = False
+                            
                         else:
-                            #print("No se tienen suficientes items para el piano")
+                            
                             text_no_piano = "No se tienen suficientes items para el piano"
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(text_no_piano, True, (255,0,0))
                             rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
                         
                     elif piano_Button.checkForInput(pygame.mouse.get_pos()) and no_tiene_piano == False:
-                        #print("Pianopianito no bloqueado")
-                        #print("piano: ", no_tiene_piano)
-                        #print("sintetizador: ", no_tiene_sintetizador)
+
                         self.instrumentos = False
                         piano_Button.click(self.screen)
                         self.inst = InterfazPiano(self.screen, self.instrumentos)
@@ -219,19 +204,6 @@ class MInstrumentos:
                             self.musicap.stop()
                                             
                             return self.instrumentos
-
-                    #Accion para entrar al menu Mezcladora
-                    if mezcladora_button.checkForInput(pygame.mouse.get_pos()):
-                        self.instrumentos = False
-                        mezcladora_button.click(self.screen)   
-                        self.mez = Mezcladora(self.screen,self.instrumentos,self.player,self.conexion,self.cursor)
-                        self.sound.pause()
-                        self.musicap.stop()
-                        regresar = self.mez.mostrar_menu_mezcladora()
-                        
-                        if regresar == False:
-                            self.musicap.stop()
-                        return self.instrumentos 
 
 
 
