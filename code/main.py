@@ -100,14 +100,14 @@ class Game:
                 if event.type == pygame.QUIT:
                     respuesta = messagebox.askyesno("Precaución", "Se perderan los avances de este nivel. ¿Estás seguro?")
                     if respuesta:
-                        # Acción a realizar si se confirma
+                        
                         print("Confirmado")
                         self.cursor.close()
                         self.conexion.close()
                         pygame.quit()
                         sys.exit()
                     else:
-                        # Acción a realizar si se cancela
+                        
                         print("Cancelado") 
 
                 if event.type == pygame.KEYDOWN:
@@ -130,12 +130,12 @@ class Game:
                         response = validar.responseI()
 
                         if isinstance(response, Sesion):
-                            #Crear funcion de carga de datos del alamanaque items
+                            
                             lista = Item.valor(self)
                             re = validar.obtener_items(correo,self.conexion, self.cursor)
-                            lista = re # Insertar los items guardados del usuario
+                            lista = re 
                             Item.carga_items(self,lista)
-                            #Crear funcion de carga de datos del instrumento
+                            
                             instrumento = validar.obtener_instrumento_piano(correo,self.conexion,self.cursor)
                             print(instrumento)
                             MInstrumentos.carga_instrumento(self,instrumento)
@@ -241,19 +241,18 @@ class Game:
     def CargarKS(self):
         print("Cargando")
         self.progreso = 20
-        #print(self.progreso)
+        
         self.clock = pygame.time.Clock()
         self.progreso = 30
-        #main audio// Musica predetermijnada
+        
         self.main_sound = pygame.mixer
         self.main_sound.music.load('audio/Monkberry Moon Delight.ogg')
         
         self.progreso = 50
-        #pause audio//Musica personalizada
+        
         self.musica_personalizada = pygame.mixer.Sound("audio/bass-loops-006-with-drums-long-loop-120-bpm-6111.mp3")
         self.musica_instrumentos = pygame.mixer.Sound("audio/[CHIPTUNE] Pink Floyd - Have A Cigar.wav")
-        #DB
-        #print(self.progreso)       
+     
         self.progreso = 503
 
     def mostrar_animacion_carga(self):

@@ -4,12 +4,10 @@ from GUI.button import Button
 from GUI.Range import Range  
 from tkinter import messagebox
 from GUI.Almanaque import Almanaque
-
+from GUI.Controles import MenuControles
 from DB import validar
 from DB.conectar import *
 from item import Item
-
-
 
 class PausaMenu:
     def __init__(self, main_sound, pause_sound, player,conexion,cursor, screen = pygame.display.set_mode((settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))):
@@ -33,13 +31,15 @@ class PausaMenu:
         fondo = pygame.image.load("graphics/elementos_graficos/pausa.png")
         fondo = pygame.transform.scale(fondo, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
-        play_button = Button(image=settings.botonBlue, pos=(200, 160), text_input="Reanudar", font=fontsito,
+        play_button = Button(image=settings.botonBlue, pos=(130, 220), text_input="Reanudar", font=fontsito,
                              base_color="#4D4D5C", hovering_color="#75E2EC")
-        pokedex_button = Button(image=settings.botonRed, pos=(200, 300), text_input="Almanaque", font=fontsito,
+        pokedex_button = Button(image=settings.botonRed, pos=(350, 220), text_input="Almanaque", font=fontsito,
                                 base_color="#4D4D5C", hovering_color="#75E2EC")
-        salir_button = Button(image=settings.botonGreen, pos=(200, 440), text_input="Salir", font=fontsito,
+        controles_button = Button(image=settings.botonGreen, pos=(350, 360), text_input="Controles", font=fontsito, 
+                                  base_color="#4D4D5C", hovering_color="#75E2EC")
+        salir_button = Button(image=settings.botonBlue, pos=(130, 500), text_input="Salir", font=fontsito,
                              base_color="#4D4D5C", hovering_color="#75E2EC")
-        guardar_button = Button(image=settings.botonBlue, pos=(200,580), text_input="Guardar partida", font=fontsito,
+        guardar_button = Button(image=settings.botonPur, pos=(130,360), text_input="Guardar partida", font=fontsito,
                                 base_color="#4D4D5C", hovering_color="#75E2EC")
         
         range_volumen = Range((900, 650, 250, 22), "Musica")
@@ -55,27 +55,26 @@ class PausaMenu:
         while self.paused:
             
             self.screen.blit(fondo, (0, 0))
-            self.screen.blit(menu_text, menu_rect)            
+            self.screen.blit(menu_text, menu_rect)           
 
             soporte_ks.cargar(self.screen)
             
-            #Mostrar boton de play
+            controles_button.cargar(self.screen)
+            
             play_button.cargar(self.screen)
             play_button.cambiar_color(pygame.mouse.get_pos())
-
-            #Mostrar boton del almanaque
+  
             pokedex_button.cargar(self.screen)
             pokedex_button.cambiar_color(pygame.mouse.get_pos())
-            #Mostrar boton de salir 
+            
             salir_button.cargar(self.screen)
             salir_button.cambiar_color(pygame.mouse.get_pos())
 
-            #Mostrar boton de guardar partida
             guardar_button.cargar(self.screen)
             guardar_button.cambiar_color(pygame.mouse.get_pos())
 
             #Volumen
-            self.sound.music.set_volume(range_volumen.range / 10)
+            self.sound.music.set_volume(range_volumen.range/10)
             self.pause_sound.set_volume(range_volumen.range/10)
 
             events = pygame.event.get()
@@ -121,6 +120,16 @@ class PausaMenu:
                         Elpepe = self.alm.show_almanaque(screen)
                         if Elpepe == False:
                             self.pause_sound.stop()                          
+                        return self.paused
+                    
+                    #accion del boton controles
+                    if controles_button.checkForInput(pygame.mouse.get_pos()):
+                        self.paused = False
+                        controles_button.click(self.screen)
+                        self.cont = MenuControles(screen, 'graphics/elementos_graficos/fondosgenerico.png', rect=(settings.SCREEN_HEIGHT, settings.SCREEN_WIDTH), center=True)
+                        Elpepe2 = self.cont.show_menu_controles(screen)
+                        if Elpepe2 == False:
+                            self.pause_sound.stop()
                         return self.paused
 
                     if soporte_ks.checkForInput(pygame.mouse.get_pos()):
