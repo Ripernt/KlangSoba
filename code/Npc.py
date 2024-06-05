@@ -11,10 +11,9 @@ from player import Player
 from pygame.locals import *
 
 
-npc_distancia_interactuar = 150
 class NPC(Entity):
 
-	def __init__(self,npc_name,pos,groups,obstacle_sprites,surface, player):
+	def __init__(self,npc_name,pos,groups,obstacle_sprites,surface):
 
 		super().__init__(groups)
 		self.sprite_type = 'npc'
@@ -41,11 +40,12 @@ class NPC(Entity):
 		self.timeAnt = 0
 		self.dt = 0
 
-		self.player = player
+		
 		self.conexion = None
 		self.cursor = None
 		self.screen = None
 
+		
 	def import_graphics(self,name):
 		self.animations = {'idle':[]}
 		main_path = f'graphics/npcs/{name}/'
@@ -81,16 +81,17 @@ class NPC(Entity):
 		distance = self.get_player_distance_direction(player)[0]
 
 		if distance <= self.notice_radius:
-			print("Presiona n para interactuar")
 	
 			for event in evento:
 				
 				if event.type == pygame.KEYDOWN:
 
 					if event.key == K_n and self.npc_name == 'mixer':
-						print("Entro en el if de NPC MEZCLADORA")
+						
 						pygame.mixer.music.pause()
-						self.mez = Mezcladora(self.player, self.conexion, self.cursor, self.screen)
+						
+						print("Jugador: ", player)
+						self.mez = Mezcladora(player, self.conexion, self.cursor, self.screen)
 						regresar_mezcladora = self.mez.mostrar_menu_mezcladora()
 						if regresar_mezcladora == False:
 							pygame.mixer.music.unpause()

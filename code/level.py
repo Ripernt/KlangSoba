@@ -132,13 +132,13 @@ class Level:
 								elif col == '397': 
 									npc_name = 'mixer'
 									print("Npc :", npc_name)
+									
 									NPC(
 										npc_name,
 										(x,y),
 										[self.visible_sprites],
 										self.obstacle_sprites,
-										self.display_surface,
-										self.player	
+										self.display_surface,	
 									)
 								#elif col == '398': npc_name = 'jesus'
 								else: 

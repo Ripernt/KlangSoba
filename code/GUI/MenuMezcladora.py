@@ -26,6 +26,8 @@ def mostrar_dialogo_guardar(mezclado, audio):
 guardandoC = False
 guardado = True
 
+
+
 class Mezcladora():
     def __init__(self, player, conexion, cursor, screen): #= pygame.display.set_mode((settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))
         #self.lista_consumir = lista
@@ -37,6 +39,7 @@ class Mezcladora():
         self.lista_audios = []
         self.no_reproduciendo = True
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.num = 0
         
               
     def mostrar_menu_mezcladora(self):
@@ -88,9 +91,11 @@ class Mezcladora():
         pila_img = pygame.transform.scale(pila_img,(50,50))
         pila_text = self.fontsito.render("x"+str(mezcladora_costo), True, "white")
 
+
         renderT = None
 
         while self.mezcladora:
+
             self.screen.fill((50,50,50))
             self.screen.blit(fondo,(0,0))
 
@@ -132,7 +137,7 @@ class Mezcladora():
                         boton_regresar.click(self.screen)
                         self.mezcladora = False
                         if not self.no_reproduciendo:
-                            pista.stop()
+                            self.pista_audio_mezclada.stop()
                         return self.mezcladora
                     #Accion para agarrar un archivo .wav
                     if boton_archivo_musica1.checkForInput(pygame.mouse.get_pos()):
@@ -150,7 +155,7 @@ class Mezcladora():
                         
                     #Accion para mezclar pistas de audio                  
                     if boton_mezclar.checkForInput(pygame.mouse.get_pos()):
-                        boton_mezclar.click(self.screen)
+                        boton_mezclar.click(self.screen) 
                         if mezcladora_costo <= self.player.items_num[0] and self.lista_audios != []:
                             constante = self.player.items_num[0] - mezcladora_costo
                             self.player.items_num[0] = constante
@@ -160,10 +165,12 @@ class Mezcladora():
                             if paga_mezcladora == True:
                                 audio_clips = [AudioFileClip(file) for file in self.lista_audios]
                                 result_audio = CompositeAudioClip(audio_clips)
-                                result_audio.write_audiofile("resultado.wav", fps=audio_clips[0].fps)
+                                result_audio.write_audiofile("resultado"+str(self.num)+".wav", fps=audio_clips[0].fps)
+                                pygame.time.wait(2)
                                 self.lista_audios.clear()
                                 caja_archivo1.setText("")
                                 caja_archivo2.setText("")
+                                self.pista_audio_mezclada =  pygame.mixer.Sound("resultado"+str(self.num)+".wav")
                                 permiso_de_mezcladora = True
                                 mezcla_text = "Se ha mezclado!"
                                 textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
@@ -195,11 +202,12 @@ class Mezcladora():
 
                     if boton_reproducir_mezcla.checkForInput(pygame.mouse.get_pos()):
                         boton_reproducir_mezcla.click(self.screen)
+                    
                         if self.no_reproduciendo == True and permiso_de_mezcladora == True:
                             self.no_reproduciendo = False
                             if pausado == False:
-                                pista_audio_mezclada =  pygame.mixer.Sound("resultado.wav")
-                                pista = pista_audio_mezclada.play()
+                                pista = self.pista_audio_mezclada.play()
+                                
                             else:
                                 pista.unpause()
                         else:
@@ -221,10 +229,15 @@ class Mezcladora():
 
                     if boton_borrar_mezcla.checkForInput(pygame.mouse.get_pos()):
                         boton_borrar_mezcla.click(self.screen)
+                        
                         if self.no_reproduciendo == True and permiso_de_mezcladora == True:
-                            os.remove("resultado.wav")
                             
-                            print("Se ha borrado la mezcla")
+                            print("resultado"+str(self.num)+".wav")
+                            #os.remove("resultado"+str(self.num)+".wav")
+                            self.num+=1
+                            print(self.num)
+                            permiso_de_mezcladora = False
+                            pausado = False
                             borrar_mezcla_text = " Se ha borrado la mezcla"
                             textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
                             renderT = textR.render(borrar_mezcla_text, True, (255,0,0))

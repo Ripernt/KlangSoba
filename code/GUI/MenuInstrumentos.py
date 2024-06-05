@@ -74,13 +74,11 @@ class MInstrumentos:
         renderT = None
         
         while self.instrumentos:
-
-            #Valida si tiene el instrumento piano
             if self.player.T_piano[0] == 1:
                 no_tiene_piano = True
             else:
                 no_tiene_piano = False
-            #Valida si tiene el instrumento sintetizador
+            
             if self.player.T_piano[1] == 1:
                 no_tiene_sintetizador = True
             else:
@@ -93,9 +91,9 @@ class MInstrumentos:
                 self.screen.blit(renderT, rect)
 
             if no_tiene_sintetizador == True:
-                #Mostrar boton sintetizador bloqueado
+                
                 sintetizador_bloqueado.cargar(self.screen)
-                #sintetizador_bloqueado.cambiar_color(pygame.mouse.get_pos())
+                
                 self.screen.blit(pila_img,(565,390))
                 self.screen.blit(pila_text,(620,400))
                 pass

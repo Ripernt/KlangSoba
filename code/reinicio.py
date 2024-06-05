@@ -1,6 +1,8 @@
 import pygame, sys, threading
 from spritesheet_functions import SpriteSheet
 from settings import *
+from DB import conectar as Conectar
+from DB.conectar import *
 from GUI.MenuInstrumentos import MInstrumentos
 from math import sqrt, pow
 from level import *
@@ -25,6 +27,15 @@ class Reinicio():
         self.Clevel2 = False
         self.downloaded_level = []
         self.currentLevelNum = 0
+
+    def conectarBase(self):
+        try: 
+            print("Conexion, cursor")
+            self.conexion = Conectar.conectar()
+            self.cursor = self.conexion.cursor()
+            print("conectado")
+        except mysql.connector.Error as error:
+                print("Se encontro un error al conectar a la base de datos: {}".format(error))
 
     def ReCargarNivel(self):
         print("Reiniciando el nivel")
@@ -133,7 +144,8 @@ class Reinicio():
                     if event.key == pygame.K_m:
                         self.main_sound.music.pause()
                         self.musica_instrumentos.play(1)
-                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos)#Cambiar la musica
+                        listaIn = Item.valor(self)
+                        self.Instrumentos = MInstrumentos(self.main_sound,self.musica_instrumentos, listaIn,self.player, self.conexion, self.cursor)#Cambiar la musica
                         hola = self.Instrumentos.mostrar_instrumentos()
                         if hola == False:
                             self.main_sound.music.unpause()
@@ -166,7 +178,8 @@ class Reinicio():
         threadReLevel.start()
         threadReCargaNivel = threading.Thread(target= self.ReCargarNivel)
         threadReCargaNivel.start()
-        
+        threadConectar = threading.Thread(target=self.conectarBase)
+        threadConectar.start()
         self.Animacion_Carga()
         threadReLevel.join()
         self.run()
