@@ -11,6 +11,7 @@ from GUI.Pausa import PausaMenu
 from GUI.button import Button
 from GUI.Entry import InputBox
 from GUI.MenuInstrumentos import MInstrumentos
+from Npc import *
 #from secure.cifrado import Cifradito
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
@@ -252,7 +253,7 @@ class Game:
         
         self.musica_personalizada = pygame.mixer.Sound("audio/bass-loops-006-with-drums-long-loop-120-bpm-6111.mp3")
         self.musica_instrumentos = pygame.mixer.Sound("audio/[CHIPTUNE] Pink Floyd - Have A Cigar.wav")
-     
+
         self.progreso = 503
 
     def mostrar_animacion_carga(self):
@@ -331,7 +332,6 @@ class Game:
     def run(self):
         print("Run")
         self.main_sound.music.play(-1)
-        
         while True:
             
             for event in pygame.event.get():
