@@ -157,6 +157,8 @@ logros_data = {
 	}
 
 npc_data = {
-    'mixer':{'notice_radius' : 150},
-    'jesus':{}
+    'mixer':{'notice_radius' : 80},
+    'jesus':{'notice_radius': 80},
+    'jimmy':{'notice_radius': 80},
+    'bernabe':{'notice_radius': 80}
 }
