@@ -45,6 +45,8 @@ class NPC(Entity):
 		self.cursor = None
 		self.screen = None
 
+		self.npc = None
+
 		
 	def import_graphics(self,name):
 		self.animations = {'idle':[]}
@@ -76,26 +78,47 @@ class NPC(Entity):
 		self.image = animation[int(self.frame_index)]
 		self.rect = self.image.get_rect(center = self.hitbox.center)
 
+	def mostrar_caja_dialogo():
+		pass		
+
 	def get_status(self, player):
-		evento = pygame.event.get()
+		
 		distance = self.get_player_distance_direction(player)[0]
 
 		if distance <= self.notice_radius:
-	
-			for event in evento:
-				
-				if event.type == pygame.KEYDOWN:
 
-					if event.key == K_n and self.npc_name == 'mixer':
-						
-						pygame.mixer.music.pause()
-						
-						print("Jugador: ", player)
-						self.mez = Mezcladora(player, self.conexion, self.cursor, self.screen)
-						regresar_mezcladora = self.mez.mostrar_menu_mezcladora()
-						if regresar_mezcladora == False:
-							pygame.mixer.music.unpause()
-		
+			if self.npc_name == 'jimmy':
+				#print("Tenemos buenas, malas y peores")
+				
+				self.mandar_npc(self.npc_name)
+			else:
+				pass
+			if self.npc_name == 'jesus':
+				#print("No sé, soy de progra")
+				
+				self.mandar_npc(self.npc_name)
+			else:
+				pass
+			if self.npc_name == 'bernabe':	
+				#print("Tu credencial, hijo")
+				
+				self.mandar_npc(self.npc_name)
+			else:
+				pass
+			if self.npc_name == 'mixer':
+				
+				self.mandar_npc(self.npc_name)
+			else:
+				pass
+
+
+	def mandar_npc(self,nombre_npc):
+		global npc
+		self.npc_temporal = nombre_npc
+		npc = self.npc_temporal
+	
+	def obtener_npc():
+		return npc
 	def update(self):
 		
 		self.animate()

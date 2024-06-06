@@ -358,6 +358,21 @@ class Game:
                         regreso_de_minstrumentos = self.Instrumentos.mostrar_instrumentos()
                         if regreso_de_minstrumentos == False:
                             self.main_sound.music.unpause()
+                    if event.key == pygame.K_n:
+                        npc_name = NPC.obtener_npc()
+                        
+                        if npc_name == 'jimmy':
+                            print("Jimmy: Erm, tenemos buenas, malas y peores. ¿Cuál quieren?")
+                        if npc_name == 'bernabe':
+                            print("Dame tu credencial, hijo")
+                        if npc_name == 'jesus':
+                            print("Has visto a mi robot?")
+                        if npc_name == 'mixer':
+                            pygame.mixer.music.pause()
+                            self.mez = Mezcladora(self.player, self.conexion, self.cursor, self.screen)
+                            regresar_mezcladora = self.mez.mostrar_menu_mezcladora()
+                            if regresar_mezcladora == False:
+                                pygame.mixer.music.unpause()
                     
                         
             self.screen.fill(self.color_level[self.currentLevelNum])

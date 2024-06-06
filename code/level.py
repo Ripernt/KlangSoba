@@ -131,8 +131,6 @@ class Level:
 										self.drop_item, self.display_surface)
 								elif col == '397': 
 									npc_name = 'mixer'
-									print("Npc :", npc_name)
-									
 									NPC(
 										npc_name,
 										(x,y),
@@ -140,7 +138,33 @@ class Level:
 										self.obstacle_sprites,
 										self.display_surface,	
 									)
-								#elif col == '398': npc_name = 'jesus'
+								elif col == '398': 
+									npc_name = 'jesus'
+									NPC(
+										npc_name,
+										(x,y),
+										[self.visible_sprites],
+										self.obstacle_sprites,
+										self.display_surface,	
+									)
+								elif col == '399':
+									npc_name = 'bernabe'
+									NPC(
+										npc_name,
+										(x,y),
+										[self.visible_sprites],
+										self.obstacle_sprites,
+										self.display_surface,	
+									)
+								elif col == '400':
+									npc_name = 'jimmy'
+									NPC(
+										npc_name,
+										(x,y),
+										[self.visible_sprites],
+										self.obstacle_sprites,
+										self.display_surface,	
+									)									
 								else: 
 									monster_name = 'squid'
 									Enemy(
