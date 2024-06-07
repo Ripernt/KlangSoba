@@ -1,3 +1,6 @@
+import pygame, sys, pyaudio, settings
+from GUI.button import Button
+
 import pygame, settings, time, wave, threading
 import numpy as np
 
@@ -9,9 +12,45 @@ from GUI.button2 import Button2
 from GUI.button import Button
 from pygame.locals import *
 
+import mysql.connector
+def conectar_mysql():
+    return mysql.connector.connect(
+        #host="localhost",
+        #user="root",
+        #password="n0m3l0",
+        #database="railway",
+        #port = '3306' #11973
+
+        user = 'root',
+        password = 'nyoeRgZHQVfcPwxPuckyRxXiTYpzZXbB' ,#nyoeRgZHQVfcPwxPuckyRxXiTYpzZXbB
+        host = 'viaduct.proxy.rlwy.net', #viaduct.proxy.rlwy.net
+        db = 'railway',
+        port = '30092' #30092
+
+    )
+    
 position = 0
 
-#Exportar archivo
+def crear_tabla():
+    conexion = conectar_mysql()
+    cursor = conexion.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS archivo_audio (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            nombre_archivo VARCHAR(255) NOT NULL,
+            archivo LONGBLOB NOT NULL
+        )
+    """)
+    conexion.close()
+
+def guardar_en_base_de_datos(nombre_archivo, archivo):
+    conexion = conectar_mysql()
+    cursor = conexion.cursor()
+    cursor.execute("INSERT INTO archivo_audio (nombre_archivo, archivo) VALUES (%s, %s)", (nombre_archivo, archivo))
+    conexion.commit()
+    conexion.close()
+
+
 def mostrar_dialogo_guardar(grabacion):
     global guardandoC, guardado
     direccion = fd.asksaveasfilename(initialdir="/", title="Guardar como", filetypes=(("wav files", "*.wav"), ("todos los archivos", "*.*")))
@@ -23,10 +62,17 @@ def mostrar_dialogo_guardar(grabacion):
         else:
             grabacion.export(direccion+".wav", format="wav")
         guardado = True
+         # Leer el archivo guardado y almacenarlo con el mismo nombre que da el usuario
+        with open(direccion + (".wav" if extension != ".wav" else ""), 'rb') as file:
+            datos = file.read()
+            nombre_archivo = os.path.basename(direccion + (".wav" if extension != ".wav" else ""))
+            guardar_en_base_de_datos(nombre_archivo, datos)
     guardandoC = False
 # guardadoCorr = False
 guardandoC = False
 guardado = True
+
+crear_tabla()
 
 class InterfazPiano:
 
