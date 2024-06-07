@@ -322,8 +322,9 @@ class Game:
     def Pantalla_incio(self):
         print("Mostrar pantalla de inicio")
         self.RoI = self.Inicio.inicio()
-        if self.RoI:
+        if self.RoI == True:
             res = self.iniciarSesion()
+            
             if res is not None:
                 return res
         else:
@@ -331,6 +332,10 @@ class Game:
             
     def run(self):
         print("Run")
+        self.x_text_box = 200
+        self.y_text_box = 500
+        self.box_width = 950
+        self.box_height = 100
         DISPLAY_TIME_AFTER_TYPING = 2
         self.main_sound.music.play(-1)
         while True:
@@ -373,7 +378,7 @@ class Game:
                             show_text_box = True
                             text_finished_time = None
                             if show_text_box:
-                                start_time = NPC.mostrar_caja_dialogo(self.screen, 200, 500, 950, 100, eleccion)
+                                start_time = NPC.mostrar_caja_dialogo(self.screen, self.x_text_box, self.y_text_box, self.box_width, self.box_height, eleccion, self.audio)
                                 text_finished_time = start_time + len(eleccion) * 50
                                 pygame.time.delay(1000)
                                 show_text_box = False
@@ -387,7 +392,7 @@ class Game:
                             show_text_box = True
                             text_finished_time = None
                             if show_text_box:
-                                start_time = NPC.mostrar_caja_dialogo(self.screen, 200, 500, 950, 100, eleccion)
+                                start_time = NPC.mostrar_caja_dialogo(self.screen, self.x_text_box, self.y_text_box, self.box_width, self.box_height, eleccion)
                                 text_finished_time = start_time + len(eleccion) * 50
                                 pygame.time.delay(1000)
                                 show_text_box = False
@@ -401,7 +406,7 @@ class Game:
                             show_text_box = True
                             text_finished_time = None
                             if show_text_box:
-                                start_time = NPC.mostrar_caja_dialogo(self.screen, 200, 500, 950, 100, eleccion)
+                                start_time = NPC.mostrar_caja_dialogo(self.screen, self.x_text_box, self.y_text_box, self.box_width, self.box_height, eleccion)
                                 text_finished_time = start_time + len(eleccion) * 50
                                 pygame.time.delay(1000)
                                 show_text_box = False
