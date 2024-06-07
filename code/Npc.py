@@ -40,7 +40,6 @@ class NPC(Entity):
 		self.timeAnt = 0
 		self.dt = 0
 
-		
 		self.conexion = None
 		self.cursor = None
 		self.screen = None

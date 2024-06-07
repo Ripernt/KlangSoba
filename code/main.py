@@ -368,46 +368,61 @@ class Game:
                         npc_name = NPC.obtener_npc()
                         
                         if npc_name == 'jimmy':
-                            text = "Jimmy: Erm, tenemos buenas, malas y peores"
+                            jimmy_sound = pygame.mixer.Sound("audio/npc_audios/JimmySound.wav")
+                            text = "Jimmy: Tenemos buenas, malas y peores"
                             text2 = "Jimmy: ¿A que le temes?"
                             text3= "Jimmy: ¡VAAAAAA!"
                             text4= "Jimmy: Obvio noOooO"
                             text5= "Jimmy: Te voy a reprobar"
-                            textos = [text,text2,text3,text4,text5]
+                            text6= "Jimmy: Apaguen y acomoden"
+                            textos = [text,text2,text3,text4,text5,text6]
                             eleccion = random.choice(textos)
                             show_text_box = True
                             text_finished_time = None
                             if show_text_box:
-                                start_time = NPC.mostrar_caja_dialogo(self.screen, self.x_text_box, self.y_text_box, self.box_width, self.box_height, eleccion, self.audio)
+                                jimmy_sound.play()
+                                start_time = NPC.mostrar_caja_dialogo(self.screen, self.x_text_box, self.y_text_box, self.box_width, self.box_height, eleccion)
                                 text_finished_time = start_time + len(eleccion) * 50
+                                jimmy_sound.stop()
                                 pygame.time.delay(1000)
                                 show_text_box = False
                             if text_finished_time and pygame.time.get_ticks() > text_finished_time + DISPLAY_TIME_AFTER_TYPING * 1000:
                                 text_finished_time = None
                         if npc_name == 'bernabe':
+                            bernabe_sound = pygame.mixer.Sound("audio/npc_audios/BernabeSound.wav")
                             text = "Bernabe: Dame tu credencial, hijo"
                             text2 = "Bernabe: ¿No tienes clase hijo?"
-                            textos = [text, text2]
+                            text3= "Bernabe: A ver tu horario"
+                            text4= "Bernabe: Paren el balón"
+                            textos = [text, text2,text3,text4]
                             eleccion = random.choice(textos)
                             show_text_box = True
                             text_finished_time = None
                             if show_text_box:
+                                bernabe_sound.play()
                                 start_time = NPC.mostrar_caja_dialogo(self.screen, self.x_text_box, self.y_text_box, self.box_width, self.box_height, eleccion)
                                 text_finished_time = start_time + len(eleccion) * 50
+                                bernabe_sound.stop()
                                 pygame.time.delay(1000)
                                 show_text_box = False
                             if text_finished_time and pygame.time.get_ticks() > text_finished_time + DISPLAY_TIME_AFTER_TYPING * 1000:
                                 text_finished_time = None
                         if npc_name == 'jesus':
+                            jesus_sound = pygame.mixer.Sound("audio/npc_audios/JesusSound.wav")
                             text = "Jesus: ¿Has visto a mi robot?"
                             text2 = "Jesus: No sé, soy de progra"
-                            textos = [text,text2]
+                            text3 = "Jesus: ¡Principio de incertidumbre de Heisenberg!"
+                            text4 = "Jesus: ¡Sistema de ecuaciones!"
+                            text5 = "Jesus: ¡Bucle For!"
+                            textos = [text,text2,text3,text4,text5]
                             eleccion = random.choice(textos)
                             show_text_box = True
                             text_finished_time = None
                             if show_text_box:
+                                jesus_sound.play()
                                 start_time = NPC.mostrar_caja_dialogo(self.screen, self.x_text_box, self.y_text_box, self.box_width, self.box_height, eleccion)
                                 text_finished_time = start_time + len(eleccion) * 50
+                                jesus_sound.stop()
                                 pygame.time.delay(1000)
                                 show_text_box = False
                             if text_finished_time and pygame.time.get_ticks() > text_finished_time + DISPLAY_TIME_AFTER_TYPING * 1000:
