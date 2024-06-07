@@ -373,8 +373,7 @@ def obtener_items(correo,conexionR, cursorR):
 
     cursor.execute(query,[corr])
     usu = cursor.fetchone()
-
-
+    
     valores = (usu[0],1) 
     valores2 = (usu[0],3) 
     valores3= (usu[0],4)

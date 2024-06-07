@@ -88,7 +88,7 @@ class Mezcladora():
         caja_archivo2 = InputBox((370,300,550,32), "", colorValue=[(0,0,0), (255,0,0)]) 
 
         #Cosas para mezclar
-        mezcladora_costo = 0
+        mezcladora_costo = 3
         paga_mezcladora = False
         pila_img = pygame.image.load("graphics/items/bateria.png")
         pila_img = pygame.transform.scale(pila_img,(50,50))
