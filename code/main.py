@@ -1,5 +1,5 @@
 import pygame, sys, threading
-#from time import time
+from time import time
 from settings import *
 from level import *
 from inicio import Inicio
@@ -45,7 +45,7 @@ class Game:
         self.player = None
         
         self.currentLevelNum = 0
-
+        
         
     def conectarBase(self):
         try: 
@@ -331,6 +331,7 @@ class Game:
             
     def run(self):
         print("Run")
+        DISPLAY_TIME_AFTER_TYPING = 2
         self.main_sound.music.play(-1)
         while True:
             
@@ -362,11 +363,50 @@ class Game:
                         npc_name = NPC.obtener_npc()
                         
                         if npc_name == 'jimmy':
-                            print("Jimmy: Erm, tenemos buenas, malas y peores. ¿Cuál quieren?")
+                            text = "Jimmy: Erm, tenemos buenas, malas y peores"
+                            text2 = "Jimmy: ¿A que le temes?"
+                            text3= "Jimmy: ¡VAAAAAA!"
+                            text4= "Jimmy: Obvio noOooO"
+                            text5= "Jimmy: Te voy a reprobar"
+                            textos = [text,text2,text3,text4,text5]
+                            eleccion = random.choice(textos)
+                            show_text_box = True
+                            text_finished_time = None
+                            if show_text_box:
+                                start_time = NPC.mostrar_caja_dialogo(self.screen, 200, 500, 950, 100, eleccion)
+                                text_finished_time = start_time + len(eleccion) * 50
+                                pygame.time.delay(1000)
+                                show_text_box = False
+                            if text_finished_time and pygame.time.get_ticks() > text_finished_time + DISPLAY_TIME_AFTER_TYPING * 1000:
+                                text_finished_time = None
                         if npc_name == 'bernabe':
-                            print("Dame tu credencial, hijo")
+                            text = "Bernabe: Dame tu credencial, hijo"
+                            text2 = "Bernabe: ¿No tienes clase hijo?"
+                            textos = [text, text2]
+                            eleccion = random.choice(textos)
+                            show_text_box = True
+                            text_finished_time = None
+                            if show_text_box:
+                                start_time = NPC.mostrar_caja_dialogo(self.screen, 200, 500, 950, 100, eleccion)
+                                text_finished_time = start_time + len(eleccion) * 50
+                                pygame.time.delay(1000)
+                                show_text_box = False
+                            if text_finished_time and pygame.time.get_ticks() > text_finished_time + DISPLAY_TIME_AFTER_TYPING * 1000:
+                                text_finished_time = None
                         if npc_name == 'jesus':
-                            print("Has visto a mi robot?")
+                            text = "Jesus: ¿Has visto a mi robot?"
+                            text2 = "Jesus: No sé, soy de progra"
+                            textos = [text,text2]
+                            eleccion = random.choice(textos)
+                            show_text_box = True
+                            text_finished_time = None
+                            if show_text_box:
+                                start_time = NPC.mostrar_caja_dialogo(self.screen, 200, 500, 950, 100, eleccion)
+                                text_finished_time = start_time + len(eleccion) * 50
+                                pygame.time.delay(1000)
+                                show_text_box = False
+                            if text_finished_time and pygame.time.get_ticks() > text_finished_time + DISPLAY_TIME_AFTER_TYPING * 1000:
+                                text_finished_time = None
                         if npc_name == 'mixer':
                             pygame.mixer.music.pause()
                             self.mez = Mezcladora(self.player, self.conexion, self.cursor, self.screen)
