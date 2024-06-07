@@ -162,8 +162,6 @@ class Inicio:
             chatKS.cargar(self.screen)
             chatKS.cambiar_color(pygame.mouse.get_pos())
 
-
-
             mouse_x, mouse_y = pygame.mouse.get_pos()
 
             if self.block_x < mouse_x < self.block_x + self.block_width and self.block_y < mouse_y < self.block_y + self.block_height:

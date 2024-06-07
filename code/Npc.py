@@ -97,25 +97,18 @@ class NPC(Entity):
 		if distance <= self.notice_radius:
 
 			if self.npc_name == 'jimmy':
-				#print("Tenemos buenas, malas y peores")
-				
 				self.mandar_npc(self.npc_name)
 			else:
 				pass
 			if self.npc_name == 'jesus':
-				#print("No sé, soy de progra")
-				
 				self.mandar_npc(self.npc_name)
 			else:
 				pass
 			if self.npc_name == 'bernabe':	
-				#print("Tu credencial, hijo")
-				
 				self.mandar_npc(self.npc_name)
 			else:
 				pass
 			if self.npc_name == 'mixer':
-				
 				self.mandar_npc(self.npc_name)
 			else:
 				pass
