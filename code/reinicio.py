@@ -137,7 +137,7 @@ class Reinicio():
                     if event.key == pygame.K_ESCAPE:
                         self.main_sound.music.pause()
                         self.musica_personalizada.play(1)
-                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada, self.player)
+                        self.Pausita = PausaMenu(self.main_sound,self.musica_personalizada, self.player, self.conexion, self.cursor)
                         xd = self.Pausita.show_menu(self.screen)
                         if xd == False:
                             self.main_sound.music.unpause()

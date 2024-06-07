@@ -45,9 +45,6 @@ class NPC(Entity):
 		self.cursor = None
 		self.screen = None
 
-		self.npc = None
-
-		
 	def import_graphics(self,name):
 		self.animations = {'idle':[]}
 		main_path = f'graphics/npcs/{name}/'
@@ -78,8 +75,20 @@ class NPC(Entity):
 		self.image = animation[int(self.frame_index)]
 		self.rect = self.image.get_rect(center = self.hitbox.center)
 
-	def mostrar_caja_dialogo():
-		pass		
+	def mostrar_caja_dialogo(surface, x, y, width, height, text):
+		font = pygame.font.Font('graphics/font/joystix.ttf', 20)
+		pygame.draw.rect(surface, BLACK, (x, y, width, height))
+		pygame.draw.rect(surface, WHITE, (x, y, width, height), 2)
+		text_x = x + 10
+		text_y = y + 10
+		for char in text:
+			text_surface = font.render(char, True, WHITE)
+			surface.blit(text_surface, (text_x, text_y))
+			text_x += text_surface.get_width()
+			pygame.display.flip()
+			pygame.time.delay(50)
+		return pygame.time.get_ticks()
+			
 
 	def get_status(self, player):
 		
