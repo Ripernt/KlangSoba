@@ -1,5 +1,5 @@
 user = 'root'
-password = 'n0m3l0' #nyoeRgZHQVfcPwxPuckyRxXiTYpzZXbB
-host = 'localhost' #viaduct.proxy.rlwy.net
+password = 'nyoeRgZHQVfcPwxPuckyRxXiTYpzZXbB' #nyoeRgZHQVfcPwxPuckyRxXiTYpzZXbB
+host = 'viaduct.proxy.rlwy.net' #viaduct.proxy.rlwy.net
 db = 'railway'
-port = '3306' #30092
+port = '30092' #30092
