@@ -131,11 +131,11 @@ class Inicio:
                           hovering_color="#DFAD29")
         
         #Soporte ks
-        soporte_ks = Button(image=settings.botonSoporte, pos=(1000,670), text_input="", font=fontsito, base_color="#4D4D5C",
+        soporte_ks = Button(image=settings.botonSoporte, pos=(1180,670), text_input="", font=fontsito, base_color="#4D4D5C",
                           hovering_color="#C66FF1", link="https://nicolasayalagomez.github.io/FASTSTERNLANDING/#box6")
         
         #Chat Ks
-        chatKS = Button(image=settings.botonPurChat, pos=(1180, 670), text_input="CHAT", font=fontsito, base_color="#4D4D5C",
+        chatKS = Button(image=settings.botonPurChat, pos=(1100, 670), text_input="CHAT", font=fontsito, base_color="#4D4D5C",
                           hovering_color="#C66FF1", link="https://azure-pouncing-armchair.glitch.me/")
 
         """ pantalla de inicio """
@@ -161,6 +161,9 @@ class Inicio:
             
             chatKS.cargar(self.screen)
             chatKS.cambiar_color(pygame.mouse.get_pos())
+
+            soporte_ks.cargar(self.screen)
+            soporte_ks.cambiar_color(pygame.mouse.get_pos())
 
             mouse_x, mouse_y = pygame.mouse.get_pos()
 
@@ -196,6 +199,9 @@ class Inicio:
                     
                     if chatKS.checkForInput(pygame.mouse.get_pos()):
                         chatKS.click(self.screen)
+
+                    if soporte_ks.checkForInput(pygame.mouse.get_pos()):
+                        soporte_ks.click(self.screen)
 
             self.sistema_particulas.update(0.016)
             self.sistema_particulas.draw(self.screen)

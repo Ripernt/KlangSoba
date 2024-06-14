@@ -435,12 +435,3 @@ def obtener_instrumento_piano(correo,conexionR,cursorR):
     lista_instrumento = [*a,*b]
 
     return lista_instrumento
-
-
-
-
-
-
-
-
-

@@ -45,11 +45,13 @@ class PausaMenu:
         range_volumen = Range((900, 650, 250, 22), "Musica")
         range_volumen.range = self.sound.music.get_volume() * 10
     
-
-        
         #Soporte ks
         soporte_ks = Button(image=settings.botonSoporte, pos=(1100,670), text_input="", font=fontsito, base_color="#4D4D5C",
                           hovering_color="#C66FF1", link="https://nicolasayalagomez.github.io/FASTSTERNLANDING/#box6")
+        
+        #Chat Ks
+        chatKS = Button(image=settings.botonPurChat, pos=(1180, 670), text_input="CHAT", font=fontsito, base_color="#4D4D5C",
+                          hovering_color="#C66FF1", link="https://azure-pouncing-armchair.glitch.me/")
         
         
         while self.paused:
@@ -69,6 +71,9 @@ class PausaMenu:
             
             salir_button.cargar(self.screen)
             salir_button.cambiar_color(pygame.mouse.get_pos())
+
+            chatKS.cargar(self.screen)
+            chatKS.cambiar_color(pygame.mouse.get_pos())
 
             guardar_button.cargar(self.screen)
             guardar_button.cambiar_color(pygame.mouse.get_pos())
@@ -134,6 +139,9 @@ class PausaMenu:
 
                     if soporte_ks.checkForInput(pygame.mouse.get_pos()):
                         soporte_ks.click(self.screen)
+
+                    if chatKS.checkForInput(pygame.mouse.get_pos()):
+                        chatKS.click(self.screen)
 
                     if salir_button.checkForInput(pygame.mouse.get_pos()):
                         salir_button.click(self.screen)

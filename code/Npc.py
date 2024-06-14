@@ -16,6 +16,9 @@ class NPC(Entity):
 	def __init__(self,npc_name,pos,groups,obstacle_sprites,surface):
 
 		super().__init__(groups)
+		
+		global npc
+		npc = None
 		self.sprite_type = 'npc'
 		self.status = 'idle'
 		# cositas de los graficos
@@ -94,7 +97,7 @@ class NPC(Entity):
 		distance = self.get_player_distance_direction(player)[0]
 
 		if distance <= self.notice_radius:
-
+			print(self.npc)
 			if self.npc_name == 'jimmy':
 				self.mandar_npc(self.npc_name)
 			else:
@@ -112,14 +115,18 @@ class NPC(Entity):
 			else:
 				pass
 
-
 	def mandar_npc(self,nombre_npc):
 		global npc
 		self.npc_temporal = nombre_npc
 		npc = self.npc_temporal
 	
 	def obtener_npc():
-		return npc
+		
+		if npc == None:
+			print("No hay npc")
+		else:
+			return npc
+	
 	def update(self):
 		
 		self.animate()

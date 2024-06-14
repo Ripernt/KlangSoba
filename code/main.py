@@ -16,7 +16,6 @@ from Npc import *
 from spritesheet_functions import SpriteSheet
 from tkinter import messagebox
 from math import sqrt, pow
-from Npc import * 
 
 def eucDis(p1, p2): 
     difx = p1[0]-p2[0]

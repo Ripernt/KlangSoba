@@ -88,7 +88,7 @@ class Mezcladora():
         caja_archivo2 = InputBox((370,300,550,32), "", colorValue=[(0,0,0), (255,0,0)]) 
 
         #Cosas para mezclar
-        mezcladora_costo = 3
+        mezcladora_costo = 0
         paga_mezcladora = False
         pila_img = pygame.image.load("graphics/items/bateria.png")
         pila_img = pygame.transform.scale(pila_img,(50,50))
@@ -146,18 +146,35 @@ class Mezcladora():
                     if boton_archivo_musica1.checkForInput(pygame.mouse.get_pos()):
                         boton_archivo_musica1.click(self.screen)
                         archivo_wav = filedialog.askopenfilename(title="Selecciona un archivo .wav")
-                        caja_archivo1.setText(str(archivo_wav))
-                        self.lista_audios.append(str(archivo_wav))
-                        self.can_mix = True
+                        string_archivo_wav = str(archivo_wav)
+                        print(string_archivo_wav)
+                        if string_archivo_wav != '':
+                            caja_archivo1.setText(string_archivo_wav)
+                            self.lista_audios.append(string_archivo_wav)
+                            self.can_mix = True
+                        else:
+                            error_archivo = "Debes de insertar un archivo"
+                            textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                            renderT = textR.render(error_archivo, True, (255,0,0))
+                            rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150))
+                            
                         
                     #Accion para agarrar un archivo .wav    
                     if boton_archivo_musica2.checkForInput(pygame.mouse.get_pos()):
                         boton_archivo_musica2.click(self.screen)
                         archivo_wav2 = filedialog.askopenfilename(title="Selecciona un archivo .wav")
-                        caja_archivo2.setText(str(archivo_wav2))
-                        self.lista_audios.append(str(archivo_wav2))
-                        self.can_mix2 = True
-                        
+                        string_archivo_wav2 = str(archivo_wav2)
+                        print(string_archivo_wav2)
+                        if string_archivo_wav2 != '':
+                            caja_archivo2.setText(string_archivo_wav2)
+                            self.lista_audios.append(string_archivo_wav2)
+                            self.can_mix2 = True
+                        else:
+                            error_archivo2 = "Debes de insertar un archivo"
+                            textR = pygame.font.Font("graphics/font/joystix.ttf", 15)
+                            renderT = textR.render(error_archivo2, True, (255,0,0))
+                            rect = renderT.get_rect(center=(SCREEN_WIDTH//2, 150)) 
+                                                   
                     #Accion para mezclar pistas de audio                  
                     if boton_mezclar.checkForInput(pygame.mouse.get_pos()):
                         boton_mezclar.click(self.screen) 

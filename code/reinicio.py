@@ -21,6 +21,7 @@ class Reinicio():
         pygame.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.color_level = [WATER_COLOR, (38, 11, 45)]
         self.progreso = 0
         self.level = None
         self.player = None
@@ -150,7 +151,7 @@ class Reinicio():
                         if hola == False:
                             self.main_sound.music.unpause()
 
-            self.screen.fill(WATER_COLOR)
+            self.screen.fill(self.color_level[self.currentLevelNum])
             self.level.run()
             
             print(self.player.rect.topleft)
